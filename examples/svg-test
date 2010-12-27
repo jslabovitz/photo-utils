@@ -1,0 +1,271 @@
+#!/usr/bin/env ruby
+
+require 'builder'
+
+$LOAD_PATH.unshift '../lib'
+require 'photo_utils'
+include PhotoUtils
+
+class SceneView
+  
+  attr_accessor :scene
+  attr_accessor :width
+  attr_accessor :height
+  attr_accessor :max_distance
+  attr_accessor :camera_width
+  attr_accessor :camera_height
+  attr_accessor :scale
+  
+  def initialize(scene, options={})
+    @scene = scene
+    @width = options[:width] || 900
+    @height = options[:height] || 50
+    @max_distance = options[:max_distance] || @scene.depth_of_field.far
+    @camera_width  = options[:camera_width]  || @scene.focal_length
+    @camera_height = options[:camera_height] || [@scene.absolute_aperture, @scene.frame.height].max
+    @scale = (@width.to_f - @height) / (@camera_width + @max_distance)
+    @camera_scale = [
+      @height.to_f / @camera_width,
+      @height.to_f / @camera_height
+    ].min
+  end
+  
+  def to_svg
+    # ;; @scene.print_exposure
+    # ;; @scene.print_depth_of_field
+    xml = Builder::XmlMarkup.new(:indent => 2)
+    xml.svg(:width => @width, :height => @height) do
+      xml.defs do
+        1.upto(9).each do |std_dev|
+          xml.filter(:id => "gb#{std_dev}") do
+            xml.feGaussianBlur(:in => 'SourceGraphic', :stdDeviation => std_dev)
+          end
+        end
+      end
+      xml.g(:transform => "translate(#{@height},0)") do
+        draw_camera(xml)
+        draw_dof(xml)
+        draw_subject(xml)
+        # draw_hyperfocal(xml)
+      end
+    end
+    xml.target!
+  end
+  
+  def draw_camera(xml)
+    fh2 = (@scene.frame.height / 2) * @camera_scale
+    aa2 = (@scene.absolute_aperture / 2) * @camera_scale
+    points = [
+      [0, -fh2],
+      [@scene.focal_length * @camera_scale, -aa2],
+      [@scene.focal_length * @camera_scale, aa2],
+      [0, fh2],
+    ]
+    xml.g(:transform => "translate(0,#{@height / 2})") do
+      xml.polygon(
+        :x => -@height, 
+        :y => 0, 
+        :points => points.map { |p| p.join(',') }.join(' '),
+        :fill => 'black')
+    end
+  end
+  
+  def draw_dof(xml)
+    # blur
+    
+    if true
+      
+      step = @max_distance / 20
+      step.step(@max_distance, step).map { |d| Length.new(d) }.each do |d|
+        blur = @scene.blur_at_distance(d)
+        if blur == 0
+          std_dev = 0
+        else
+          ratio = @scene.circle_of_confusion / blur
+          std_dev = [9 - (ratio * 10).to_i, 0].max
+        end
+        xml.circle(
+          :cx => d * @scale,
+          :cy => @height / 2,
+          :r => (step * @scale) / 2 / 2,
+          :fill => 'black',
+          :filter => (std_dev > 0) ? "url(\#gb#{std_dev})" : ())
+      end
+      
+    else
+      step = (@max_distance / @width) * 10
+      0.step(@max_distance, step).map { |d| Length.new(d) }.each do |d|
+        blur = @scene.blur_at_distance(d)
+        opacity = [1, @scene.circle_of_confusion / blur].min
+        xml.rect(
+          :x => d * @scale, 
+          :y => (@height - (@scene.field_of_view.height * @scale)) / 2,
+          :width => step * @scale,
+          :height => @scene.field_of_view.height * @scale, 
+          :fill => 'blue',
+          :'fill-opacity' => opacity)
+      end
+    end
+    
+    # depth of focus area
+    xml.rect(
+      :x => @scene.depth_of_field.near * @scale, 
+      :y => 0,
+      :width => @scene.total_depth_of_field * @scale, 
+      :height => @height,
+      :stroke => 'blue',
+      :fill => 'none')
+  end
+  
+  def draw_subject(xml)
+    xml.rect(
+      :x => @scene.subject_distance * @scale, 
+      :y => 0,
+      :width => 1, 
+      :height => @height,
+      :fill => 'red')
+  end
+  
+  def draw_hyperfocal(xml)
+    xml.line(
+      :x1 => @scene.hyperfocal_distance * scale,
+      :y1 => 0,
+      :x2 => @scene.hyperfocal_distance * scale,
+      :y2 => @height,
+      :stroke => 'green')
+  end
+  
+end
+
+# set up basic scene
+
+basic_scene = Scene.new
+basic_scene.subject_distance = 12.feet
+basic_scene.sensitivity = 3200
+basic_scene.brightness = 8
+
+scenes = []
+
+if false
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 50.mm
+  scene.aperture = 2
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['6x6']
+  scene.focal_length = 92.mm
+  scene.aperture = 8
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['5x7']
+  scene.focal_length = 253.mm
+  scene.aperture = 64
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+end
+
+if true
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 90.mm
+  scene.aperture = 2.8
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 90.mm
+  scene.aperture = 4
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 90.mm
+  scene.aperture = 5.6
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 85.mm
+  scene.aperture = 4
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+  scene = basic_scene.dup
+  scene.frame = FORMATS['35']
+  scene.focal_length = 85.mm
+  scene.aperture = 5.6
+  scene.description = "#{scene.frame}: #{scene.focal_length} @ #{scene.aperture}"
+  scenes << scene
+  
+end
+
+if false
+  
+  camera = Camera.cameras.find { |c| c.name =~ /RB67/ }
+  
+  basic_scene.description = camera.name
+  basic_scene.frame = FORMATS[camera.format]
+  
+  camera.lenses.each do |lens|
+    aperture = lens.max_aperture
+    while aperture < lens.min_aperture
+      scene = basic_scene.dup
+      scene.focal_length = lens.focal_length
+      scene.aperture = aperture
+      break if scene.time > 1.0/30
+      scene.description += ": #{scene.focal_length} @ #{scene.aperture}"
+      scenes << scene
+      aperture = Aperture.new_from_v(aperture.to_v + 2)
+    end
+  end
+  
+end
+
+scenes.each do |scene|
+  scene.print; puts
+end
+
+# max_distance = scenes.map { |s| s.depth_of_field.far }.max
+# max_distance = scenes.map { |s| s.hyperfocal_distance }.max
+max_distance = 50.feet
+
+camera_width  = scenes.map { |s| s.focal_length }.max
+camera_height = scenes.map { |s| [s.absolute_aperture, s.frame.height].max }.max
+
+html = Builder::XmlMarkup.new(:indent => 2)
+html.declare!(:DOCTYPE, :html)
+html.html do
+  html.head {}
+  html.body do
+    html.table do
+      scenes.each do |scene|
+        scene_view = SceneView.new(scene, 
+          :max_distance => max_distance,
+          :camera_width => camera_width,
+          :camera_height => camera_height)
+        html.tr do
+          html.td do
+            html << scene.description
+          end
+          html.td do
+            html << scene_view.to_svg
+          end
+        end
+      end
+    end
+  end
+end
+
+raise "Usage: #{$0} output-file.html" unless ARGV.first
+File.open(ARGV.first, 'w') { |f| f.write(html.target!) }

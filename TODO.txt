@@ -1,0 +1,6 @@
+lighting formulas:
+  http://www.lightsearch.com/resources/lightguides/formulas.html
+
+units:
+  http://github.com/toastyapps/alchemist
+
