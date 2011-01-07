@@ -108,18 +108,21 @@ module PhotoUtils
     http://en.wikipedia.org/wiki/APEX_system
     http://en.wikipedia.org/wiki/Exposure_value
     http://en.wikipedia.org/wiki/Light_meter#Exposure_meter_calibration
+    
+    basic APEX formula:
+      Ev = Tv + Av = Sv + Bv
 
-    Ev = Tv + Av = Sv + Bv
+    logarithmic to linear equations:
+      2^Av = N^2 (N is f-Number)
+      2^Tv = 1/T (T in seconds)
+      2^Sv = S/π (S is ASA film speed, now ISO)
+      2^Bv = Bl (Bl in foot-lamberts) = B/π (B in candles per square foot)
 
-    2^Av = N^2 (N is f-Number)
-    2^Tv = 1/T (T in seconds)
-    2^Sv = S/π (S is ASA film speed, now ISO)
-    2^Bv = Bl (Bl in foot-lamberts) = B/π (B in candles per square foot)
-
-    Tv = 0 for a time (shutter speed) of one second.
-    Av = 0 for an aperture of f/1.
-    Sv = 0 for a film speed of ISO 3.125 arithmetic (and hence Sv = 5 for ISO 100).
-    Bv = 0 for a scene brightness of 1 foot-lambert.
+    base values:
+      Tv = 0 for a time (shutter speed) of one second.
+      Av = 0 for an aperture of f/1.
+      Sv = 0 for a film speed of ISO 3.125 arithmetic (and hence Sv = 5 for ISO 100).
+      Bv = 0 for a scene brightness of 1 foot-lambert.
 
     calculate time from exposure and aperture
       Tv = Ev - Av
@@ -127,10 +130,10 @@ module PhotoUtils
     calculate time from brightness, sensitivity, and aperture
       Tv = (Sv + Bv) - Av
 
-    calculate brightness from EV and sensitivity
+    calculate brightness from Ev and sensitivity
       Bv = Ev - Sv
 
-    calculate EV from aperture, time, and film speed
+    calculate Ev from aperture, time, and film speed
       Ev = (Tv + Av) - Sv
 
 =end
@@ -200,7 +203,7 @@ module PhotoUtils
         raise "Need aperture/time or sensitivity/brightness to compute exposure"
       end
     end
-
+    
     def calculate_best_exposure(lens)
       @aperture = @time = nil
       @time = Time.new(1.0/60)
@@ -212,6 +215,30 @@ module PhotoUtils
         @aperture = nil
         @time = @time.incr
       end
+    end
+    
+    def av
+      aperture.to_v
+    end
+    
+    def tv
+      time.to_v
+    end
+    
+    def sv
+      sensitivity.to_v
+    end
+    
+    def bv
+      brightness.to_v
+    end
+    
+    def ev
+      exposure
+    end
+    
+    def ev100
+      Exposure.new(ev - (sv - Sensitivity.new(100).to_v))
     end
     
     def apex
@@ -230,7 +257,7 @@ module PhotoUtils
       io.puts "    sensitivity: #{sensitivity} (#{sensitivity.to_s(:value)})"
       io.puts "       aperture: #{aperture} (#{aperture.to_s(:value)})"
       io.puts "           time: #{time} (#{time.to_s(:value)})"
-      io.puts "       exposure: #{exposure} (#{apex})"
+      io.puts "       exposure: #{exposure.to_s(:ev, sensitivity)}, #{ev100.to_s(:ev, 100)} (#{apex})"
     end
     
     def print_depth_of_field(io=STDOUT)

@@ -12,12 +12,14 @@ module PhotoUtils
       self.to_f
     end
     
-    def to_s(format=:ev)
+    def to_s(format=:ev, sensitivity=nil)
       case format
       when :ev
-        "EV #{prec(1)}"
+        "Ev#{sensitivity ? sensitivity.to_i : ''} #{prec(1)}"
       when :value
         "Ev:#{prec(1)}"
+      else
+        raise "Unknown format: #{format.inspect}"
       end
     end
     

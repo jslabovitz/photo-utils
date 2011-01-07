@@ -23,8 +23,7 @@ spec = Gem::Specification.new do |s|
   s.homepage          = "http://johnlabovitz.com"
 
   s.has_rdoc          = true
-  # You should probably have a README of some kind. Change the filename
-  # as appropriate
+  # You should probably have a README of some kind. Change the filename as appropriate
   # s.extra_rdoc_files  = %w(README)
   s.rdoc_options      = %w(--main README)
 
@@ -33,12 +32,11 @@ spec = Gem::Specification.new do |s|
   s.test_files        = Dir.glob('{test/test*.rb}')
   s.require_paths     = ["lib"]
 
-  # If you want to depend on other gems, add them here, along with any
-  # relevant versions
+  # If you want to depend on other gems, add them here, along with any relevant versions
   s.add_dependency('hashstruct')
 
   # If your tests use any gems, include them here
-  s.add_development_dependency("wrong") # for example
+  s.add_development_dependency('wrong')
   
   s.executables       = %w(photo-util)
 end

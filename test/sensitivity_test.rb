@@ -11,6 +11,10 @@ class TestSensitivity < Test::Unit::TestCase
 	  @s = Sensitivity.new(400)
   end
   
+  def test_zero_value
+    assert { Sensitivity.new(3.125).to_v == 0 }
+  end
+  
   def test_has_correct_native_value
 	  assert { @s.to_f == 400 }
   end
@@ -25,8 +29,8 @@ class TestSensitivity < Test::Unit::TestCase
   end
   
   def test_increments_and_decrements
-	  assert { @s.incr.round == Sensitivity.new(800).round }
-	  assert { @s.decr.round == Sensitivity.new(200).round  }
+	  assert { @s.incr.round == Sensitivity.new(@s * 2).round }
+	  assert { @s.decr.round == Sensitivity.new(@s / 2).round  }
   end
   
 end

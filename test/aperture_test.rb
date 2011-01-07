@@ -11,6 +11,10 @@ class TestAperture < Test::Unit::TestCase
 	  @a = Aperture.new(8)
   end
   
+  def test_zero_value
+    assert { Aperture.new(1).to_v == 0 }
+  end
+  
   def test_has_correct_native_value
 	  assert { @a.to_f == 8 }
   end

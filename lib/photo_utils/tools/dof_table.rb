@@ -18,7 +18,7 @@ module PhotoUtils
         scene.print_lens_info
         puts
   
-        # AV equivalents of f/4 -- f/64
+        # Av equivalents of f/4 -- f/64
         apertures = (4..12).map { |av| Aperture.new_from_v(av) }
   
         first = true
@@ -27,7 +27,7 @@ module PhotoUtils
           scene.subject_distance = s.feet
           if first
             first = false
-            puts (['', ''] + apertures.map { |a| "AV #{a.to_v.to_i}" }).join("\t")
+            puts (['', ''] + apertures.map { |a| "Av #{a.to_v.to_i}" }).join("\t")
             puts (['', ''] + apertures.map { |a| a.to_s(:us) }).join("\t")
             puts (['Distance', 'Field of view'] + apertures).join("\t")
           end

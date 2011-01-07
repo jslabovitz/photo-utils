@@ -1,8 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'subcommand'    # gem install subcommand
-include Subcommands
-
 require 'photo_utils'
 require 'photo_utils/tools/reciprocity'
 require 'photo_utils/tools/focal_length'
@@ -12,48 +9,23 @@ require 'photo_utils/tools/dof'
 require 'photo_utils/tools/compare'
 require 'photo_utils/tools/blur'
 require 'photo_utils/tools/film_test'
-
-include PhotoUtils
+require 'photo_utils/tools/brightness'
 
 options = {}
 appname = File.basename($0)
 
-global_options do |opts|
-  opts.banner = "Usage: #{appname} [options] [subcommand [options]]"
-  opts.description = "Calculate useful things for photographers."
-  opts.separator ""
-  opts.separator "Global options are:"
-  opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-    options[:verbose] = v
-  end
-end
-
-add_help_option
-
 commands = {
-  'reciprocity'   => Tools::Reciprocity,
-  'focal-length'  => Tools::FocalLength,
-  'test'          => Tools::Test,
-  'dof-table'     => Tools::DOFTable,
-  'dof'           => Tools::DOF,
-  'compare'       => Tools::Compare,
-  'blur'          => Tools::Blur,
-  'film-test'     => Tools::FilmTest,
+  'reciprocity'   => PhotoUtils::Tools::Reciprocity,
+  'focal-length'  => PhotoUtils::Tools::FocalLength,
+  'test'          => PhotoUtils::Tools::Test,
+  'dof-table'     => PhotoUtils::Tools::DOFTable,
+  'dof'           => PhotoUtils::Tools::DOF,
+  'compare'       => PhotoUtils::Tools::Compare,
+  'blur'          => PhotoUtils::Tools::Blur,
+  'film-test'     => PhotoUtils::Tools::FilmTest,
+  'brightness'    => PhotoUtils::Tools::Brightness,
 }
 
-commands.each do |name, tool_class|
-  command(name) do |opts|
-    opts.banner = tool_class.usage
-    opts.description = tool_class.description
-    # tool_class.options.each do |opts, options|
-    # opts.on(*opts) { |v| options.merge!(tool_class.) }
-    #   options[:force] = v
-    # end
-  end
-end
-
-cmd = opt_parse
-;;pp(cmd)
-tool = commands[cmd].new
-;;pp([tool, options, args])
-tool.run(options, args)
+cmd = ARGV.shift or raise "Usage"
+cmd_class = commands[cmd] or raise "Usage"
+cmd_class.new.run(ARGV, options)

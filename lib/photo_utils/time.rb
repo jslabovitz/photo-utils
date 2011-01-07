@@ -22,6 +22,8 @@ module PhotoUtils
         end
       when :value
         "Tv:#{to_v.prec(1)}"
+      else
+        raise "Unknown format: #{format.inspect}"
       end
     end
     

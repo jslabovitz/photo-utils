@@ -9,12 +9,12 @@ class TestScene < Test::Unit::TestCase
   
   def setup
     @scene = Scene.new
-    @scene.subject_distance = 30.feet
-    @scene.sensitivity = 1600
-    @scene.brightness = 64
+    @scene.subject_distance = 10.feet
+    @scene.sensitivity = 200
+    @scene.brightness = 1
     @scene.frame = FORMATS['6x6']
     @scene.focal_length = 80.mm
-    @scene.aperture = 4
+    @scene.aperture = 8
   end
   
   def test_make_scene
@@ -26,6 +26,18 @@ class TestScene < Test::Unit::TestCase
     assert { blur == 0 }
   end
 	
+	# test main APEX equations
+	
+	def test_apex
+	  assert { @scene.ev              == @scene.av + @scene.tv }
+	  assert { @scene.bv + @scene.sv  == @scene.av + @scene.tv }
+  end
+  
+  def test_exposure
+	  assert { (5..6).include?(@scene.ev)    }
+	  assert { (4..5).include?(@scene.ev100) }
+  end
+  
 end
 
 =begin

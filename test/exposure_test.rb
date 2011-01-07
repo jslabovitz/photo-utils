@@ -16,7 +16,7 @@ class TestExposure < Test::Unit::TestCase
   end
 
   def test_format_as_string
-	  assert { @e.to_s == 'EV 10' }
+	  assert { @e.to_s == 'Ev 10' }
 	  assert { @e.to_s(:value) == 'Ev:10' }
   end
 	

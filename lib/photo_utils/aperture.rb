@@ -16,7 +16,7 @@ module PhotoUtils
       v = to_v
       case format
       when :us
-        # AV 8 is equivalent to f/16 and US 16
+        # Av 8 is equivalent to f/16 and US 16
         steps = v.to_i - 8
         us = 16
         if steps < 0
@@ -34,6 +34,8 @@ module PhotoUtils
         end
       when :value
         "Av:#{v.prec(1)}"
+      else
+        raise "Unknown format: #{format.inspect}"
       end
     end
     

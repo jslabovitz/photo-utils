@@ -20,7 +20,7 @@ module PhotoUtils
         #     estimate width/height
         #     desired minimum shutter
         #  calculate
-        #    EV100
+        #    Ev100
         #    subject distance
         #    depth of field
         #    height or width (not given)
@@ -136,7 +136,7 @@ module PhotoUtils
           scene = Scene.new
     
           model = img['Model']
-          scene.frame = PhotoUtils::FORMATS[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
+          scene.frame = FORMATS[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
     
           scene.description = "#{shot[:type]} [#{shot[:seq]}]"
           scene.aperture = img['Aperture']
@@ -150,11 +150,11 @@ module PhotoUtils
     
           exp_comp = img['ExposureCompensation'].to_f
           if exp_comp != 0
-            scene.sensitivity = PhotoUtils::Sensitivity.new_from_v(scene.sensitivity.to_v + exp_comp)
+            scene.sensitivity = Sensitivity.new_from_v(scene.sensitivity.to_v + exp_comp)
           end
     
           # d = w * f / s
-          scene.subject_distance = PhotoUtils::Length.new(shot.subject_width * (scene.focal_length / scene.frame.width))
+          scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.frame.width))
     
           puts
           puts "--- #{scene.description}"
@@ -169,7 +169,7 @@ module PhotoUtils
           cameras.each do |camera|
       
             scene2 = Scene.new
-            scene2.frame = PhotoUtils::FORMATS[camera.format.to_s] or raise "Unknown format: #{camera.format.inspect}"
+            scene2.frame = FORMATS[camera.format.to_s] or raise "Unknown format: #{camera.format.inspect}"
             scene2.aperture = scene.aperture
             scene2.brightness = scene.brightness
             # scene2.sensitivity = 400
