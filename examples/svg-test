@@ -171,7 +171,7 @@ if false
   
 end
 
-if true
+if false
   
   scene = basic_scene.dup
   scene.frame = FORMATS['35']
@@ -210,9 +210,9 @@ if true
   
 end
 
-if false
+if true
   
-  camera = Camera.cameras.find { |c| c.name =~ /RB67/ }
+  camera = Camera.cameras.find { |c| c.name =~ /eastman/i } or raise "Can't find camera"
   
   basic_scene.description = camera.name
   basic_scene.frame = FORMATS[camera.format]
@@ -223,7 +223,7 @@ if false
       scene = basic_scene.dup
       scene.focal_length = lens.focal_length
       scene.aperture = aperture
-      break if scene.time > 1.0/30
+      # break if scene.time > 1.0/30
       scene.description += ": #{scene.focal_length} @ #{scene.aperture}"
       scenes << scene
       aperture = Aperture.new_from_v(aperture.to_v + 2)

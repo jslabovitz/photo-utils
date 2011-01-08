@@ -35,7 +35,7 @@ class TestLength < Test::Unit::TestCase
   
   def test_parse
 	  @table.each do |s, n|
-      assert { Length.parse(s) == n }
+      assert { Length.new(s) == n }
     end
   end
   

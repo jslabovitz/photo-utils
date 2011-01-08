@@ -74,8 +74,8 @@ module PhotoUtils
             nil
           else
             file, width, dof, type = line.split(/\s+/, 4)
-              dof = Length.parse(dof)
-            width = Length.parse(width)
+              dof = Length.new(dof)
+            width = Length.new(width)
             HashStruct.new(
               :type => type,
               :file => file,

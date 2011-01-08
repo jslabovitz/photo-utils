@@ -6,38 +6,40 @@ module PhotoUtils
 
   class Length < DelegateClass(Float)
     
-    def self.parse(s)
-      if s == '∞'
-        n = Math::Infinity
-      else
+    def initialize(x)
+      case x
+      when Length
+        super(x)
+      when Numeric
+        super(x.to_f)
+      when '∞'
+        super(Math::Infinity)
+      when String
         n = 0
-        s = s.dup
+        s = x.dup
         until s.empty?
-          s.strip!
-          if s.gsub!(/^(\d+(\.\d+)?)\s*/, '')
-            x = $1.to_f
-            x = if s.gsub!(/^('|ft\b)/, '')
-              x.feet
+          if s.gsub!(/^\s*(\d+(\.\d+)?)\s*/, '')
+            n2 = $1.to_f
+            n2 = if s.gsub!(/^('|ft\b)/, '')
+              n2.feet
             elsif s.gsub!(/^("|in\b)/, '')
-              x.inches
-            elsif s.gsub!(/^\s*(m\b)/, '')
-              x.meters
+              n2.inches
+            elsif s.gsub!(/^\s*m\b/, '')
+              n2.meters
             elsif s.gsub!(/^\s*(mm\b)?/, '')
-              x.mm
+              n2.mm
             else
               raise "Can't parse unit: #{s.inspect}"
             end
-            n += x
+            n += n2
           else
             raise "Can't parse number: #{s.inspect}"
           end
         end
+        super(n)
+      else
+        raise "Can't make length from #{x.class}: #{x.inspect}"
       end
-      new(n)
-    end
-    
-    def initialize(n)
-      super(n.to_f)
     end
     
     def to_s(format=:metric)

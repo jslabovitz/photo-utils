@@ -9,10 +9,10 @@ module PhotoUtils
       def run(args)
         format = args.shift || '35'
         focal_length = args.shift || '50mm'
-
+        
         scene = Scene.new
-        scene.focal_length = focal_length
-        scene.frame = FORMATS[format]
+        scene.focal_length = Length.new(focal_length)
+        scene.frame = FORMATS[format] or raise "Unknown format: #{format.inspect}"
           
         puts
         scene.print_lens_info

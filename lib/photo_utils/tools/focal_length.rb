@@ -6,7 +6,7 @@ module PhotoUtils
     
     class FocalLength < Tool
       
-      def run(args, options)
+      def run(args)
         from_focal_length, from_format = args.shift.split(':')
         from_focal_length = from_focal_length.to_i
         from_format = (FORMATS[from_format || '35'] or raise "Unknown format: #{from_format.inspect}")
