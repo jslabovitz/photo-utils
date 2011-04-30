@@ -30,15 +30,13 @@ module PhotoUtils
     end
     
     def aperture_for_depth_of_field(near_limit, far_limit)
-      # h = ((focal_length / near_limit) + (focal_length / far_limit) - 2) / ((1 / far_limit) - (1 / near_limit))
-      # a = (focal_length ** 2) / (h * circle_of_confusion)
       a = ((focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))      
       Aperture.new(a)
     end
 
     def hyperfocal_distance
       # http://en.wikipedia.org/wiki/Hyperfocal_distance
-      raise "Must set focal length, aperture, and circle of confusion to determine hyperfocal distance" unless focal_length && aperture && circle_of_confusion
+      raise "Need focal length, aperture, and circle of confusion to determine hyperfocal distance" unless focal_length && aperture && circle_of_confusion
       h = ((focal_length ** 2) / (aperture * circle_of_confusion)) + focal_length
       Length.new(h)
     end
@@ -74,28 +72,24 @@ module PhotoUtils
     end
 
     def angle_of_view
-      raise "Must set focal length and frame size to determine angle of view" unless focal_length && frame
+      raise "Need focal length and frame size to determine angle of view" unless focal_length && frame
       frame.angle_of_view(focal_length)
     end
 
     def field_of_view(distance)
-      raise "Must set focal length and frame size to determine field of view" unless focal_length && frame
+      raise "Need focal length and frame size to determine field of view" unless focal_length && frame
       frame.field_of_view(focal_length, distance)
     end
-
-    # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
-
-    def magnification(distance, focal_length)
-      # m = f / (s - f)
-      focal_length.to_f / (distance - focal_length)
+    
+    def magnification
+      # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
+      focal_length.to_f / (subject_distance - focal_length)
     end
 
-    # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
-
     def blur_at_distance(d)
+      # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
       xd = (d - subject_distance).abs
-      ms = magnification(subject_distance, focal_length)
-      b = (focal_length * ms) / aperture
+      b = (focal_length * magnification) / aperture
       if d < subject_distance
         b *= xd / (subject_distance - xd)
       else
@@ -271,7 +265,7 @@ module PhotoUtils
       fov = 
       io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
       io.puts "      subject FOV: #{field_of_view(subject_distance).to_s(:imperial)}"
-      io.puts "      subject mag: #{magnification(subject_distance, focal_length)}x"
+      io.puts "      subject mag: #{magnification}x"
       io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
       io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"

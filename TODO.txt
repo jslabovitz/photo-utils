@@ -1,6 +1,13 @@
-lighting formulas:
-  http://www.lightsearch.com/resources/lightguides/formulas.html
 
-units:
-  http://github.com/toastyapps/alchemist
+  - Add lighting formulas:
+    http://www.lightsearch.com/resources/lightguides/formulas.html
 
+  - units:
+    http://github.com/toastyapps/alchemist
+
+  - Allow for multiple formats per camera
+    - eg, RB67 takes 6x7, but also Polaroid packfilm
+  
+  - Remove APEX usage
+    - Substitute with regular formulas?
+    
