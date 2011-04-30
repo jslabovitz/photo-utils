@@ -31,12 +31,6 @@ module PhotoUtils
       @max_aperture = Aperture.new(a)
     end
     
-    def print(params={})
-      indent = params[:indent] || 0
-      io = params[:io] || STDOUT
-      io.puts "#{"\t" * indent}#{name}: focal length: #{focal_length}, aperture: #{max_aperture} - #{min_aperture}"
-    end
-
   end
   
 end

@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+$LOAD_PATH.unshift(File.join(File.realpath(File.dirname($0)), '..', 'lib'))
+
 require 'photo_utils'
 require 'photo_utils/tools/reciprocity'
 require 'photo_utils/tools/focal_length'
@@ -10,6 +12,9 @@ require 'photo_utils/tools/compare'
 require 'photo_utils/tools/blur'
 require 'photo_utils/tools/film_test'
 require 'photo_utils/tools/brightness'
+require 'photo_utils/tools/cameras'
+require 'photo_utils/tools/calc_aperture'
+require 'photo_utils/tools/chart_dof'
 
 options = {}
 appname = File.basename($0)
@@ -24,6 +29,9 @@ commands = {
   'blur'          => PhotoUtils::Tools::Blur,
   'film-test'     => PhotoUtils::Tools::FilmTest,
   'brightness'    => PhotoUtils::Tools::Brightness,
+  'cameras'       => PhotoUtils::Tools::Cameras,
+  'calc-aperture' => PhotoUtils::Tools::CalcAperture,
+  'chart-dof'     => PhotoUtils::Tools::ChartDOF,
 }
 
 cmd = ARGV.shift or raise "Usage"

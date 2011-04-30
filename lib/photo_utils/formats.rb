@@ -30,6 +30,7 @@ module PhotoUtils
     
     APS-C                     14.8  22.2    Canon EOS DIGITAL REBEL XT, Canon EOS DIGITAL REBEL XTi, Canon EOS DIGITAL REBEL XSi, Canon EOS 450D
     APS-H                     19.1  28.7
+    R-D1                      15.6  23.7    Epson R-D1, Epson R-D1s, Epson R-D1g, Epson R-D1x
     
     DX                        15.5  23.6    NIKON D70
     

@@ -2,6 +2,7 @@
 
 require 'pp'
 require 'hashstruct'    # gem install hashstruct
+require 'builder'
 
 require 'photo_utils/extensions/math'
 require 'photo_utils/extensions/array'
