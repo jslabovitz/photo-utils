@@ -75,7 +75,7 @@ module PhotoUtils
   }.split("\n").each do |s|
     case s.strip.sub(/#.*/, '')
     when /^(.*?)\s+([\d\.]+)\s+([\d\.]+)\s*(.*?)$/
-      frame = Frame.new($1, $2.to_f, $3.to_f)
+      frame = Frame.new($2.to_f, $3.to_f)
       FORMATS[$1] = frame
       $4.split(/,\s*/).each do |eq|
         FORMATS[eq] = frame

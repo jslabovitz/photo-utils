@@ -6,18 +6,20 @@ module PhotoUtils
   
   class Frame
     
-    attr_accessor :name
     attr_accessor :height
     attr_accessor :width
     
-    def initialize(name, height, width)
-      @name   = name
+    def initialize(height, width)
       @height = Length.new(height)
       @width  = Length.new(width)
     end
     
-    def to_s
-      "#{@name} (#{@height} x #{@width})"
+    def to_s(format=:metric)
+      if @height == Math::Infinity && @width == Math::Infinity
+        "n/a"
+      else
+        "#{@height.to_s(format)} x #{@width.to_s(format)}"
+      end
     end
   
     def diagonal
@@ -44,7 +46,7 @@ module PhotoUtils
     
     def field_of_view(focal_length, subject_distance)
       # http://en.wikipedia.org/wiki/Field_of_view
-      self.class.new("#{name} FOV",
+      self.class.new(
         subject_distance * (height / focal_length),
         subject_distance * (width  / focal_length))
     end

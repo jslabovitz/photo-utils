@@ -6,7 +6,8 @@ module PhotoUtils
     
     #FIXME: Clarify usage between incident & reflected/spot metering
     
-    N = 0.2918635         # unit scaling constant (cd/m2 -> foot-Lambert)
+    CDM2_TO_FL = 0.2918635  # cd/m2 -> foot-Lambert
+    LUX_TO_FL = 0.0929    # lux -> foot-Lambert
     K = 12.7              # reflected-light meter calibration constant (http://en.wikipedia.org/wiki/Light_meter#Calibration_constants)
                           # ranges from 10.6 to 13.4
                           # http://dougkerr.net/Pumpkin/articles/Exposure_metering_18.pdf
@@ -16,6 +17,14 @@ module PhotoUtils
     
     def self.new_from_v(v)
       new(2 ** v.to_f)
+    end
+    
+    def self.new_from_cdm2(cdm2)
+      new(N * cdm2)
+    end
+    
+    def self.new_from_lux(lux)
+      new(N * lux)
     end
     
     def to_v

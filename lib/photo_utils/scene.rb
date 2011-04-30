@@ -9,10 +9,12 @@ module PhotoUtils
     attr_accessor :circle_of_confusion
     attr_accessor :focal_length
     attr_accessor :subject_distance
+    attr_accessor :background_distance
 
     def initialize
       @frame = FORMATS['35']
       @circle_of_confusion = 0.03
+      @background_distance = Length.new(Math::Infinity)
     end
 
     def focal_length=(f)
@@ -23,6 +25,10 @@ module PhotoUtils
       @subject_distance = Length.new(s)
     end
 
+    def background_distance=(s)
+      @background_distance = Length.new(s)
+    end
+    
     def aperture_for_depth_of_field(near_limit, far_limit)
       # h = ((focal_length / near_limit) + (focal_length / far_limit) - 2) / ((1 / far_limit) - (1 / near_limit))
       # a = (focal_length ** 2) / (h * circle_of_confusion)
@@ -72,9 +78,9 @@ module PhotoUtils
       frame.angle_of_view(focal_length)
     end
 
-    def field_of_view
-      raise "Must set focal length, frame size, and subject distance to determine field of view" unless focal_length && frame && subject_distance
-      frame.field_of_view(focal_length, subject_distance)
+    def field_of_view(distance)
+      raise "Must set focal length and frame size to determine field of view" unless focal_length && frame
+      frame.field_of_view(focal_length, distance)
     end
 
     # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
@@ -246,27 +252,31 @@ module PhotoUtils
     end
     
     def print_lens_info(io=STDOUT)
-      io.puts "   focal length: #{focal_length} (#{
+      io.puts "     focal length: #{focal_length} (#{
         %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{frame.focal_length_equivalent(focal_length, FORMATS[f])}" }.join(', ')
       }; crop factor #{frame.crop_factor.prec(2)})"
-      io.puts "  angle of view: #{angle_of_view}"
+      io.puts "    angle of view: #{angle_of_view}"
     end
     
     def print_exposure(io=STDOUT)
-      io.puts "     brightness: #{brightness} (#{brightness.to_s(:value)})"
-      io.puts "    sensitivity: #{sensitivity} (#{sensitivity.to_s(:value)})"
-      io.puts "       aperture: #{aperture} (#{aperture.to_s(:value)})"
-      io.puts "           time: #{time} (#{time.to_s(:value)})"
-      io.puts "       exposure: #{exposure.to_s(:ev, sensitivity)}, #{ev100.to_s(:ev, 100)} (#{apex})"
+      io.puts "       brightness: #{brightness} (#{brightness.to_s(:value)})"
+      io.puts "      sensitivity: #{sensitivity} (#{sensitivity.to_s(:value)})"
+      io.puts "         aperture: #{aperture} (#{aperture.to_s(:value)})"
+      io.puts "             time: #{time} (#{time.to_s(:value)})"
+      io.puts "         exposure: #{exposure.to_s(:ev, sensitivity)}, #{ev100.to_s(:ev, 100)} (#{apex})"
     end
     
     def print_depth_of_field(io=STDOUT)
       print_lens_info(io)
-      fov = field_of_view
-      io.puts "  field of view: #{fov.height.to_s(:imperial)}H x #{fov.width.to_s(:imperial)}W"
-      io.puts "    subject mag: #{magnification(subject_distance, focal_length)}x"
-      io.puts "   subject dist: #{subject_distance.to_s(:imperial)}"
-      io.puts " depth of field: #{total_depth_of_field.to_s(:imperial)} <-#{near_distance_from_subject.to_s(:imperial)} .. +#{far_distance_from_subject.to_s(:imperial)}> (H = #{hyperfocal_distance.to_s(:imperial)})"
+      fov = 
+      io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
+      io.puts "      subject FOV: #{field_of_view(subject_distance).to_s(:imperial)}"
+      io.puts "      subject mag: #{magnification(subject_distance, focal_length)}x"
+      io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
+      io.puts "  background dist: #{background_distance.to_s(:imperial)}"
+      io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
+      io.puts "  background blur: #{blur_at_distance(background_distance)}"
+      io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
     end
     
     def print(io=STDOUT)

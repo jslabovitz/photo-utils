@@ -2,7 +2,7 @@
 
 require 'builder'
 
-$LOAD_PATH.unshift '../lib'
+$LOAD_PATH << 'lib'
 require 'photo_utils'
 include PhotoUtils
 
@@ -94,14 +94,14 @@ class SceneView
       
     else
       step = (@max_distance / @width) * 10
-      0.step(@max_distance, step).map { |d| Length.new(d) }.each do |d|
-        blur = @scene.blur_at_distance(d)
+      0.step(@max_distance, step).map { |d| Length.new(d) }.each do |distance|
+        blur = @scene.blur_at_distance(distance)
         opacity = [1, @scene.circle_of_confusion / blur].min
         xml.rect(
-          :x => d * @scale, 
-          :y => (@height - (@scene.field_of_view.height * @scale)) / 2,
+          :x => distance * @scale, 
+          :y => (@height - (@scene.field_of_view(distance).height * @scale)) / 2,
           :width => step * @scale,
-          :height => @scene.field_of_view.height * @scale, 
+          :height => @scene.field_of_view(distance).height * @scale, 
           :fill => 'blue',
           :'fill-opacity' => opacity)
       end
@@ -140,8 +140,8 @@ end
 # set up basic scene
 
 basic_scene = Scene.new
-basic_scene.subject_distance = 12.feet
-basic_scene.sensitivity = 3200
+basic_scene.subject_distance = 8.feet
+basic_scene.sensitivity = 400
 basic_scene.brightness = 8
 
 scenes = []
@@ -213,21 +213,21 @@ end
 if true
   
   camera = Camera.cameras.find { |c| c.name =~ /eastman/i } or raise "Can't find camera"
+  lens = camera.lenses.find { |l| l.name =~ /gundlach/i } or raise "Can't find lens"
   
   basic_scene.description = camera.name
-  basic_scene.frame = FORMATS[camera.format]
+  # basic_scene.frame = FORMATS[camera.format]
+  ;;basic_scene.frame = FORMATS['6x9']
   
-  camera.lenses.each do |lens|
-    aperture = lens.max_aperture
-    while aperture < lens.min_aperture
-      scene = basic_scene.dup
-      scene.focal_length = lens.focal_length
-      scene.aperture = aperture
-      # break if scene.time > 1.0/30
-      scene.description += ": #{scene.focal_length} @ #{scene.aperture}"
-      scenes << scene
-      aperture = Aperture.new_from_v(aperture.to_v + 2)
-    end
+  aperture = lens.max_aperture
+  while aperture <= lens.min_aperture
+    scene = basic_scene.dup
+    scene.focal_length = lens.focal_length
+    scene.aperture = aperture
+    # break if scene.time > 1.0/30
+    scene.description += ": #{scene.focal_length} @ #{scene.aperture}"
+    scenes << scene
+    aperture = Aperture.new_from_v(aperture.to_v + 1)
   end
   
 end

@@ -9,19 +9,15 @@ module PhotoUtils
       def run(args)
         scene = Scene.new
   
-        scene.subject_distance = 30.feet
-        scene.sensitivity = 3200
-        scene.brightness = 2
-  
-        if false
-          scene.frame = FORMATS['6x6']
-          scene.focal_length = 165.mm
-          scene.aperture = 4.5
-        else
-          scene.frame = FORMATS['35']
-          scene.focal_length = 90.mm
-          scene.aperture = 2.8
-        end
+        scene.frame = FORMATS['6x6']
+        scene.focal_length = 136.mm
+        scene.subject_distance = 15.feet
+        scene.sensitivity = 100
+        # scene.sensitivity = 3000
+        # scene.brightness = 1000   # overcast daylight
+        scene.brightness = 300   # open shade
+        # scene.aperture = 16
+        scene.time = 1.0 / 25
   
         scene.print_exposure
         scene.print_depth_of_field
