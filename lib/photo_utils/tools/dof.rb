@@ -17,7 +17,7 @@ module PhotoUtils
   
           scene = Scene.new
           scene.focal_length = focal_length
-          scene.frame = FORMATS[format]
+          scene.format = FORMATS[format]
               
           # calculate average brightness, by analyzing test exposures on site
           scene.sensitivity = 1600

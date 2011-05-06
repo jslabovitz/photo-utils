@@ -11,7 +11,7 @@ module PhotoUtils
         lens = camera.lenses.find { |l| l.focal_length == 90 }
         
         scene = Scene.new
-        scene.frame = camera.format
+        scene.format = camera.format
         scene.sensitivity = 100
         scene.time = 1.0/60
         scene.aperture = 5.6

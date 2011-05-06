@@ -16,7 +16,7 @@ module PhotoUtils
         # basic_scene.sensitivity = 3200
         # basic_scene.brightness = 8
         # basic_scene.description = camera.name
-        # basic_scene.frame = FORMATS[camera.format]
+        # basic_scene.format = FORMATS[camera.format]
 
         # camera = Camera[/RB67/]
         # camera = Camera[/Eastman/]
@@ -29,7 +29,7 @@ module PhotoUtils
         # basic_scene.time = 1.0/60
         basic_scene.brightness = 32
         basic_scene.description = camera.name
-        basic_scene.frame = FORMATS[camera.format]
+        basic_scene.format = FORMATS[camera.format]
  
         puts "--- @ #{basic_scene.subject_distance.to_s(:imperial)}"
         camera.lenses.each do |lens|

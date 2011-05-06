@@ -10,7 +10,7 @@ module PhotoUtils
         camera = Camera['Ikon'] or raise "Can't find camera"
         lens = camera.lenses.find { |l| l.focal_length == 85 } or raise "Can't find lens"
         scene = Scene.new
-        scene.frame = FORMATS[camera.format]
+        scene.format = FORMATS[camera.format]
         scene.sensitivity = 1600
         scene.time = 1.0/60
         scene.aperture = 2.8

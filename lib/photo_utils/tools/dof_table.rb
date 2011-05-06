@@ -12,7 +12,7 @@ module PhotoUtils
         
         scene = Scene.new
         scene.focal_length = Length.new(focal_length)
-        scene.frame = FORMATS[format] or raise "Unknown format: #{format.inspect}"
+        scene.format = FORMATS[format] or raise "Unknown format: #{format.inspect}"
           
         puts
         scene.print_lens_info

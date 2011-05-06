@@ -12,7 +12,7 @@ module PhotoUtils
         scene.sensitivity = 1600
         scene.brightness = 64
         
-        scene.frame = FORMATS['6x6']
+        scene.format = FORMATS['6x6']
         scene.focal_length = 80.mm
         scene.aperture = 4
         scene.print_exposure

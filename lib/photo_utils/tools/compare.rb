@@ -136,7 +136,7 @@ module PhotoUtils
           scene = Scene.new
     
           model = img['Model']
-          scene.frame = FORMATS[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
+          scene.format = FORMATS[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
     
           scene.description = "#{shot[:type]} [#{shot[:seq]}]"
           scene.aperture = img['Aperture']
@@ -154,7 +154,7 @@ module PhotoUtils
           end
     
           # d = w * f / s
-          scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.frame.width))
+          scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.format.width))
     
           puts
           puts "--- #{scene.description}"
