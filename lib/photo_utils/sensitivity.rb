@@ -1,7 +1,5 @@
 # coding: utf-8
 
-require 'delegate'
-
 module PhotoUtils
   
   class Sensitivity < Value
