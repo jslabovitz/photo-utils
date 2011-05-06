@@ -25,6 +25,10 @@ module PhotoUtils
       end
     end
     
+    def self.[](name)
+      find(:name => name)
+    end
+    
     attr_accessor :name
     attr_accessor :format
     attr_accessor :min_shutter
