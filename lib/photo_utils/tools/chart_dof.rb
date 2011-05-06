@@ -20,21 +20,21 @@ module PhotoUtils
         if false
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 50.mm
           scene.aperture = 2
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['6x6']
+          scene.format = Format['6x6']
           scene.focal_length = 92.mm
           scene.aperture = 8
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['5x7']
+          scene.format = Format['5x7']
           scene.focal_length = 253.mm
           scene.aperture = 64
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
@@ -45,35 +45,35 @@ module PhotoUtils
         if false
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 2.8
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 4
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 5.6
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 85.mm
           scene.aperture = 4
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
   
           scene = basic_scene.dup
-          scene.format = FORMATS['35']
+          scene.format = Format['35']
           scene.focal_length = 85.mm
           scene.aperture = 5.6
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
@@ -87,8 +87,8 @@ module PhotoUtils
           lens = camera.lenses.find { |l| l.name =~ /gundlach/i } or raise "Can't find lens"
   
           basic_scene.description = camera.name
-          # basic_scene.format = FORMATS[camera.format]
-          ;;basic_scene.format = FORMATS['6x9']
+          # basic_scene.format = camera.format
+          ;;basic_scene.format = Format['6x9']
   
           aperture = lens.max_aperture
           while aperture <= lens.min_aperture

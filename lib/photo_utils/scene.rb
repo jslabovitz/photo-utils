@@ -12,7 +12,7 @@ module PhotoUtils
     attr_accessor :background_distance
 
     def initialize
-      @format = FORMATS['35']
+      @format = Format['35']
       @circle_of_confusion = 0.03
       @background_distance = Length.new(Math::Infinity)
     end
@@ -72,13 +72,13 @@ module PhotoUtils
     end
 
     def angle_of_view
-      raise "Need focal length and format size to determine angle of view" unless focal_length && format
-      format.angle_of_view(focal_length)
+      raise "Need focal length and format size to determine angle of view" unless focal_length && @format
+      @format.angle_of_view(focal_length)
     end
 
     def field_of_view(distance)
-      raise "Need focal length and format size to determine field of view" unless focal_length && format
-      format.field_of_view(focal_length, distance)
+      raise "Need focal length and format size to determine field of view" unless focal_length && @format
+      @format.field_of_view(focal_length, distance)
     end
     
     def magnification
@@ -247,8 +247,8 @@ module PhotoUtils
     
     def print_lens_info(io=STDOUT)
       io.puts "     focal length: #{focal_length} (#{
-        %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{format.focal_length_equivalent(focal_length, FORMATS[f])}" }.join(', ')
-      }; crop factor #{format.crop_factor.prec(2)})"
+        %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@format.focal_length_equivalent(focal_length, Format[f])}" }.join(', ')
+      }; crop factor #{@format.crop_factor.prec(2)})"
       io.puts "    angle of view: #{angle_of_view}"
     end
     

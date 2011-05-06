@@ -7,12 +7,12 @@ module PhotoUtils
     class DOFTable < Tool
       
       def run(args)
-        format = args.shift || '35'
+        format_name = args.shift || '35'
         focal_length = args.shift || '50mm'
         
         scene = Scene.new
         scene.focal_length = Length.new(focal_length)
-        scene.format = FORMATS[format] or raise "Unknown format: #{format.inspect}"
+        scene.format = Format[format_name] or raise "Unknown format: #{format_name.inspect}"
           
         puts
         scene.print_lens_info

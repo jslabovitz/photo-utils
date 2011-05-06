@@ -9,7 +9,7 @@ module PhotoUtils
       def run(args)
         scene = Scene.new
   
-        scene.format = FORMATS['6x6']
+        scene.format = Format['6x6']
         scene.focal_length = 136.mm
         scene.subject_distance = 15.feet
         scene.sensitivity = 100

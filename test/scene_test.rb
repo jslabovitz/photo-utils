@@ -12,7 +12,7 @@ class TestScene < Test::Unit::TestCase
     @scene.subject_distance = 10.feet
     @scene.sensitivity = 200
     @scene.brightness = 1
-    @scene.format = FORMATS['6x6']
+    @scene.format = Format['6x6']
     @scene.focal_length = 80.mm
     @scene.aperture = 8
   end

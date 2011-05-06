@@ -13,11 +13,11 @@ module PhotoUtils
           [90, '6x7 Mamiya RB/RZ67'],
           [65, '6x4.5'],
           [45, '6x4.5'],
-        ].each do |focal_length, format|
+        ].each do |focal_length, format_name|
   
           scene = Scene.new
           scene.focal_length = focal_length
-          scene.format = FORMATS[format]
+          scene.format = Format[format_name]
               
           # calculate average brightness, by analyzing test exposures on site
           scene.sensitivity = 1600

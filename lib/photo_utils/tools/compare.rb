@@ -136,7 +136,7 @@ module PhotoUtils
           scene = Scene.new
     
           model = img['Model']
-          scene.format = FORMATS[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
+          scene.format = Format[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
     
           scene.description = "#{shot[:type]} [#{shot[:seq]}]"
           scene.aperture = img['Aperture']
@@ -169,7 +169,7 @@ module PhotoUtils
           cameras.each do |camera|
       
             scene2 = Scene.new
-            scene2.frame = FORMATS[camera.format.to_s] or raise "Unknown format: #{camera.format.inspect}"
+            scene2.format = camera.format or raise "Unknown format: #{camera.format.inspect}"
             scene2.aperture = scene.aperture
             scene2.brightness = scene.brightness
             # scene2.sensitivity = 400
