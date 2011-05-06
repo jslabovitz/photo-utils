@@ -64,28 +64,31 @@ module PhotoUtils
     6x12 Linhof		            57		120
     6x17		                  56		168
     6x17		                  56		168
-  
+    
+    #FIXME: Polaroid/Fuji packfilm
+    
     Polaroid 550		          92		126
     Polaroid 545		          95		122
-    
     4x5 Quickload		          95		120
-    4x5 Fidelity		          97		120
+    4x5 Fidelity		          97		120     4x5
     
     5x7                       127   178
+
     8x10                      203   254
   
-  }.split("\n").each do |s|
-    case s.strip.sub(/#.*/, '')
+  }.split("\n").each do |line|
+    case line.sub(/#.*/, '').strip
     when /^(.*?)\s+([\d\.]+)\s+([\d\.]+)\s*(.*?)$/
-      frame = Frame.new($2.to_f, $3.to_f)
-      FORMATS[$1] = frame
-      $4.split(/,\s*/).each do |eq|
+      name, width, height, aliases = $1, $2, $3, $4
+      frame = Frame.new(width.to_f, height.to_f)
+      FORMATS[name] = frame
+      aliases.split(/,\s*/).each do |eq|
         FORMATS[eq] = frame
       end
     when ''
       # ignore blank line
     else
-      warn "Can't parse line: #{s.inspect}"
+      raise "Can't parse format line: #{line.inspect}"
     end
   end
 
