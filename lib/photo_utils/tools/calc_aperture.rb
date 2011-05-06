@@ -30,7 +30,7 @@ module PhotoUtils
         basic_scene.brightness = 32
         basic_scene.description = camera.name
         basic_scene.frame = FORMATS[camera.format]
-
+ 
         puts "--- @ #{basic_scene.subject_distance.to_s(:imperial)}"
         camera.lenses.each do |lens|
           scene = basic_scene.dup
