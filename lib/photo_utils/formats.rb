@@ -67,6 +67,7 @@ module PhotoUtils
   
     Polaroid 550		          92		126
     Polaroid 545		          95		122
+    
     4x5 Quickload		          95		120
     4x5 Fidelity		          97		120
     
