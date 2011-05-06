@@ -17,6 +17,14 @@ module PhotoUtils
       class_variable_get('@@cameras')
     end
     
+    def self.find(params)
+      if (sel = params[:name])
+        cameras.find { |c| sel === c.name }
+      else
+        raise "Don't know how to search for camera with params: #{params.inspect}"
+      end
+    end
+    
     attr_accessor :name
     attr_accessor :format
     attr_accessor :min_shutter

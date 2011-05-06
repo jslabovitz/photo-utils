@@ -7,7 +7,7 @@ module PhotoUtils
     class Brightness < Tool
       
       def run(args)
-        camera = Camera.cameras.find { |c| c.name == 'Ikon' } or raise "Can't find camera"
+        camera = Camera.find(:name => 'Ikon') or raise "Can't find camera"
         lens = camera.lenses.find { |l| l.focal_length == 85 } or raise "Can't find lens"
         scene = Scene.new
         scene.frame = camera.format
