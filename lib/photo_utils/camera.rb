@@ -42,7 +42,7 @@ module PhotoUtils
       io = params[:io] || STDOUT
       io.puts "#{"\t" * indent}#{name}: format: #{format}, shutter: #{max_shutter} - #{min_shutter}"
       frame = FORMATS[format]
-      @lenses.each do |lens|
+      @lenses.sort_by(&:focal_length).each do |lens|
         io.puts "#{"\t" * (indent + 1)}#{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{frame.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
       end
     end
