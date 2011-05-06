@@ -265,7 +265,7 @@ module PhotoUtils
       fov = 
       io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
       io.puts "      subject FOV: #{field_of_view(subject_distance).to_s(:imperial)}"
-      io.puts "      subject mag: #{magnification}x"
+      io.puts "      subject mag: #{'%.2f' % magnification}x"
       io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
       io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
