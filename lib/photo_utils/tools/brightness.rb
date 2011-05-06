@@ -8,7 +8,7 @@ module PhotoUtils
       
       def run(args)
         camera = Camera.cameras.find { |c| c.name == 'Ikon' } or raise "Can't find camera"
-        lens = camera.lenses.find { |l| l.focal_length == 90 } or raise "Can't find lens"
+        lens = camera.lenses.find { |l| l.focal_length == 85 } or raise "Can't find lens"
         scene = Scene.new
         scene.frame = camera.format
         scene.sensitivity = 1600
