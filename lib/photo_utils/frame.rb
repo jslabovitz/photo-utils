@@ -47,8 +47,8 @@ module PhotoUtils
     def field_of_view(focal_length, subject_distance)
       # http://en.wikipedia.org/wiki/Field_of_view
       self.class.new(
-        subject_distance * (height / focal_length),
-        subject_distance * (width  / focal_length))
+        subject_distance * (@height / focal_length),
+        subject_distance * (@width  / focal_length))
     end
   
   end
