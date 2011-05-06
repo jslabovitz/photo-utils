@@ -7,7 +7,7 @@ module PhotoUtils
     class FilmTest < Tool
       
       def run(args)
-        camera = Camera.find(:name => 'RB67')
+        camera = Camera['RB67']
         lens = camera.lenses.find { |l| l.focal_length == 90 }
         
         scene = Scene.new

@@ -7,10 +7,10 @@ module PhotoUtils
     class Brightness < Tool
       
       def run(args)
-        camera = Camera.find(:name => 'Ikon') or raise "Can't find camera"
+        camera = Camera['Ikon'] or raise "Can't find camera"
         lens = camera.lenses.find { |l| l.focal_length == 85 } or raise "Can't find lens"
         scene = Scene.new
-        scene.frame = camera.format
+        scene.frame = FORMATS[camera.format]
         scene.sensitivity = 1600
         scene.time = 1.0/60
         scene.aperture = 2.8

@@ -10,7 +10,7 @@ module PhotoUtils
 
         # set up basic scene
 
-        # camera = Camera.find(:name => /Ikon/)
+        # camera = Camera[/Ikon/]
         # basic_scene = Scene.new
         # basic_scene.subject_distance = 12.feet
         # basic_scene.sensitivity = 3200
@@ -18,9 +18,9 @@ module PhotoUtils
         # basic_scene.description = camera.name
         # basic_scene.frame = FORMATS[camera.format]
 
-        # camera = Camera.find(:name => /RB67/)
-        # camera = Camera.find(:name => /Eastman/)
-        camera = Camera.find(:name => /r-d1/i)
+        # camera = Camera[/RB67/]
+        # camera = Camera[/Eastman/]
+        camera = Camera[/r-d1/i]
         basic_scene = Scene.new
         basic_scene.subject_distance = 12.feet
         basic_scene.background_distance = 14.feet

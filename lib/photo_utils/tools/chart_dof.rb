@@ -83,7 +83,7 @@ module PhotoUtils
 
         if true
   
-          camera = Camera.find(:name => /eastman/i) or raise "Can't find camera"
+          camera = Camera[/eastman/i] or raise "Can't find camera"
           lens = camera.lenses.find { |l| l.name =~ /gundlach/i } or raise "Can't find lens"
   
           basic_scene.description = camera.name
