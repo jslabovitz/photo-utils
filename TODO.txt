@@ -1,13 +1,39 @@
+  
+  - Create real camera model.
+    - Set Camera#format to one format in definition.
+    - Set Camera#lens to one lens in definition.
+    - Set Lens#aperture.
+    - Set Camera#shutter.
+    
+  - Move focal_length, format, etc., out of Scene, and into new 'camera' attribute.
+  
+  - Allow for multiple formats per camera
+    - eg, RB67 takes 6x7, but also Polaroid packfilm
+    
+  - Create generic camera models:
+    - 35mm w/50mm lens
+    - 6x6 w/80mm lens
+    - 4x5 w/127mm lens
+    - APS-C w/? lens
+  
+  - Create Subject class
+    - Near/far depth of field.
+    
+  - Add print size to Scene
+    - Calculate best CoC according to print size
+    
+  - Create Medium class?
+    - eg, film, plate, instant, CCD/CMOS
+    - With #sensitivity.
 
+  - Calculate bellows factor
+  
   - Add lighting formulas:
     http://www.lightsearch.com/resources/lightguides/formulas.html
 
   - units:
     http://github.com/toastyapps/alchemist
 
-  - Allow for multiple formats per camera
-    - eg, RB67 takes 6x7, but also Polaroid packfilm
-  
-  - Remove APEX usage
-    - Substitute with regular formulas?
+  - Remove APEX usage?
+    - Substitute with regular formulas
     
