@@ -8,13 +8,12 @@ module PhotoUtils
       
       def run(args)
         camera = Camera['RB67']
-        lens = camera.lenses.find { |l| l.focal_length == 90 }
         
         scene = Scene.new
-        scene.format = camera.format
+        scene.camera = camera
         scene.sensitivity = 100
-        scene.time = 1.0/60
-        scene.aperture = 5.6
+        scene.camera.shutter = 1.0/60
+        scene.camera.lens.aperture = 5.6
         scene.description = "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68"
         
         scene.print_exposure
@@ -35,7 +34,7 @@ module PhotoUtils
           scene2 = scene.dup
           scene2.brightness = PhotoUtils::Brightness.new_from_v(scene.brightness.to_v - zone_offset_from_mg)
           scene2.sensitivity = Sensitivity.new_from_v(scene.sensitivity.to_v + i)
-          scene2.calculate_best_exposure(lens)
+          scene2.calculate_best_exposure
           scene2.description = "#{scene2.sensitivity} (#{i}) [#{scene2.exposure}]"
           scenes << scene2
         end

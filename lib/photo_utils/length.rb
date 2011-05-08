@@ -42,7 +42,7 @@ module PhotoUtils
       end
     end
     
-    def to_s(format=:metric)
+    def to_s(format=:metric, precision=nil)
       if self == Math::Infinity
         '∞'
       else 
@@ -66,6 +66,8 @@ module PhotoUtils
         when :metric
           if self >= 1000
             "#{(self / 1000).prec(2)}m"
+          elsif precision
+            "#{self.prec(precision)}mm"
           else
             "#{self.round}mm"
           end

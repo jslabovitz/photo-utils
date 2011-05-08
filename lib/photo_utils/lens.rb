@@ -8,11 +8,13 @@ module PhotoUtils
     attr_reader   :focal_length
     attr_accessor :min_aperture
     attr_accessor :max_aperture
+    attr_accessor :aperture
     
     def initialize(params={})
       params.each do |key, value|
         method("#{key}=").call(value)
       end
+      @aperture = @max_aperture
     end
     
     def name
@@ -31,6 +33,10 @@ module PhotoUtils
       @max_aperture = Aperture.new(a)
     end
     
+    def aperture=(a)
+      @aperture = Aperture.new(a)
+    end
+
   end
   
 end

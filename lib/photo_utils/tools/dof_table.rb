@@ -7,15 +7,11 @@ module PhotoUtils
     class DOFTable < Tool
       
       def run(args)
-        format_name = args.shift || '35'
-        focal_length = args.shift || '50mm'
-        
         scene = Scene.new
-        scene.focal_length = Length.new(focal_length)
-        scene.format = Format[format_name] or raise "Unknown format: #{format_name.inspect}"
+        scene.camera = Camera[/Eastman/]
           
         puts
-        scene.print_lens_info
+        scene.print_camera
         puts
   
         # Av equivalents of f/4 -- f/64
@@ -32,9 +28,9 @@ module PhotoUtils
             puts (['Distance', 'Field of view'] + apertures).join("\t")
           end
           print scene.subject_distance.to_s(:imperial)
-          print "\t" + "#{scene.field_of_view(subject_distance).height.to_s(:imperial)}H x #{scene.field_of_view(subject_distance).width.to_s(:imperial)}W"      
+          print "\t" + "#{scene.field_of_view(scene.subject_distance).height.to_s(:imperial)}H x #{scene.field_of_view(scene.subject_distance).width.to_s(:imperial)}W"      
           apertures.each do |a|
-            scene.aperture = a
+            scene.camera.lens.aperture = a
             # print "\t" + "%s (%s ~ %s)" % [scene.total_depth_of_field, scene.near_distance_from_subject, scene.far_distance_from_subject].map { |d| d.to_s(:imperial) }
             print "\t" + "%s" % [scene.total_depth_of_field].map { |d| d.to_s(:imperial) }
           end

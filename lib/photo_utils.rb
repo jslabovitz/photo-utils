@@ -15,10 +15,11 @@ require 'photo_utils/value'
 
 require 'photo_utils/aperture'
 require 'photo_utils/brightness'
-require 'photo_utils/exposure'
+# require 'photo_utils/exposure'
 require 'photo_utils/sensitivity'
 require 'photo_utils/time'
 
+require 'photo_utils/apex'
 require 'photo_utils/lens'
 require 'photo_utils/camera'
 require 'photo_utils/frame'

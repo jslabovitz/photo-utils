@@ -22,7 +22,6 @@ spec = Gem::Specification.new do |s|
   s.email             = "johnl@johnlabovitz.com"
   s.homepage          = "http://johnlabovitz.com"
 
-  s.has_rdoc          = true
   # You should probably have a README of some kind. Change the filename as appropriate
   # s.extra_rdoc_files  = %w(README)
   s.rdoc_options      = %w(--main README)

@@ -27,8 +27,6 @@ module PhotoUtils
     end
   
     def to_svg
-      # ;; @scene.print_exposure
-      # ;; @scene.print_depth_of_field
       xml = Builder::XmlMarkup.new(:indent => 2)
       xml.svg(:width => @width, :height => @height) do
         xml.defs do

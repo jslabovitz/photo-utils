@@ -5,22 +5,26 @@ module PhotoUtils
   class Scene
 
     attr_accessor :description
-    attr_accessor :format
-    attr_accessor :circle_of_confusion
-    attr_accessor :focal_length
     attr_accessor :subject_distance
     attr_accessor :background_distance
-
+    attr_accessor :camera
+    attr_accessor :sensitivity
+    attr_accessor :brightness
+    
     def initialize
-      @format = Format['35']
-      @circle_of_confusion = 0.03
       @background_distance = Length.new(Math::Infinity)
+      @sensitivity = Sensitivity.new(100)
+      @brightness = Brightness.new(100)
     end
-
-    def focal_length=(f)
-      @focal_length = Length.new(f)
+    
+    def sensitivity=(s)
+      @sensitivity = Sensitivity.new(s)
     end
-
+    
+    def brightness=(b)
+      @brightness = Brightness.new(b)
+    end
+    
     def subject_distance=(s)
       @subject_distance = Length.new(s)
     end
@@ -29,15 +33,21 @@ module PhotoUtils
       @background_distance = Length.new(s)
     end
     
+    def circle_of_confusion
+      # http://en.wikipedia.org/wiki/Circle_of_confusion
+      @camera.format.frame.diagonal / 1750
+    end
+    
     def aperture_for_depth_of_field(near_limit, far_limit)
-      a = ((focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))      
+      a = ((@camera.lens.focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))      
       Aperture.new(a)
     end
 
     def hyperfocal_distance
       # http://en.wikipedia.org/wiki/Hyperfocal_distance
-      raise "Need focal length, aperture, and circle of confusion to determine hyperfocal distance" unless focal_length && aperture && circle_of_confusion
-      h = ((focal_length ** 2) / (aperture * circle_of_confusion)) + focal_length
+      raise "Need focal length, aperture, and circle of confusion to determine hyperfocal distance" \
+        unless @camera.lens.focal_length && @camera.lens.aperture && circle_of_confusion
+      h = ((@camera.lens.focal_length ** 2) / (@camera.lens.aperture * circle_of_confusion)) + @camera.lens.focal_length
       Length.new(h)
     end
 
@@ -71,206 +81,85 @@ module PhotoUtils
       Length.new(d)
     end
 
-    def angle_of_view
-      raise "Need focal length and format size to determine angle of view" unless focal_length && @format
-      @format.angle_of_view(focal_length)
-    end
-
     def field_of_view(distance)
-      raise "Need focal length and format size to determine field of view" unless focal_length && @format
-      @format.field_of_view(focal_length, distance)
+      raise "Need focal length and format size to determine field of view" unless @camera.lens.focal_length && @camera.format
+      @camera.format.field_of_view(@camera.lens.focal_length, distance)
     end
     
     def magnification
       # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
-      focal_length.to_f / (subject_distance - focal_length)
+      @camera.lens.focal_length / (subject_distance - @camera.lens.focal_length)
     end
 
     def blur_at_distance(d)
       # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
       xd = (d - subject_distance).abs
-      b = (focal_length * magnification) / aperture
+      b = (@camera.lens.focal_length * magnification) / @camera.lens.aperture
       if d < subject_distance
         b *= xd / (subject_distance - xd)
       else
         b *= xd / (subject_distance + xd)
       end
-      b
+      # diameter of blur disk, in mm
+      Length.new(b.mm)
     end
 
     def absolute_aperture
-      aperture.absolute(focal_length)
+      @camera.lens.aperture.absolute(@camera.lens.focal_length)
     end
 
-=begin
-
-    http://doug.kerr.home.att.net/pumpkin/APEX.pdf
-    http://en.wikipedia.org/wiki/APEX_system
-    http://en.wikipedia.org/wiki/Exposure_value
-    http://en.wikipedia.org/wiki/Light_meter#Exposure_meter_calibration
-    
-    basic APEX formula:
-      Ev = Tv + Av = Sv + Bv
-
-    logarithmic to linear equations:
-      2^Av = N^2 (N is f-Number)
-      2^Tv = 1/T (T in seconds)
-      2^Sv = S/π (S is ASA film speed, now ISO)
-      2^Bv = Bl (Bl in foot-lamberts) = B/π (B in candles per square foot)
-
-    base values:
-      Tv = 0 for a time (shutter speed) of one second.
-      Av = 0 for an aperture of f/1.
-      Sv = 0 for a film speed of ISO 3.125 arithmetic (and hence Sv = 5 for ISO 100).
-      Bv = 0 for a scene brightness of 1 foot-lambert.
-
-    calculate time from exposure and aperture
-      Tv = Ev - Av
-
-    calculate time from brightness, sensitivity, and aperture
-      Tv = (Sv + Bv) - Av
-
-    calculate brightness from Ev and sensitivity
-      Bv = Ev - Sv
-
-    calculate Ev from aperture, time, and film speed
-      Ev = (Tv + Av) - Sv
-
-=end
-
-    def aperture
-      if @aperture
-        @aperture
-      elsif @sensitivity && @brightness && @time
-        Aperture.new_from_v((@sensitivity.to_v + @brightness.to_v) - @time.to_v)
-      else
-        raise "Need brightness/sensitivity/time to compute aperture"
+    def calculate_best_exposure
+      @exposure.aperture = nil
+      @exposure.time = Time.new(1.0/60)
+      while @exposure.aperture < @camera.lens.max_aperture
+        @exposure.aperture = nil
+        @exposure.time = @exposure.time.decr
       end
-    end
-    
-    def aperture=(n)
-      @aperture = n ? Aperture.new(n) : nil
-    end
-
-    def time
-      if @time
-        @time
-      elsif @sensitivity && @brightness && @aperture
-        Time.new_from_v((@sensitivity.to_v + @brightness.to_v) - @aperture.to_v)
-      else
-        raise "Need brightness/sensitivity/aperture to compute time"
+      while @exposure.aperture > @camera.lens.min_aperture
+        @exposure.aperture = nil
+        @exposure.time = @exposure.time.incr
       end
+      @camera.lens.aperture = exposure.aperture
+      @camera.shutter = exposure.time
     end
     
-    def time=(n)
-      @time = n ? Time.new(n) : nil
-    end
-
-    def sensitivity
-      if @sensitivity
-        @sensitivity
-      elsif @aperture && @time && @brightness
-        Sensitivity.new_from_v(@aperture.to_v + @time.to_v - @brightness.to_v)
-      else
-        raise "Need aperture/time/brightness to compute sensitivity"
-      end
-    end
-
-    def sensitivity=(n)
-      @sensitivity = n ? Sensitivity.new(n) : nil
-    end
-
-    def brightness=(n)
-      @brightness = n ? Brightness.new(n) : nil
-    end
-
-    def brightness
-      if @brightness
-        @brightness
-      elsif @aperture && @time && @sensitivity
-        Brightness.new_from_v(@aperture.to_v + @time.to_v - @sensitivity.to_v)
-      else
-        raise "Need aperture/time/sensitivity to compute brightness"
-      end
-    end
-
-    def exposure
-      if @aperture && @time
-        Exposure.new_from_v(@aperture.to_v + @time.to_v)
-      elsif @sensitivity && @brightness
-        Exposure.new_from_v(@sensitivity.to_v + @brightness.to_v)
-      else
-        raise "Need aperture/time or sensitivity/brightness to compute exposure"
-      end
-    end
-    
-    def calculate_best_exposure(lens)
-      @aperture = @time = nil
-      @time = Time.new(1.0/60)
-      while aperture < lens.max_aperture
-        @aperture = nil
-        @time = @time.decr
-      end
-      while aperture > lens.min_aperture
-        @aperture = nil
-        @time = @time.incr
-      end
-    end
-    
-    def av
-      aperture.to_v
-    end
-    
-    def tv
-      time.to_v
-    end
-    
-    def sv
-      sensitivity.to_v
-    end
-    
-    def bv
-      brightness.to_v
-    end
-    
-    def ev
-      exposure
-    end
-    
-    def ev100
-      Exposure.new(ev - (sv - Sensitivity.new(100).to_v))
-    end
-    
-    def apex
-      "#{aperture.to_s(:value)} + #{time.to_s(:value)} = #{sensitivity.to_s(:value)} + #{brightness.to_s(:value)}"
-    end
-    
-    def print_lens_info(io=STDOUT)
-      io.puts "     focal length: #{focal_length} (#{
-        %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@format.focal_length_equivalent(focal_length, Format[f])}" }.join(', ')
-      }; crop factor #{@format.crop_factor.prec(2)})"
-      io.puts "    angle of view: #{angle_of_view}"
+    def print_camera(io=STDOUT)
+      io.puts "CAMERA:"
+      io.puts "             name: #{@camera.name}"
+      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.prec(2)})"
+      io.puts "    shutter range: #{@camera.max_shutter} - #{@camera.min_shutter}"
+      io.puts "   aperture range: #{@camera.lens.max_aperture} - #{@camera.lens.min_aperture}"
+      io.puts "             lens: #{@camera.lens.name} - #{@camera.lens.focal_length} (#{
+        %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@camera.format.focal_length_equivalent(@camera.lens.focal_length, Format[f])}" }.join(', ')
+      })"
+      io.puts "    angle of view: #{@camera.angle_of_view}"
+      io.puts "          shutter: #{@camera.shutter}"
+      io.puts "         aperture: #{@camera.lens.aperture}"
+      io.puts
     end
     
     def print_exposure(io=STDOUT)
-      io.puts "       brightness: #{brightness} (#{brightness.to_s(:value)})"
-      io.puts "      sensitivity: #{sensitivity} (#{sensitivity.to_s(:value)})"
-      io.puts "         aperture: #{aperture} (#{aperture.to_s(:value)})"
-      io.puts "             time: #{time} (#{time.to_s(:value)})"
-      io.puts "         exposure: #{exposure.to_s(:ev, sensitivity)}, #{ev100.to_s(:ev, 100)} (#{apex})"
+      exposure = Exposure.new(
+        :brightness => @brightness,
+        :sensitivity => @sensitivity,
+        :aperture => @camera.lens.aperture,
+        :time => @camera.shutter)
+      exposure.print(io)
     end
     
     def print_depth_of_field(io=STDOUT)
-      print_lens_info(io)
-      fov = 
+      io.puts "FIELD:"
       io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
       io.puts "      subject FOV: #{field_of_view(subject_distance).to_s(:imperial)}"
       io.puts "      subject mag: #{'%.2f' % magnification}x"
       io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
-      io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
-      io.puts "  background blur: #{blur_at_distance(background_distance)}"
+      if background_distance != Math::Infinity
+        io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
+        io.puts "  background blur: #{blur_at_distance(background_distance).to_s(:metric, 2)}"
+      end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
+      io.puts
     end
     
     def print(io=STDOUT)

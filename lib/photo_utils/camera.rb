@@ -34,11 +34,16 @@ module PhotoUtils
     attr_accessor :min_shutter
     attr_accessor :max_shutter
     attr_accessor :lenses
+    attr_accessor :lens
+    attr_accessor :shutter
     
     def initialize(params={})
       params.each do |key, value|
         method("#{key}=").call(value)
       end
+      normal = @format.frame.diagonal
+      @lens = @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
+      @shutter = @max_shutter
     end
     
     def min_shutter=(t)
@@ -49,12 +54,15 @@ module PhotoUtils
       @max_shutter = Time.new(t)
     end
     
-    def print(params={})
-      indent = params[:indent] || 0
-      io = params[:io] || STDOUT
-      io.puts "#{"\t" * indent}#{name}: format: #{format}, shutter: #{max_shutter} - #{min_shutter}"
+    def angle_of_view
+      raise "Need focal length and format size to determine angle of view" unless @lens && @lens.focal_length && @format
+      @format.angle_of_view(@lens.focal_length)
+    end
+
+    def print(io=STDOUT)
+      io.puts "#{name}: format: #{format}, shutter: #{max_shutter} - #{min_shutter}"
       @lenses.sort_by(&:focal_length).each do |lens|
-        io.puts "#{"\t" * (indent + 1)}#{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
+        io.puts "\t" + "#{lens == self.lens ? '*' : ' '} #{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
       end
     end
     

@@ -1,12 +1,4 @@
   
-  - Create real camera model.
-    - Set Camera#format to one format in definition.
-    - Set Camera#lens to one lens in definition.
-    - Set Lens#aperture.
-    - Set Camera#shutter.
-    
-  - Move focal_length, format, etc., out of Scene, and into new 'camera' attribute.
-  
   - Allow for multiple formats per camera
     - eg, RB67 takes 6x7, but also Polaroid packfilm
     
@@ -26,13 +18,13 @@
     - eg, film, plate, instant, CCD/CMOS
     - With #sensitivity.
 
+  - Add common brightness values to Brightness class.
+    - eg, open shade, bright sun, etc.
+    
   - Calculate bellows factor
   
   - Add lighting formulas:
     http://www.lightsearch.com/resources/lightguides/formulas.html
-
-  - units:
-    http://github.com/toastyapps/alchemist
 
   - Remove APEX usage?
     - Substitute with regular formulas

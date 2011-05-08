@@ -20,11 +20,11 @@ module PhotoUtils
     end
     
     def self.new_from_cdm2(cdm2)
-      new(N * cdm2)
+      new(CDM2_TO_FL * cdm2)
     end
     
     def self.new_from_lux(lux)
-      new(N * lux)
+      new(LUX_TO_FL * lux)
     end
     
     def to_v
