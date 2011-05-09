@@ -1,5 +1,9 @@
-  
+    
   - Round values to nearest 1/6 stop?
+  
+  - Create FieldCalculator class:
+    - Set subject distance/height/width/depth
+    - Does DoF calculations
   
   - Create generic camera models:
     - 35mm w/50mm lens
@@ -8,6 +12,7 @@
     - APS-C w/? lens
   
   - Create Subject class
+    - Height/width.
     - Near/far depth of field.
     
   - Add print size to Scene
@@ -24,7 +29,6 @@
   
   - Add lighting formulas:
     http://www.lightsearch.com/resources/lightguides/formulas.html
-
-  - Remove APEX usage?
-    - Substitute with regular formulas
+    http://www.birket.com/technical-library/143/
+    
     
