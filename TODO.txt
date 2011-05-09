@@ -1,7 +1,4 @@
     
-  - Calculate working f-number
-      http://en.wikipedia.org/wiki/F-number#Working_f-number
-  
   - Create FieldCalculator class:
     - Set subject distance/height/width/depth
     - Does DoF calculations
@@ -25,9 +22,7 @@
 
   - Add common brightness values to Brightness class.
     - eg, open shade, bright sun, etc.
-    
-  - Calculate bellows factor
-  
+      
   - Add lighting formulas:
     http://www.lightsearch.com/resources/lightguides/formulas.html
     http://www.birket.com/technical-library/143/

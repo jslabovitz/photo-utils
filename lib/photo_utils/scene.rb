@@ -90,7 +90,14 @@ module PhotoUtils
       # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
       @camera.lens.focal_length / (subject_distance - @camera.lens.focal_length)
     end
-
+    
+    # AKA bellows factor
+    
+    def working_aperture
+      # http://en.wikipedia.org/wiki/F-number#Working_f-number
+      Aperture.new((1 - magnification) * @camera.lens.aperture)
+    end
+    
     def blur_at_distance(d)
       # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
       xd = (d - subject_distance).abs
@@ -159,6 +166,7 @@ module PhotoUtils
         io.puts "  background blur: #{blur_at_distance(background_distance).to_s(:metric, 2)}"
       end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
+      io.puts " working aperture: #{working_aperture}"
       io.puts
     end
     
