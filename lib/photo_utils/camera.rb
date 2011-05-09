@@ -30,6 +30,7 @@ module PhotoUtils
     end
     
     attr_accessor :name
+    attr_accessor :formats
     attr_accessor :format
     attr_accessor :min_shutter
     attr_accessor :max_shutter
@@ -41,7 +42,9 @@ module PhotoUtils
       params.each do |key, value|
         method("#{key}=").call(value)
       end
+      @format ||= @formats.first
       normal = @format.frame.diagonal
+      # set the lens to the one closest to normal (diagonal of frame)
       @lens = @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
       @shutter = @max_shutter
     end
@@ -60,9 +63,9 @@ module PhotoUtils
     end
 
     def print(io=STDOUT)
-      io.puts "#{name}: format: #{format}, shutter: #{max_shutter} - #{min_shutter}"
+      io.puts "#{@name}: format: #{@format}, shutter: #{@max_shutter} - #{@min_shutter}"
       @lenses.sort_by(&:focal_length).each do |lens|
-        io.puts "\t" + "#{lens == self.lens ? '*' : ' '} #{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
+        io.puts "\t" + "#{lens == self.lens ? '*' : ' '} #{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{@format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
       end
     end
     

@@ -1,7 +1,6 @@
   
-  - Allow for multiple formats per camera
-    - eg, RB67 takes 6x7, but also Polaroid packfilm
-    
+  - Round values to nearest 1/6 stop?
+  
   - Create generic camera models:
     - 35mm w/50mm lens
     - 6x6 w/80mm lens
