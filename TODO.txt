@@ -1,5 +1,6 @@
     
-  - Round values to nearest 1/6 stop?
+  - Calculate working f-number
+      http://en.wikipedia.org/wiki/F-number#Working_f-number
   
   - Create FieldCalculator class:
     - Set subject distance/height/width/depth

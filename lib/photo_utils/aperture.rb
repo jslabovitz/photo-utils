@@ -12,7 +12,7 @@ module PhotoUtils
       Math.log2(self ** 2)
     end
     
-    def to_s(format=:fstop)
+    def to_s(format=:fstop, stop_steps=3)
       v = to_v
       case format
       when :us
@@ -26,11 +26,12 @@ module PhotoUtils
         end
         "US #{us}"
       when :fstop
-        frac = v - v.to_i
-        if frac < 0.25 || frac > 0.75
-          "f/#{Aperture.new_from_v(v.round).prec(1)}"
+        rounded_f = Aperture.new_from_v((v.to_f * stop_steps).to_i / stop_steps.to_f).prec(1)
+        frac = rounded_f.to_f - rounded_f.to_i
+        if frac != 0
+          "f/#{rounded_f.to_f}"
         else
-          "f/#{Aperture.new_from_v(v.floor).prec(1)}~#{Aperture.new_from_v(v.ceil).prec(1)}"
+          "f/#{rounded_f.to_i}"
         end
       when :value
         "Av:#{v.prec(1)}"

@@ -34,9 +34,9 @@ module PhotoUtils
     attr_accessor :format
     attr_accessor :min_shutter
     attr_accessor :max_shutter
+    attr_accessor :shutter
     attr_accessor :lenses
     attr_accessor :lens
-    attr_accessor :shutter
     
     def initialize(params={})
       params.each do |key, value|
@@ -55,6 +55,10 @@ module PhotoUtils
     
     def max_shutter=(t)
       @max_shutter = Time.new(t)
+    end
+    
+    def shutter=(t)
+      @shutter = Time.new(t)
     end
     
     def angle_of_view
