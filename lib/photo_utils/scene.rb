@@ -91,6 +91,12 @@ module PhotoUtils
       @camera.lens.focal_length / (subject_distance - @camera.lens.focal_length)
     end
     
+    def subject_distance_for_field_of_view(fov)
+      d_w = fov.width  / @camera.format.frame.width  * @camera.lens.focal_length
+      d_h = fov.height / @camera.format.frame.height * @camera.lens.focal_length
+      [d_w, d_h].max
+    end
+    
     # AKA bellows factor
     
     def working_aperture
@@ -114,7 +120,17 @@ module PhotoUtils
     def absolute_aperture
       @camera.lens.aperture.absolute(@camera.lens.focal_length)
     end
-
+    
+    def set_exposure
+      exposure = Exposure.new(
+        :brightness => @brightness,
+        :sensitivity => @sensitivity,
+        :aperture => @camera.lens.aperture,
+        :time => @camera.shutter)
+      @camera.lens.aperture = exposure.aperture
+      @camera.shutter = exposure.time
+    end
+    
     def calculate_best_exposure
       @exposure.aperture = nil
       @exposure.time = Time.new(1.0/60)
