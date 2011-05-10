@@ -50,15 +50,15 @@ module PhotoUtils
     end
     
     def min_shutter=(t)
-      @min_shutter = Time.new(t)
+      @min_shutter = t ? Time.new(t) : nil
     end
     
     def max_shutter=(t)
-      @max_shutter = Time.new(t)
+      @max_shutter = t ? Time.new(t) : nil
     end
     
     def shutter=(t)
-      @shutter = Time.new(t)
+      @shutter = t ? Time.new(t) : nil
     end
     
     def angle_of_view
