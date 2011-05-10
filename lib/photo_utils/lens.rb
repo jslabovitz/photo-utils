@@ -17,6 +17,18 @@ module PhotoUtils
       @aperture = @max_aperture
     end
     
+    def inspect
+      "<#{self.class}: name=#{@name.inspect}, focal_length=#{@focal_length.inspect}, min_aperture=#{@min_aperture.inspect}, max_aperture=#{@max_aperture.inspect}, aperture=#{@aperture.inspect}>"
+    end
+    
+    def to_s
+      if @name
+        "#{@name} (#{@focal_length})"
+      else
+        @focal_length.to_s
+      end
+    end
+    
     def name
       @name || @focal_length.to_s
     end
