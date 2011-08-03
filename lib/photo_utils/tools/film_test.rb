@@ -34,7 +34,7 @@ module PhotoUtils
           scene2 = scene.dup
           scene2.brightness = PhotoUtils::Brightness.new_from_v(scene.brightness.to_v - zone_offset_from_mg)
           scene2.sensitivity = Sensitivity.new_from_v(scene.sensitivity.to_v + i)
-          scene2.calculate_best_exposure
+          # FIXME: scene2.calculate_best_exposure
           scene2.description = "#{scene2.sensitivity} (#{i}) [#{scene2.exposure}]"
           scenes << scene2
         end

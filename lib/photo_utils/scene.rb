@@ -131,21 +131,6 @@ module PhotoUtils
       @camera.shutter = exposure.time
     end
     
-    def calculate_best_exposure
-      @exposure.aperture = nil
-      @exposure.time = Time.new(1.0/60)
-      while @exposure.aperture < @camera.lens.max_aperture
-        @exposure.aperture = nil
-        @exposure.time = @exposure.time.decr
-      end
-      while @exposure.aperture > @camera.lens.min_aperture
-        @exposure.aperture = nil
-        @exposure.time = @exposure.time.incr
-      end
-      @camera.lens.aperture = exposure.aperture
-      @camera.shutter = exposure.time
-    end
-    
     def print_camera(io=STDOUT)
       io.puts "CAMERA:"
       io.puts "             name: #{@camera.name}"
