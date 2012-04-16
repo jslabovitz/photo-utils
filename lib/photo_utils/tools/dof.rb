@@ -9,20 +9,7 @@ module PhotoUtils
       def run(args)
         
         cameras = []
-        # cameras << Camera[/R-D1/]
-        # cameras[-1].lens = cameras[-1].lenses.find { |l| l.focal_length == 50.mm }
-        # 
-        # cameras << Camera[/Ikon/]
-        # cameras[-1].lens = cameras[-1].lenses.find { |l| l.focal_length == 85.mm }
-        # 
-        # cameras << Camera[/RF645/]
-        # cameras[-1].lens = cameras[-1].lenses.find { |l| l.focal_length == 100.mm }
-        # 
-        # cameras << Camera[/C330/]
-        # cameras[-1].lens = cameras[-1].lenses.find { |l| l.focal_length == 180.mm }
-
-        cameras << Camera[/RB67/]
-        cameras[-1].lens = cameras[-1].lenses.find { |l| l.focal_length == 250.mm }
+        cameras << Camera[/Eastman/]
         
         cameras.each do |camera|
   
@@ -32,7 +19,7 @@ module PhotoUtils
           scene.subject_distance = 7.feet
           # scene.camera.lens.aperture = scene.aperture_for_depth_of_field(scene.subject_distance - 3.feet, scene.subject_distance + 3.feet)
           scene.camera.lens.aperture = 45
-          scene.sensitivity = 400
+          scene.sensitivity = 3200
           scene.set_exposure
           
           puts "#{camera.name}"
