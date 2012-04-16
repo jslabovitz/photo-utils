@@ -1,6 +1,6 @@
 # coding: utf-8
 
-require 'pathname'
+require 'pathname3'
 
 module PhotoUtils
 
@@ -39,6 +39,9 @@ module PhotoUtils
     attr_accessor :lens
     
     def initialize(params={})
+      if params[:format]
+        params[:formats] = [params.delete(:format)]
+      end
       params.each do |key, value|
         method("#{key}=").call(value)
       end
