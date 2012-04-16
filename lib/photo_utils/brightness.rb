@@ -31,10 +31,22 @@ module PhotoUtils
       Math.log2(self.to_f)
     end
     
+    def to_cdm2
+      self * 3.4262591
+    end
+    
+    def to_lux_equivalent
+      self * 10.76
+    end
+    
     def to_s(format=:fL)
       case format
       when :fL
         "#{round} fL"
+      when :cdm2
+        "#{to_cdm2.round} cd/m2"
+      when :lux_eq
+        "#{to_lux_equivalent.round} lux-eq"
       when :value
         "Bv:#{to_v.prec(1)}"
       else
