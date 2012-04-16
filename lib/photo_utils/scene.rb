@@ -121,6 +121,14 @@ module PhotoUtils
       @camera.lens.aperture.absolute(@camera.lens.focal_length)
     end
     
+    def exposure
+      Exposure.new(
+        :brightness => @brightness,
+        :sensitivity => @sensitivity,
+        :aperture => @camera.lens.aperture,
+        :time => @camera.shutter)
+    end
+    
     def set_exposure
       exposure = Exposure.new(
         :brightness => @brightness,
