@@ -1,11 +1,11 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class FocalLength < Tool
-      
+
       def run(args)
         from_focal_length, from_format = args.shift.split(':')
         from_focal_length = from_focal_length.to_i
@@ -17,9 +17,9 @@ module PhotoUtils
           puts "%10s: %6s" % [to_format.name, scene.format.focal_length_equivalent(from_focal_length, to_format)]
         end
       end
-      
+
     end
-    
+
   end
-  
+
 end

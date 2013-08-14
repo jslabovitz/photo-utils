@@ -27,4 +27,8 @@
     http://www.lightsearch.com/resources/lightguides/formulas.html
     http://www.birket.com/technical-library/143/
     
+  - Add flash calculation
     
+    http://www.scantips.com/lights/flashbasics1c.html
+    http://www.portraitlighting.net/inversesquare_law.htm
+    http://en.wikipedia.org/wiki/Guide_number

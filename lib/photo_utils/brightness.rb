@@ -15,6 +15,8 @@ module PhotoUtils
     C_HEMISPHERICAL = 250 # incident-light meter calibration constant (hemispherical sensor)
     C = C_HEMISPHERICAL
     
+    # amount specified in foot-Lambert
+    
     def self.new_from_v(v)
       new(2 ** v.to_f)
     end
