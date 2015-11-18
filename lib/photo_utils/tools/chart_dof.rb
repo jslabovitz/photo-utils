@@ -1,11 +1,11 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class ChartDOF < Tool
-      
+
       def run(args)
 
         # set up basic scene
@@ -18,78 +18,78 @@ module PhotoUtils
         scenes = []
 
         if false
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 50.mm
           scene.aperture = 2
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['6x6']
           scene.focal_length = 92.mm
           scene.aperture = 8
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['5x7']
           scene.focal_length = 253.mm
           scene.aperture = 64
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
         end
 
         if false
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 2.8
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 4
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 90.mm
           scene.aperture = 5.6
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 85.mm
           scene.aperture = 4
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
           scene = basic_scene.dup
           scene.format = Format['35']
           scene.focal_length = 85.mm
           scene.aperture = 5.6
           scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
           scenes << scene
-  
+
         end
 
         if true
-  
+
           camera = Camera[/eastman/i] or raise "Can't find camera"
           lens = camera.lenses.find { |l| l.name =~ /gundlach/i } or raise "Can't find lens"
-  
+
           basic_scene.description = camera.name
           # basic_scene.format = camera.format
           ;;basic_scene.format = Format['6x9']
-  
+
           aperture = lens.max_aperture
           while aperture <= lens.min_aperture
             scene = basic_scene.dup
@@ -100,7 +100,7 @@ module PhotoUtils
             scenes << scene
             aperture = Aperture.new_from_v(aperture.to_v + 1)
           end
-  
+
         end
 
         scenes.each do |scene|
@@ -140,11 +140,11 @@ module PhotoUtils
 
         raise "Usage: #{$0} output-file.html" unless ARGV.first
         File.open(ARGV.first, 'w') { |f| f.write(html.target!) }
-        
+
       end
-      
+
     end
-    
+
   end
-  
+
 end

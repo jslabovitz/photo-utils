@@ -3,7 +3,7 @@ require 'photo_utils'
 module PhotoUtils
 
   class SceneView
-  
+
     attr_accessor :scene
     attr_accessor :width
     attr_accessor :height
@@ -11,7 +11,7 @@ module PhotoUtils
     attr_accessor :camera_width
     attr_accessor :camera_height
     attr_accessor :scale
-  
+
     def initialize(scene, options={})
       @scene = scene
       @width = options[:width] || 900
@@ -25,7 +25,7 @@ module PhotoUtils
         @height.to_f / @camera_height
       ].min
     end
-  
+
     def to_svg
       xml = Builder::XmlMarkup.new(indent: 2)
       xml.svg(width: @width, height: @height) do
@@ -45,7 +45,7 @@ module PhotoUtils
       end
       xml.target!
     end
-  
+
     def draw_camera(xml)
       fh2 = (@scene.format.height / 2) * @camera_scale
       aa2 = (@scene.absolute_aperture / 2) * @camera_scale
@@ -63,12 +63,12 @@ module PhotoUtils
           fill: 'black')
       end
     end
-  
+
     def draw_dof(xml)
       # blur
-    
+
       if true
-      
+
         step = @max_distance / 20
         step.step(@max_distance, step).map { |d| Length.new(d) }.each do |d|
           blur = @scene.blur_at_distance(d)
@@ -85,7 +85,7 @@ module PhotoUtils
             fill: 'black',
             filter: (std_dev > 0) ? "url(\#gb#{std_dev})" : ())
         end
-      
+
       else
         step = (@max_distance / @width) * 10
         0.step(@max_distance, step).map { |d| Length.new(d) }.each do |distance|
@@ -100,7 +100,7 @@ module PhotoUtils
             :'fill-opacity': opacity)
         end
       end
-    
+
       # depth of focus area
       xml.rect(
         x: @scene.depth_of_field.near * @scale,
@@ -110,7 +110,7 @@ module PhotoUtils
         stroke: 'blue',
         fill: 'none')
     end
-  
+
     def draw_subject(xml)
       xml.rect(
         x: @scene.subject_distance * @scale,
@@ -119,7 +119,7 @@ module PhotoUtils
         height: @height,
         fill: 'red')
     end
-  
+
     def draw_hyperfocal(xml)
       xml.line(
         x1: @scene.hyperfocal_distance * scale,
@@ -128,7 +128,7 @@ module PhotoUtils
         y2: @height,
         stroke: 'green')
     end
-  
+
   end
 
 end

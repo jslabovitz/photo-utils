@@ -10,21 +10,21 @@ module PhotoUtils
     attr_accessor :camera
     attr_accessor :sensitivity
     attr_accessor :brightness
-    
+
     def initialize
       @background_distance = Length.new(Math::Infinity)
       @sensitivity = Sensitivity.new(100)
       @brightness = Brightness.new(100)
     end
-    
+
     def sensitivity=(s)
       @sensitivity = Sensitivity.new(s)
     end
-    
+
     def brightness=(b)
       @brightness = Brightness.new(b)
     end
-    
+
     def subject_distance=(s)
       @subject_distance = Length.new(s)
     end
@@ -32,14 +32,14 @@ module PhotoUtils
     def background_distance=(s)
       @background_distance = Length.new(s)
     end
-    
+
     def circle_of_confusion
       # http://en.wikipedia.org/wiki/Circle_of_confusion
       @camera.format.frame.diagonal / 1750
     end
-    
+
     def aperture_for_depth_of_field(near_limit, far_limit)
-      a = ((@camera.lens.focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))      
+      a = ((@camera.lens.focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))
       Aperture.new(a)
     end
 
@@ -85,25 +85,25 @@ module PhotoUtils
       raise "Need focal length and format size to determine field of view" unless @camera.lens.focal_length && @camera.format
       @camera.format.field_of_view(@camera.lens.focal_length, distance)
     end
-    
+
     def magnification
       # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
       @camera.lens.focal_length / (subject_distance - @camera.lens.focal_length)
     end
-    
+
     def subject_distance_for_field_of_view(fov)
       d_w = fov.width  / @camera.format.frame.width  * @camera.lens.focal_length
       d_h = fov.height / @camera.format.frame.height * @camera.lens.focal_length
       [d_w, d_h].max
     end
-    
+
     # AKA bellows factor
-    
+
     def working_aperture
       # http://en.wikipedia.org/wiki/F-number#Working_f-number
       Aperture.new((1 - magnification) * @camera.lens.aperture)
     end
-    
+
     def blur_at_distance(d)
       # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
       xd = (d - subject_distance).abs
@@ -120,7 +120,7 @@ module PhotoUtils
     def absolute_aperture
       @camera.lens.aperture.absolute(@camera.lens.focal_length)
     end
-    
+
     def exposure
       Exposure.new(
         brightness: @brightness,
@@ -128,7 +128,7 @@ module PhotoUtils
         aperture: @camera.lens.aperture,
         time: @camera.shutter)
     end
-    
+
     def set_exposure
       exposure = Exposure.new(
         brightness: @brightness,
@@ -138,7 +138,7 @@ module PhotoUtils
       @camera.lens.aperture = exposure.aperture
       @camera.shutter = exposure.time
     end
-    
+
     def print_camera(io=STDOUT)
       io.puts "CAMERA:"
       io.puts "             name: #{@camera.name}"
@@ -153,7 +153,7 @@ module PhotoUtils
       io.puts "         aperture: #{@camera.lens.aperture}"
       io.puts
     end
-    
+
     def print_exposure(io=STDOUT)
       exposure = Exposure.new(
         brightness: @brightness,
@@ -162,7 +162,7 @@ module PhotoUtils
         time: @camera.shutter)
       exposure.print(io)
     end
-    
+
     def print_depth_of_field(io=STDOUT)
       io.puts "FIELD:"
       io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
@@ -178,7 +178,7 @@ module PhotoUtils
       io.puts " working aperture: #{working_aperture}"
       io.puts
     end
-    
+
     def print(io=STDOUT)
       print_depth_of_field(io)
       print_exposure(io)
