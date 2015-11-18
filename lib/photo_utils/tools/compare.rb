@@ -38,9 +38,9 @@ module PhotoUtils
         $max_sensitivity = Sensitivity.new(1600)
         $max_angle_of_view_delta = Angle.new(5)
         $max_subject_distance_delta = 6.feet
-  
-        base = Pathname.new('/Users/johnl/Pictures/Lightroom Burned Exports')
-  
+
+        base = Path.new('/Users/johnl/Pictures/Lightroom Burned Exports')
+
         shots = %q{
 
           # file                        width DoF   description

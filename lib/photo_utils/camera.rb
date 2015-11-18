@@ -1,13 +1,11 @@
 # coding: utf-8
 
-require 'pathname3'
-
 module PhotoUtils
 
   class Camera
-    
-    CAMERAS_PATH = Pathname.new(ENV['HOME']) + '.cameras.rb'
-    
+
+    CAMERAS_PATH = Path.new(ENV['HOME']) / '.cameras.rb'
+
     def self.cameras
       unless class_variable_defined?('@@cameras')
         if CAMERAS_PATH.exist?
