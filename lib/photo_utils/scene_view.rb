@@ -97,7 +97,7 @@ module PhotoUtils
             width: step * @scale,
             height: @scene.field_of_view(distance).height * @scale,
             fill: 'blue',
-            :'fill-opacity': opacity)
+            'fill-opacity' => opacity)
         end
       end
 
