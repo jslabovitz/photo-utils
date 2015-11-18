@@ -14,7 +14,7 @@ module PhotoUtils
       end
       @@cameras
     end
-    
+
     def self.find(params)
       if (sel = params[:name])
         cameras.find { |c| sel === c.name }
@@ -22,11 +22,11 @@ module PhotoUtils
         raise "Don't know how to search for camera with params: #{params.inspect}"
       end
     end
-    
+
     def self.[](name)
       find(:name => name)
     end
-    
+
     attr_accessor :name
     attr_accessor :formats
     attr_accessor :format
@@ -35,7 +35,7 @@ module PhotoUtils
     attr_accessor :shutter
     attr_accessor :lenses
     attr_accessor :lens
-    
+
     def initialize(params={})
       if params[:format]
         params[:formats] = [params.delete(:format)]
@@ -49,19 +49,19 @@ module PhotoUtils
       @lens = @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
       @shutter = @max_shutter
     end
-    
+
     def min_shutter=(t)
       @min_shutter = t ? Time.new(t) : nil
     end
-    
+
     def max_shutter=(t)
       @max_shutter = t ? Time.new(t) : nil
     end
-    
+
     def shutter=(t)
       @shutter = t ? Time.new(t) : nil
     end
-    
+
     def angle_of_view
       raise "Need focal length and format size to determine angle of view" unless @lens && @lens.focal_length && @format
       @format.angle_of_view(@lens.focal_length)
@@ -73,7 +73,7 @@ module PhotoUtils
         io.puts "\t" + "#{lens == self.lens ? '*' : ' '} #{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{@format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
       end
     end
-    
+
   end
 
 end

@@ -4,11 +4,11 @@ require 'photo_utils/tool'
 # require 'pathname2'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class Compare < Tool
-      
+
       def run(args)
         # given:
         #   an image file with EXIF data
@@ -31,9 +31,9 @@ module PhotoUtils
         # scenes:
         #   stage performance at medium / far
         #   portrait at close / medium
-    
+
         #FIXME: Ugh
-  
+
         $min_sensitivity = Sensitivity.new(100)
         $max_sensitivity = Sensitivity.new(1600)
         $max_angle_of_view_delta = Angle.new(5)
@@ -66,7 +66,7 @@ module PhotoUtils
           060524.023.jpg                9'    3'    Japan: plants & rust
           060527.051.jpg                8'    3'    Japan: racoon & bicycle
           060528.003.jpg                18"   6"    Japan: tiny buddhas
-    
+
         }.split(/\n/).map { |line|
           line.gsub!(/^\s+|\s+$/, '')
           line.sub!(/#.*/, '')
@@ -83,11 +83,11 @@ module PhotoUtils
               :desired_dof => dof)
           end
         }.compact
-    
+
         # FIXME: Ugh
-  
+
         def validate(scene, camera, lens, subject_distance_delta, angle_of_view_delta)
-    
+
           #
           # validate subject distance delta
           #
@@ -124,20 +124,20 @@ module PhotoUtils
           if scene.time > camera.max_shutter
             raise "shutter too slow (#{scene.time} < #{camera.max_shutter})"
           end
-    
+
         end
-  
+
         successes = {}
-  
+
         shots.each do |shot|
 
           img = MiniExiftool.new(base + shot.file, :numerical => true, :timestamps => DateTime)
-    
+
           scene = Scene.new
-    
+
           model = img['Model']
           scene.format = Format[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
-    
+
           scene.description = "#{shot[:type]} [#{shot[:seq]}]"
           scene.aperture = img['Aperture']
           if img['ISO'].kind_of?(Numeric)
@@ -147,50 +147,50 @@ module PhotoUtils
           end
           scene.time = img['ExposureTime']
           scene.focal_length = img['FocalLength']
-    
+
           exp_comp = img['ExposureCompensation'].to_f
           if exp_comp != 0
             scene.sensitivity = Sensitivity.new_from_v(scene.sensitivity.to_v + exp_comp)
           end
-    
+
           # d = w * f / s
           scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.format.width))
-    
+
           puts
           puts "--- #{scene.description}"
           puts
-    
+
           scene.print_exposure
           scene.print_depth_of_field
           puts
-    
+
           # now compute equivalent scene for each camera
-    
+
           cameras.each do |camera|
-      
+
             scene2 = Scene.new
             scene2.format = camera.format or raise "Unknown format: #{camera.format.inspect}"
             scene2.aperture = scene.aperture
             scene2.brightness = scene.brightness
             # scene2.sensitivity = 400
-      
-            # find the lens that would best fit 
-      
+
+            # find the lens that would best fit
+
             found = false
-      
+
             # NOTE: #uniq doesn't work well with delegate classes, so we cast the focal length to a float first
             focal_lengths = camera.lenses.collect { |lens| lens.focal_length.to_f }.sort.reverse.uniq
-      
+
             focal_lengths.each do |focal_length|
-        
+
               lenses = camera.lenses.select { |lens| lens.focal_length == focal_length }.sort_by { |lens| lens.max_aperture }.reverse
-        
+
               lenses.each do |lens|
-          
+
                 scene2.focal_length = lens.focal_length
-          
+
                 # keeping subject width the same, compute new distance from given focal length
-        
+
                 #    o     i
                 #   --- = ---
                 #    d     f
@@ -199,21 +199,21 @@ module PhotoUtils
                 # d = subject distance
                 # o = subject dimension
                 # i = frame dimension
-        
+
                 scene2.subject_distance = 1 / ((scene2.frame.width / scene2.focal_length) / shot.subject_width)
-        
+
                 #
                 # calculate depth of field
                 #
-          
+
                 near_limit = scene2.subject_distance - (shot.desired_dof / 2)
                 far_limit  = scene2.subject_distance + (shot.desired_dof / 2)
                 scene2.aperture = scene2.aperture_for_depth_of_field(near_limit, far_limit)
-          
+
                 #
                 # adjust aperture
                 #
-          
+
                 # ;;a = scene2.aperture
                 # round aperture to closest 1/2 stop
                 scene2.aperture = Aperture.new_from_v((scene2.aperture.to_v / 0.5).round * 0.5)
@@ -221,11 +221,11 @@ module PhotoUtils
                 # clamp to maximum aperture
                 scene2.aperture = [scene2.aperture, lens.max_aperture].max
                 # ;;puts "[2] #{a} => #{scene2.aperture}"
-          
+
                 #
                 # calculate sensitivity
                 #
-          
+
                 # start with minimum shutter time
                 scene2.time = camera.max_shutter
                 # round up to the next ISO value
@@ -234,29 +234,29 @@ module PhotoUtils
                 scene2.sensitivity = [scene2.sensitivity, $min_sensitivity].max
                 # # force recalculation of shutter
                 # scene2.time = nil
-          
+
                 #
                 # compute subject distance difference
                 #
-          
+
                 subject_distance_delta = scene.subject_distance - scene2.subject_distance
-          
+
                 #
                 # compute angle of view difference
                 #
-          
+
                 angle_of_view_delta = Angle.new(scene.angle_of_view - scene2.angle_of_view)
-          
+
                 #
                 # validate
                 #
-          
+
                 begin
                   validate(scene2, camera, lens, subject_distance_delta, angle_of_view_delta)
                 rescue => e
                   failure = e
                 end
-          
+
                 puts "  %-15.15s  |  %-19.19s  |  %10s @ %5s @ %8s  |  dist: %6s (%s%6s) |  dof: %6s (-%5s .. +%5s)  |  %s" % [
                   camera.name,
                   lens.name,
@@ -271,7 +271,7 @@ module PhotoUtils
                   scene2.far_distance_from_subject.to_s(:imperial),
                   failure || 'GOOD'
                 ] if options[:verbose] || !failure
-          
+
                 successes[camera.name] ||= {}
 
                 if !failure
@@ -280,26 +280,26 @@ module PhotoUtils
                   found = true
                   break
                 end
-          
+
               end
-                    
+
               break if found
-        
+
             end
-      
+
             unless found
               successes[camera.name]['FAILED'] ||= 0
               successes[camera.name]['FAILED'] += 1
             end
-      
+
           end
-    
+
         end
 
         ;;pp successes
         # ;;successes.sort_by { |k,v| v }.each { |k,v| puts "%2d: %s" % [v, k] }
       end
-      
+
     end
   end
 end
