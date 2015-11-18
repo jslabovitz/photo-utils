@@ -1,5 +1,3 @@
-# coding: utf-8
-
 module Math
 
   NaN           = 0.0/0

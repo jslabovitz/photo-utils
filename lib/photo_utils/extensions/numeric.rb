@@ -1,5 +1,3 @@
-# coding: utf-8
-
 require 'photo_utils'
 
 INCHES_PER_METER = 39.3700787402

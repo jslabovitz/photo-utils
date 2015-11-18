@@ -1,5 +1,3 @@
-# coding: utf-8
-
 module PhotoUtils
 
   # http://photo.net/medium-format-photography-forum/00QiiV

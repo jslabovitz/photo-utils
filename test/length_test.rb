@@ -1,5 +1,3 @@
-# coding: utf-8
-
 require 'test/unit'
 require 'wrong'
 require 'photo_utils'
