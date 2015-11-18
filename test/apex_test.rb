@@ -9,10 +9,10 @@ class TestAPEX < Test::Unit::TestCase
   
   def setup
     @exposure = Exposure.new(
-      :time => nil,
-      :aperture => 8,
-      :sensitivity => 200,
-      :brightness => Brightness.new_from_v(5))
+      time: nil,
+      aperture: 8,
+      sensitivity: 200,
+      brightness: Brightness.new_from_v(5))
   end
   
 	def test_apex

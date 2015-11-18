@@ -84,7 +84,7 @@ module PhotoUtils
         when /^(.*?)\s{2,}([\d\.]+)\s+([\d\.]+)\s*(.*?)$/
           name, height, width, aliases = $1, $2, $3, $4
           frame = Frame.new(width.to_f, height.to_f)
-          format = Format.new(:name => name, :frame => frame)
+          format = Format.new(name: name, frame: frame)
           @@formats[name] = format
           aliases.split(/,\s*/).each { |a| @@formats[a] = format }
         when ''

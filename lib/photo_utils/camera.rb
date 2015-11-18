@@ -24,7 +24,7 @@ module PhotoUtils
     end
 
     def self.[](name)
-      find(:name => name)
+      find(name: name)
     end
 
     attr_accessor :name

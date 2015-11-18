@@ -77,10 +77,10 @@ module PhotoUtils
               dof = Length.new(dof)
             width = Length.new(width)
             HashStruct.new(
-              :type => type,
-              :file => file,
-              :subject_width => width,
-              :desired_dof => dof)
+              type: type,
+              file: file,
+              subject_width: width,
+              desired_dof: dof)
           end
         }.compact
 
@@ -131,7 +131,7 @@ module PhotoUtils
 
         shots.each do |shot|
 
-          img = MiniExiftool.new(base + shot.file, :numerical => true, :timestamps => DateTime)
+          img = MiniExiftool.new(base + shot.file, numerical: true, timestamps: DateTime)
 
           scene = Scene.new
 

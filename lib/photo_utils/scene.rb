@@ -123,18 +123,18 @@ module PhotoUtils
     
     def exposure
       Exposure.new(
-        :brightness => @brightness,
-        :sensitivity => @sensitivity,
-        :aperture => @camera.lens.aperture,
-        :time => @camera.shutter)
+        brightness: @brightness,
+        sensitivity: @sensitivity,
+        aperture: @camera.lens.aperture,
+        time: @camera.shutter)
     end
     
     def set_exposure
       exposure = Exposure.new(
-        :brightness => @brightness,
-        :sensitivity => @sensitivity,
-        :aperture => @camera.lens.aperture,
-        :time => @camera.shutter)
+        brightness: @brightness,
+        sensitivity: @sensitivity,
+        aperture: @camera.lens.aperture,
+        time: @camera.shutter)
       @camera.lens.aperture = exposure.aperture
       @camera.shutter = exposure.time
     end
@@ -156,10 +156,10 @@ module PhotoUtils
     
     def print_exposure(io=STDOUT)
       exposure = Exposure.new(
-        :brightness => @brightness,
-        :sensitivity => @sensitivity,
-        :aperture => @camera.lens.aperture,
-        :time => @camera.shutter)
+        brightness: @brightness,
+        sensitivity: @sensitivity,
+        aperture: @camera.lens.aperture,
+        time: @camera.shutter)
       exposure.print(io)
     end
     

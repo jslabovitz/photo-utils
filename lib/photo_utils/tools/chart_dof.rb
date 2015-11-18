@@ -114,17 +114,17 @@ module PhotoUtils
         camera_width  = scenes.map { |s| s.focal_length }.max
         camera_height = scenes.map { |s| [s.absolute_aperture, s.frame.height].max }.max
 
-        html = Builder::XmlMarkup.new(:indent => 2)
+        html = Builder::XmlMarkup.new(indent: 2)
         html.declare!(:DOCTYPE, :html)
         html.html do
           html.head {}
           html.body do
             html.table do
               scenes.each do |scene|
-                scene_view = SceneView.new(scene, 
-                  :max_distance => max_distance,
-                  :camera_width => camera_width,
-                  :camera_height => camera_height)
+                scene_view = SceneView.new(scene,
+                  max_distance: max_distance,
+                  camera_width: camera_width,
+                  camera_height: camera_height)
                 html.tr do
                   html.td do
                     html << scene.description
