@@ -1,11 +1,11 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class Blur < Tool
-      
+
       def run(args)
         scene = Scene.new
         scene.sensitivity = 100
@@ -20,24 +20,24 @@ module PhotoUtils
         # scene.camera.lens = scene.camera.lenses.find { |l| l.focal_length == 12.inches }
         scene.camera.lens.aperture = 32
         scene.camera.shutter = nil
-        
+
         scene.print_camera
         scene.print_exposure
         scene.print_depth_of_field
-        
+
         1.feet.step(scene.subject_distance * 2, 1.feet).map { |d| Length.new(d) }.each do |d|
           blur = scene.blur_at_distance(d)
           puts "%12s: blur disk: %7s, blur/CoC: %6d%% -- %s" % [
-            d.to_s(:imperial), 
+            d.to_s(:imperial),
             blur.to_s(:metric, 2),
             (blur / scene.circle_of_confusion) * 100,
             blur <= scene.circle_of_confusion ? 'in focus' : 'out of focus'
           ]
         end
       end
-      
+
     end
-    
+
   end
-  
+
 end

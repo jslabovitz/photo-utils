@@ -1,35 +1,35 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class FilmTest < Tool
-      
+
       def run(args)
         camera = Camera['RB67']
-        
+
         scene = Scene.new
         scene.camera = camera
         scene.sensitivity = 100
         scene.camera.shutter = 1.0/60
         scene.camera.lens.aperture = 5.6
         scene.description = "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68"
-        
+
         scene.print_exposure
-        
+
         zone_offset_from_mg = -4
-        
+
         # recommendation from Adams' "The Negative"
         # steps = [0, -1.0/3, -2.0/3, -1, 1.0/3, 2.0/3, 1]
         steps = [0, -0.5, -1, -1.5, -2, 0.5, 1, 1.5, 2]
-        
+
         scenes = []
-  
+
         base_fog = Scene.new
         base_fog.description = "base + fog"
         scenes << base_fog
-  
+
         steps.each do |i|
           scene2 = scene.dup
           scene2.brightness = PhotoUtils::Brightness.new_from_v(scene.brightness.to_v - zone_offset_from_mg)
@@ -38,7 +38,7 @@ module PhotoUtils
           scene2.description = "#{scene2.sensitivity} (#{i}) [#{scene2.exposure}]"
           scenes << scene2
         end
-  
+
         scenes.each_with_index do |scene2, i|
           begin
             aperture = scene2.aperture
@@ -46,7 +46,7 @@ module PhotoUtils
           rescue => e
             aperture = time = nil
           end
-    
+
           puts "%2d | %-25.25s | %12s | %5s" % [
             i + 1,
             scene2.description,
@@ -55,9 +55,9 @@ module PhotoUtils
           ]
         end
       end
-      
+
     end
-    
+
   end
-  
+
 end

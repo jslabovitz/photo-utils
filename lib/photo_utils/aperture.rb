@@ -3,7 +3,7 @@
 module PhotoUtils
 
   class Aperture < Value
-    
+
     def self.new_from_v(v)
       new(Math.sqrt(2 ** v.to_f))
     end
@@ -11,7 +11,7 @@ module PhotoUtils
     def to_v
       Math.log2(self ** 2)
     end
-    
+
     def to_s(format=:fstop, stop_steps=3)
       v = to_v
       case format
@@ -39,11 +39,11 @@ module PhotoUtils
         raise "Unknown format: #{format.inspect}"
       end
     end
-    
+
     def absolute(focal_length)
       focal_length / self
     end
-        
+
   end
 
 end

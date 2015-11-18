@@ -3,7 +3,7 @@
 module PhotoUtils
 
   class Exposure
-    
+
 =begin
 
     http://doug.kerr.home.att.net/pumpkin/APEX.pdf
@@ -39,13 +39,13 @@ module PhotoUtils
       Ev = (Tv + Av) - Sv
 
 =end
-    
+
     def initialize(params={})
       params.each do |key, value|
         method("#{key}=").call(value)
       end
     end
-    
+
     def aperture=(n)
       @aperture = n ? Aperture.new(n) : nil
     end
@@ -115,31 +115,31 @@ module PhotoUtils
     def av
       aperture.to_v
     end
-    
+
     def tv
       time.to_v
     end
-    
+
     def sv
       sensitivity.to_v
     end
-    
+
     def bv
       brightness.to_v
     end
-    
+
     def ev
       exposure
     end
-    
+
     def ev100
       ev - sv - Sensitivity.new(100).to_v
     end
-    
+
     def to_s
       "Ev:#{ev.prec(1)} = #{aperture.to_s(:value)} + #{time.to_s(:value)} = #{sensitivity.to_s(:value)} + #{brightness.to_s(:value)}"
     end
-    
+
     def print(io=STDOUT)
       io.puts "EXPOSURE:"
       io.puts "       brightness: #{brightness} (#{brightness.to_s(:value)})"
@@ -149,7 +149,7 @@ module PhotoUtils
       io.puts "         exposure: #{to_s}"
       io.puts
     end
-    
+
   end
-  
+
 end

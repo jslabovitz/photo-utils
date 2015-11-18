@@ -26,14 +26,14 @@ module PhotoUtils
         raise "Unknown format: #{format.inspect}"
       end
     end
-    
+
     # http://www.apug.org/forums/forum37/22334-fuji-neopan-400-reciprocity-failure-data.html
-    
+
     def reciprocity
       tc = self + (0.3 * (self ** 1.62))
       Time.new(tc)
     end
-    
+
   end
 
 end

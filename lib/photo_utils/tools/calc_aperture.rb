@@ -1,11 +1,11 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class CalcAperture < Tool
-      
+
       def run(args)
 
         # set up basic scene
@@ -16,7 +16,7 @@ module PhotoUtils
         basic_scene.background_distance = 14.feet
         basic_scene.camera.lens.aperture = 8
         basic_scene.description = basic_scene.camera.name
- 
+
         puts "--- @ #{basic_scene.subject_distance.to_s(:imperial)}"
         basic_scene.camera.lenses.each do |lens|
           scene = basic_scene.dup
@@ -35,11 +35,11 @@ module PhotoUtils
           scene.print_exposure
           puts
         end
-      
+
       end
-      
+
     end
-    
+
   end
-  
+
 end

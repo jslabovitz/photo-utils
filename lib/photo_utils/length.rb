@@ -5,7 +5,7 @@ require 'delegate'
 module PhotoUtils
 
   class Length < DelegateClass(Float)
-    
+
     def initialize(x)
       case x
       when Length
@@ -41,11 +41,11 @@ module PhotoUtils
         raise "Can't make length from #{x.class}: #{x.inspect}"
       end
     end
-    
+
     def to_s(format=:metric, precision=nil)
       if self == Math::Infinity
         '∞'
-      else 
+      else
         case format
         when :imperial
           inches = self * INCHES_PER_METER / 1000
@@ -84,5 +84,5 @@ module PhotoUtils
     end
 
   end
-  
+
 end

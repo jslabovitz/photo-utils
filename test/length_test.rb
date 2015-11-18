@@ -5,10 +5,10 @@ require 'wrong'
 require 'photo_utils'
 
 class TestLength < Test::Unit::TestCase
-  
+
   include Wrong
   include PhotoUtils
-  
+
   def setup
     @table = {
   	  %q{∞}     => Math::Infinity,
@@ -21,7 +21,7 @@ class TestLength < Test::Unit::TestCase
       %q{10.5m} => 10.5.meters,
     }
   end
-  
+
 	def test_formatter
 	  @table.each do |s, n|
 	    if s =~ /['"]/
@@ -32,11 +32,11 @@ class TestLength < Test::Unit::TestCase
   	  assert { Length.new(n).to_s(format) == s }
     end
   end
-  
+
   def test_parse
 	  @table.each do |s, n|
       assert { Length.new(s) == n }
     end
   end
-  
+
 end

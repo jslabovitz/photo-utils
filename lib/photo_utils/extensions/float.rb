@@ -1,7 +1,7 @@
 # coding: utf-8
 
 class Float
-  
+
   def prec(x)
     if self == self.round
       self.round
@@ -9,5 +9,5 @@ class Float
       ("%.*f" % [x, self]).to_f
     end
   end
-  
+
 end

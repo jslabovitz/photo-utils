@@ -1,11 +1,11 @@
 require 'photo_utils/tool'
 
 module PhotoUtils
-  
+
   class Tools
-    
+
     class Reciprocity < Tool
-      
+
       def usage
         %q{
           -r 1      compute single value
@@ -13,7 +13,7 @@ module PhotoUtils
           -r        compute default range of 1-100 secs
         }
       end
-      
+
       def run(args)
         if args.first
           r = args.shift.split('-', 2).map { |n| n ? n.to_i : nil }
@@ -30,7 +30,7 @@ module PhotoUtils
       end
 
     end
-    
+
   end
-  
+
 end
