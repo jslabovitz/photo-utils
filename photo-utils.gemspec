@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.require_path  = 'lib'
 
   s.add_dependency 'hashstruct'
+  s.add_dependency 'builder'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
