@@ -11,7 +11,7 @@ module PhotoUtils
         # set up basic scene
 
         basic_scene = Scene.new
-        basic_scene.camera = Camera[/r-d1/i]
+        basic_scene.camera = Camera[/hasselblad/i]
         basic_scene.subject_distance = 12.feet
         basic_scene.background_distance = 14.feet
         basic_scene.camera.lens.aperture = 8

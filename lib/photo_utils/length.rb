@@ -40,35 +40,41 @@ module PhotoUtils
       end
     end
 
-    def to_s(format=:metric, precision=nil)
+    def format_imperial
+      inches = self * INCHES_PER_METER / 1000
+      if inches.floor >= 12
+        feet = (inches / 12).floor
+        inches %= 12
+      else
+        feet = 0
+      end
+      if inches > 0
+        inches = inches.ceil
+        if inches == 12
+          feet += 1
+          inches = 0
+        end
+      end
+      (feet > 0 ? "#{feet}'" : '') + (inches > 0 ? "#{inches}\"" : '')
+    end
+
+    def format_metric(precision=nil)
+      if self >= 1000
+        "#{(self / 1000).format(precision)}m"
+      else
+        "#{format(precision)}mm"
+      end
+    end
+
+    def to_s(format=:metric)
       if self == Math::Infinity
         '∞'
       else
         case format
         when :imperial
-          inches = self * INCHES_PER_METER / 1000
-          if inches.floor >= 12
-            feet = (inches / 12).floor
-            inches %= 12
-          else
-            feet = 0
-          end
-          if inches > 0
-            inches = inches.ceil
-            if inches == 12
-              feet += 1
-              inches = 0
-            end
-          end
-          (feet > 0 ? "#{feet}'" : '') + (inches > 0 ? "#{inches}\"" : '')
+          format_imperial
         when :metric
-          if self >= 1000
-            "#{(self / 1000).prec(2)}m"
-          elsif precision
-            "#{self.prec(precision)}mm"
-          else
-            "#{self.round}mm"
-          end
+          format_metric
         end
       end
     end

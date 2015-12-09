@@ -84,19 +84,15 @@ module PhotoUtils
         if true
 
           camera = Camera[/eastman/i] or raise "Can't find camera"
-          lens = camera.lenses.find { |l| l.name =~ /gundlach/i } or raise "Can't find lens"
-
           basic_scene.description = camera.name
-          # basic_scene.format = camera.format
-          ;;basic_scene.format = Format['6x9']
+          basic_scene.camera = camera
 
-          aperture = lens.max_aperture
-          while aperture <= lens.min_aperture
+          aperture = camera.lens.max_aperture
+          while aperture <= camera.lens.min_aperture
             scene = basic_scene.dup
-            scene.focal_length = lens.focal_length
-            scene.aperture = aperture
+            camera.lens.aperture = aperture
             # break if scene.time > 1.0/30
-            scene.description += ": #{scene.focal_length} @ #{scene.aperture}"
+            scene.description += ": #{camera.lens.focal_length} @ #{camera.lens.aperture}"
             scenes << scene
             aperture = Aperture.new_from_v(aperture.to_v + 1)
           end

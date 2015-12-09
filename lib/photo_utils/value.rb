@@ -5,7 +5,7 @@ module PhotoUtils
   class Value < DelegateClass(Float)
 
     def self.new_from_v(v)
-      raise UnimplementedMethod, "Subclass has not implemented \#new_from_v"
+      raise NotImplementedError, "Subclass has not implemented \#new_from_v"
     end
 
     def initialize(n)
@@ -13,7 +13,7 @@ module PhotoUtils
     end
 
     def to_v
-      raise UnimplementedMethod, "Subclass has not implemented \#to_v"
+      raise NotImplementedError, "Subclass has not implemented \#to_v"
     end
 
     def incr

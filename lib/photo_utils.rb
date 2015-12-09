@@ -14,7 +14,8 @@ require 'photo_utils/value'
 
 require 'photo_utils/aperture'
 require 'photo_utils/brightness'
-# require 'photo_utils/exposure'
+require 'photo_utils/compensation'
+require 'photo_utils/illuminance'
 require 'photo_utils/sensitivity'
 require 'photo_utils/time'
 

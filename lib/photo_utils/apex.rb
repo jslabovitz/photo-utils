@@ -38,9 +38,15 @@ module PhotoUtils
 
 =end
 
+    attr_accessor :aperture
+    attr_accessor :time
+    attr_accessor :sensitivity
+    attr_accessor :light
+    attr_accessor :compensation
+
     def initialize(params={})
       params.each do |key, value|
-        method("#{key}=").call(value)
+        send("#{key}=", value)
       end
     end
 
@@ -56,57 +62,80 @@ module PhotoUtils
       @sensitivity = n ? Sensitivity.new(n) : nil
     end
 
-    def brightness=(n)
-      @brightness = n ? Brightness.new(n) : nil
+    def light=(n)
+      @light = case n
+      when Brightness, Illuminance
+        n
+      when Numeric
+        Brightness.new(n)
+      when nil
+        nil
+      else
+        raise
+      end
+    end
+
+    def compensation=(n)
+      @compensation = n ? Compensation.new_from_v(n) : nil
     end
 
     def aperture
       if @aperture
         @aperture
-      elsif @sensitivity && @brightness && @time
-        Aperture.new_from_v(sv + bv - tv)
+      elsif @sensitivity && @light && @time
+        Aperture.new_from_v(sv + lv - tv + cv)
       else
-        raise "Need brightness/sensitivity/time to compute aperture"
+        raise "Need sensitivity/light/time to compute aperture"
       end
     end
 
     def time
       if @time
         @time
-      elsif @sensitivity && @brightness && @aperture
-        Time.new_from_v(sv + bv - av)
+      elsif @sensitivity && @light && @aperture
+        Time.new_from_v(sv + lv - av + cv)
       else
-        raise "Need brightness/sensitivity/aperture to compute time"
+        raise "Need sensitivity/light/aperture to compute time"
       end
     end
 
     def sensitivity
       if @sensitivity
         @sensitivity
-      elsif @aperture && @time && @brightness
-        Sensitivity.new_from_v(av + tv - bv)
+      elsif @aperture && @time && @light
+        Sensitivity.new_from_v(av + tv - bv + cv)
       else
-        raise "Need aperture/time/brightness to compute sensitivity"
+        raise "Need aperture/time/light to compute sensitivity"
       end
     end
 
     def brightness
-      if @brightness
-        @brightness
+      if @light
+        Brightness.new_from_v(lv)
       elsif @aperture && @time && @sensitivity
-        Brightness.new_from_v(av + tv - sv)
+        Brightness.new_from_v(av + tv - sv + cv)
       else
         raise "Need aperture/time/sensitivity to compute brightness"
+      end
+    end
+
+    def illuminance
+      if @light
+        Illuminance.new_from_v(lv)
+      elsif @aperture && @time && @sensitivity
+        Illuminance.new_from_v(av + tv - sv + cv)
+      else
+        raise "Need aperture/time/sensitivity to compute illuminance"
       end
     end
 
     def exposure
       if @aperture && @time
         av + tv
-      elsif @sensitivity && @brightness
-        sv + bv
+      elsif @sensitivity && @light
+        sv + lv + cv
       else
-        raise "Need aperture/time or sensitivity/brightness to compute exposure"
+        raise "Need aperture/time or sensitivity/light to compute exposure"
       end
     end
 
@@ -126,6 +155,18 @@ module PhotoUtils
       brightness.to_v
     end
 
+    def iv
+      illuminance.to_v
+    end
+
+    def lv
+      light.to_v
+    end
+
+    def cv
+      @compensation ? @compensation.to_f : 0
+    end
+
     def ev
       exposure
     end
@@ -134,16 +175,32 @@ module PhotoUtils
       ev - sv - Sensitivity.new(100).to_v
     end
 
+    def stepped_exposures(steps=7, increment=0.3)
+      n = increment * (steps / 2)
+      (-n..n).step(increment).map do |adjustment|
+        new_exposure = dup
+        new_exposure.compensation = (@compensation ? @compensation : 0) + adjustment
+        new_exposure
+      end
+    end
+
     def to_s
-      "Ev:#{ev.prec(1)} = #{aperture.to_s(:value)} + #{time.to_s(:value)} = #{sensitivity.to_s(:value)} + #{brightness.to_s(:value)}"
+      "%s = %s + %s = %s + %s" % [
+        "Ev:#{ev.format(10)}",
+        aperture.format_value,
+        time.format_value,
+        sensitivity.format_value,
+        light.format_value,
+      ]
     end
 
     def print(io=STDOUT)
       io.puts "EXPOSURE:"
-      io.puts "       brightness: #{brightness} (#{brightness.to_s(:value)})"
-      io.puts "      sensitivity: #{sensitivity} (#{sensitivity.to_s(:value)})"
-      io.puts "         aperture: #{aperture} (#{aperture.to_s(:value)})"
-      io.puts "             time: #{time} (#{time.to_s(:value)})"
+      io.puts "            light: #{light} (#{light.format_value})"
+      io.puts "      sensitivity: #{sensitivity} (#{sensitivity.format_value})"
+      io.puts "         aperture: #{aperture} (#{aperture.format_value})"
+      io.puts "             time: #{time} (#{time.format_value})"
+      io.puts "     compensation: #{@compensation ? compensation.format_value : '--'}"
       io.puts "         exposure: #{to_s}"
       io.puts
     end

@@ -2,20 +2,38 @@ module PhotoUtils
 
   class Sensitivity < Value
 
+    C = 3.125
+
+    def self.new_from_iso(n)
+      new(n)
+    end
+
     def self.new_from_v(v)
-      new((2 ** v.to_f) / 0.32)
+      new(C * (2 ** v.to_f))
     end
 
     def to_v
-      Math.log2(self * 0.32)
+      Math.log2(self / C)
+    end
+
+    def to_iso
+      to_f
+    end
+
+    def format_iso
+      'ISO ' + to_iso.format(10)
+    end
+
+    def format_value
+      "Sv:#{to_v.format}"
     end
 
     def to_s(format=:iso)
       case format
       when :iso
-        "ISO #{round}"
+        format_iso
       when :value
-        "Sv:#{to_v.prec(1)}"
+        format_value
       else
         raise "Unknown format: #{format.inspect}"
       end

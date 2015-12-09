@@ -68,7 +68,14 @@ module PhotoUtils
     def print(io=STDOUT)
       io.puts "#{@name}: format: #{@format}, shutter: #{@max_shutter} - #{@min_shutter}"
       @lenses.sort_by(&:focal_length).each do |lens|
-        io.puts "\t" + "#{lens == self.lens ? '*' : ' '} #{lens.name}: focal length: #{lens.focal_length} (35mm equiv: #{@format.focal_length_equivalent(lens.focal_length)}), aperture: #{lens.max_aperture} - #{lens.min_aperture}"
+        io.puts "\t%s %s: focal length: %s (35mm equiv: %s), aperture: %s~%s" % [
+          lens == self.lens ? '*' : ' ',
+          lens.name,
+          lens.focal_length.format_metric(1),
+          @format.focal_length_equivalent(lens.focal_length).format_metric(1),
+          lens.max_aperture,
+          lens.min_aperture,
+        ]
       end
     end
 

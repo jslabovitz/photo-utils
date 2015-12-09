@@ -29,7 +29,7 @@ module PhotoUtils
           blur = scene.blur_at_distance(d)
           puts "%12s: blur disk: %7s, blur/CoC: %6d%% -- %s" % [
             d.to_s(:imperial),
-            blur.to_s(:metric, 2),
+            blur.to_s(:metric),
             (blur / scene.circle_of_confusion) * 100,
             blur <= scene.circle_of_confusion ? 'in focus' : 'out of focus'
           ]

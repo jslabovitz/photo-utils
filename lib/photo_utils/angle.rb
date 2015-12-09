@@ -9,7 +9,7 @@ module PhotoUtils
     end
 
     def to_s
-      "#{self.round}°"
+      "#{format}°"
     end
 
   end

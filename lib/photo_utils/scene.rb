@@ -10,9 +10,11 @@ module PhotoUtils
     attr_accessor :brightness
 
     def initialize
-      @background_distance = Length.new(Math::Infinity)
-      @sensitivity = Sensitivity.new(100)
-      @brightness = Brightness.new(100)
+      {
+        background_distance: Math::Infinity,
+        sensitivity: 100,
+        brightness: 100,
+      }.each { |k, v| send("#{k}=", v) }
     end
 
     def sensitivity=(s)
@@ -121,28 +123,24 @@ module PhotoUtils
 
     def exposure
       Exposure.new(
-        brightness: @brightness,
+        light: @brightness,
         sensitivity: @sensitivity,
         aperture: @camera.lens.aperture,
         time: @camera.shutter)
     end
 
     def set_exposure
-      exposure = Exposure.new(
-        brightness: @brightness,
-        sensitivity: @sensitivity,
-        aperture: @camera.lens.aperture,
-        time: @camera.shutter)
-      @camera.lens.aperture = exposure.aperture
-      @camera.shutter = exposure.time
+      exp = exposure
+      @camera.lens.aperture = exp.aperture
+      @camera.shutter = exp.time
     end
 
     def print_camera(io=STDOUT)
       io.puts "CAMERA:"
       io.puts "             name: #{@camera.name}"
-      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.prec(2)})"
-      io.puts "    shutter range: #{@camera.max_shutter} - #{@camera.min_shutter}"
-      io.puts "   aperture range: #{@camera.lens.max_aperture} - #{@camera.lens.min_aperture}"
+      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.format(10)})"
+      io.puts "    shutter range: #{@camera.max_shutter} ~ #{@camera.min_shutter}"
+      io.puts "   aperture range: #{@camera.lens.max_aperture} ~ #{@camera.lens.min_aperture}"
       io.puts "             lens: #{@camera.lens.name} - #{@camera.lens.focal_length} (#{
         %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@camera.format.focal_length_equivalent(@camera.lens.focal_length, Format[f])}" }.join(', ')
       })"
@@ -153,11 +151,6 @@ module PhotoUtils
     end
 
     def print_exposure(io=STDOUT)
-      exposure = Exposure.new(
-        brightness: @brightness,
-        sensitivity: @sensitivity,
-        aperture: @camera.lens.aperture,
-        time: @camera.shutter)
       exposure.print(io)
     end
 
@@ -170,7 +163,7 @@ module PhotoUtils
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
       if background_distance != Math::Infinity
         io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
-        io.puts "  background blur: #{blur_at_distance(background_distance).to_s(:metric, 2)}"
+        io.puts "  background blur: #{blur_at_distance(background_distance).to_s(:metric)}"
       end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
       io.puts " working aperture: #{working_aperture}"

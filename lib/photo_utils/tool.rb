@@ -9,7 +9,7 @@ module PhotoUtils
     end
 
     def run(args)
-      raise UnimplementedMethod, "Tool #{self.class} does not implement \#run"
+      raise NotImplementedError, "Tool #{self.class} does not implement \#run"
     end
 
   end
