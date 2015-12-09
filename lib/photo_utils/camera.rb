@@ -38,9 +38,7 @@ module PhotoUtils
       if params[:format]
         params[:formats] = [params.delete(:format)]
       end
-      params.each do |key, value|
-        method("#{key}=").call(value)
-      end
+      params.each { |k, v| send("#{k}=", v) }
       @format ||= @formats.first
       normal = @format.frame.diagonal
       # set the lens to the one closest to normal (diagonal of frame)

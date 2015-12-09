@@ -102,9 +102,7 @@ module PhotoUtils
     attr_accessor :frame
 
     def initialize(params={})
-      params.each do |key, value|
-        method("#{key}=").call(value)
-      end
+      params.each { |k, v| send("#{k}=", v) }
     end
 
     def inspect
