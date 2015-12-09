@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email             = 'johnl@johnlabovitz.com'
   s.homepage          = 'http://johnlabovitz.com'
   s.version           = PhotoUtils::VERSION
-  s.summary           = "Models, formulas, and utilties for photography optics, etc."
+  s.summary           = 'Models, formulas, and utilties for photography optics, etc.'
   s.description = %q{
     PhotoUtils provides Models, formulas, and utilties for photography optics, etc.
   }
@@ -21,9 +21,9 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'hashstruct'
   s.add_dependency 'builder'
+  s.add_dependency 'path'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rake'
-  s.add_development_dependency 'path'
-  # s.add_development_dependency 'wrong'
+  s.add_development_dependency 'wrong'
 end
