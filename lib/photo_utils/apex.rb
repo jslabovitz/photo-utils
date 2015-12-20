@@ -76,7 +76,7 @@ module PhotoUtils
     end
 
     def compensation=(n)
-      @compensation = n ? Compensation.new_from_v(n) : nil
+      @compensation = Compensation.new(n)
     end
 
     def aperture
@@ -164,7 +164,7 @@ module PhotoUtils
     end
 
     def cv
-      @compensation ? @compensation.to_f : 0
+      @compensation ? @compensation.to_v : 0
     end
 
     def ev
@@ -179,7 +179,7 @@ module PhotoUtils
       n = increment * (steps / 2)
       (-n..n).step(increment).map do |adjustment|
         new_exposure = dup
-        new_exposure.compensation = (@compensation ? @compensation : 0) + adjustment
+        new_exposure.compensation = PhotoUtils::Compensation.new_from_v((@compensation ? @compensation.to_v : 0) + adjustment)
         new_exposure
       end
     end

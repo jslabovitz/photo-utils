@@ -2,21 +2,40 @@ module PhotoUtils
 
   class Compensation < Value
 
-    # amount specified in stops
+    # amount specified in factor
+
+    def self.new_from_factor(f)
+      new(f)
+    end
 
     def self.new_from_v(v)
-      new(v)
+      new(2 ** v)
+    end
+
+    def to_factor
+      to_f
+    end
+
+    def to_v
+      Math.log2(to_f)
+    end
+
+    def format_factor
+      "x%.1f" % to_f.format(10)
     end
 
     def format_value
+      v = to_v
       "Cv:%s%s" % [
-        (self < 0) ? '-' : '+',
-        abs.format(10)
+        (v < 0) ? '-' : '+',
+        v.abs.format(10)
       ]
     end
 
-    def to_s(format=:value)
+    def to_s(format=:factor)
       case format
+      when :factor
+        format_factor
       when :value
         format_value
       else
