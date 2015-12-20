@@ -18,7 +18,7 @@ module PhotoUtils
     end
 
     def to_v
-      Math.log2(self.to_f / NK)
+      Math.log2(to_f / NK)
     end
 
     def to_cdm2
