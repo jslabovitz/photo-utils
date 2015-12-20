@@ -134,9 +134,8 @@ module PhotoUtils
           end
         end
 
-        raise "Usage: #{$0} output-file.html" unless ARGV.first
-        File.open(ARGV.first, 'w') { |f| f.write(html.target!) }
-
+        output_file = @args.first or raise
+        Path.new(output_file).write(html.target!)
       end
 
     end
