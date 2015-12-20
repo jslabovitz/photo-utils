@@ -6,7 +6,7 @@ module PhotoUtils
 
     class CalcAperture < Tool
 
-      def run(args)
+      def run
 
         # set up basic scene
 

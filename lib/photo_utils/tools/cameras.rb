@@ -6,7 +6,7 @@ module PhotoUtils
 
     class Cameras < Tool
 
-      def run(args)
+      def run
         if Camera.cameras
           Camera.cameras.each do |camera|
             camera.print

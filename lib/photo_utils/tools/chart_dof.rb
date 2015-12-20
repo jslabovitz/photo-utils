@@ -6,7 +6,7 @@ module PhotoUtils
 
     class ChartDOF < Tool
 
-      def run(args)
+      def run
 
         # set up basic scene
 

@@ -2,14 +2,21 @@ module PhotoUtils
 
   class Tool
 
+    def initialize
+    end
+
+    def name
+      self.class.to_s.downcase
+    end
+
     def usage
+      warn "#{$0} #{name} ..."
     end
 
     def description
     end
 
-    def run(args)
-      raise NotImplementedError, "Tool #{self.class} does not implement \#run"
+    def run
     end
 
   end

@@ -14,9 +14,9 @@ module PhotoUtils
         }
       end
 
-      def run(args)
-        if args.first
-          r = args.shift.split('-', 2).map { |n| n ? n.to_i : nil }
+      def run
+        if @args.first
+          r = @args.first.split('-', 2).map { |n| n ? n.to_i : nil }
         else
           r = 1..100
         end

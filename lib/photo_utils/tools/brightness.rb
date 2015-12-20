@@ -6,7 +6,7 @@ module PhotoUtils
 
     class Brightness < Tool
 
-      def run(args)
+      def run
         scene = Scene.new
         scene.camera = Camera[/Rollei/]
         scene.description = "Salon L'Orient"

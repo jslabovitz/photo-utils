@@ -6,7 +6,7 @@ module PhotoUtils
 
     class DOF < Tool
 
-      def run(args)
+      def run
 
         cameras = []
         cameras << Camera[/Bronica/]

@@ -6,7 +6,7 @@ module PhotoUtils
 
     class DOFTable < Tool
 
-      def run(args)
+      def run
         scene = Scene.new
         scene.camera = Camera[/Eastman/]
 

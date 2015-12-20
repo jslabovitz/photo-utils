@@ -6,7 +6,7 @@ module PhotoUtils
 
     class FilmTest < Tool
 
-      def run(args)
+      def run
         camera = Camera['Hasselblad']
 
         scene = Scene.new

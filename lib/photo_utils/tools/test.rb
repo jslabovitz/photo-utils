@@ -6,7 +6,7 @@ module PhotoUtils
 
     class Test < Tool
 
-      def run(args)
+      def run
 
         # field_of_view = Frame.new(5.feet, 8.feet)
         subject_distance = 3.feet

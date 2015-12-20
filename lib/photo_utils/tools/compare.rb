@@ -9,7 +9,7 @@ module PhotoUtils
 
     class Compare < Tool
 
-      def run(args)
+      def run
         # given:
         #   an image file with EXIF data
         #     extract:

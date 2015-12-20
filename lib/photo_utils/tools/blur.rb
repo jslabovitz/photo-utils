@@ -6,7 +6,7 @@ module PhotoUtils
 
     class Blur < Tool
 
-      def run(args)
+      def run
         scene = Scene.new
         scene.sensitivity = 100
         scene.subject_distance = 6.feet
