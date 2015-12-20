@@ -14,7 +14,7 @@ module PhotoUtils
         scene.print_camera
         puts
 
-        # Av equivalents of f/4 -- f/64
+        # Av equivalents of f/4 ~ f/64
         apertures = (4..12).map { |av| Aperture.new_from_v(av) }
 
         first = true
