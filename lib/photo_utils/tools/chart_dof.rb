@@ -134,7 +134,7 @@ module PhotoUtils
           end
         end
 
-        output_file = @args.first or raise
+        output_file = ARGV.first or usage
         Path.new(output_file).write(html.target!)
       end
 
