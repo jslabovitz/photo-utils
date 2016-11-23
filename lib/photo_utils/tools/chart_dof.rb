@@ -107,8 +107,8 @@ module PhotoUtils
         # max_distance = scenes.map { |s| s.hyperfocal_distance }.max
         max_distance = 50.feet
 
-        camera_width  = scenes.map { |s| s.focal_length }.max
-        camera_height = scenes.map { |s| [s.absolute_aperture, s.frame.height].max }.max
+        camera_width  = scenes.map { |s| camera.lens.focal_length }.max
+        camera_height = scenes.map { |s| [s.absolute_aperture, camera.format.frame.height].max }.max
 
         html = Builder::XmlMarkup.new(indent: 2)
         html.declare!(:DOCTYPE, :html)
