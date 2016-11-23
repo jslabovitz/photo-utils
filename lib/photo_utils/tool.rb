@@ -18,6 +18,7 @@ module PhotoUtils
     end
 
     def run
+      # implemented by subclass
     end
 
   end
