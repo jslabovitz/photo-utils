@@ -36,4 +36,4 @@ commands = {
 
 cmd = ARGV.shift or raise "Usage"
 cmd_class = commands[cmd] or raise "Usage"
-cmd_class.new.run(ARGV)
+cmd_class.new.run
