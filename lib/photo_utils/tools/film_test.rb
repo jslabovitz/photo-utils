@@ -26,10 +26,6 @@ module PhotoUtils
 
         scenes = []
 
-        base_fog = Scene.new
-        base_fog.description = "base + fog"
-        scenes << base_fog
-
         steps.each do |i|
           scene2 = scene.dup
           scene2.brightness = PhotoUtils::Brightness.new_from_v(scene.brightness.to_v - zone_offset_from_mg)
