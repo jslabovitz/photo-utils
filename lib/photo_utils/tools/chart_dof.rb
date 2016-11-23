@@ -83,7 +83,7 @@ module PhotoUtils
 
         if true
 
-          camera = Camera[/eastman/i] or raise "Can't find camera"
+          camera = Camera[ARGV.shift] or raise "Can't find camera"
           basic_scene.description = camera.name
           basic_scene.camera = camera
 
