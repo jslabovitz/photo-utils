@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.version           = PhotoUtils::VERSION
   s.summary           = 'Models, formulas, and utilties for photography optics, etc.'
   s.description = %q{
-    PhotoUtils provides Models, formulas, and utilties for photography optics, etc.
+    PhotoUtils provides models, formulas, and utilties for photography optics, etc.
   }
 
   s.files         = `git ls-files`.split("\n")
