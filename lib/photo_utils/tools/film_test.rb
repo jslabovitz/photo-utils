@@ -7,7 +7,7 @@ module PhotoUtils
     class FilmTest < Tool
 
       def run
-        camera = Camera['Hasselblad']
+        camera = Camera[ARGV.first] or raise "No camera"
 
         scene = Scene.new
         scene.camera = camera
