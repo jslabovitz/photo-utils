@@ -11,6 +11,7 @@ module PhotoUtils
 
     def usage
       warn "#{$0} #{name} ..."
+      exit(1)
     end
 
     def description
