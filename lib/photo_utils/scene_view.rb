@@ -47,12 +47,12 @@ module PhotoUtils
     end
 
     def draw_camera(xml)
-      fh2 = (@scene.format.height / 2) * @camera_scale
+      fh2 = (@scene.camera.format.frame.height / 2) * @camera_scale
       aa2 = (@scene.absolute_aperture / 2) * @camera_scale
       points = [
         [0, -fh2],
-        [@scene.focal_length * @camera_scale, -aa2],
-        [@scene.focal_length * @camera_scale, aa2],
+        [@scene.camera.lens.focal_length * @camera_scale, -aa2],
+        [@scene.camera.lens.focal_length * @camera_scale, aa2],
         [0, fh2],
       ]
       xml.g(transform: "translate(0,#{@height / 2})") do
