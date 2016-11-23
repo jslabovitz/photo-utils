@@ -1,34 +1,45 @@
-    
-  - Create FieldCalculator class:
-    - Set subject distance/height/width/depth
-    - Does DoF calculations
-  
-  - Create generic camera models:
-    - 35mm w/50mm lens
-    - 6x6 w/80mm lens
-    - 4x5 w/127mm lens
-    - APS-C w/? lens
-  
-  - Create Subject class
-    - Height/width.
-    - Near/far depth of field.
-    
-  - Add print size to Scene
-    - Calculate best CoC according to print size
-    
-  - Create Medium class?
-    - eg, film, plate, instant, CCD/CMOS
-    - With #sensitivity.
+- set lens & format in Scene, not Camera
+  - add #default_lens and #default_format to Camera
 
-  - Add common brightness values to Brightness class.
-    - eg, open shade, bright sun, etc.
-      
-  - Add lighting formulas:
-    http://www.lightsearch.com/resources/lightguides/formulas.html
-    http://www.birket.com/technical-library/143/
+- consolidate Camera#print & Scene#print_camera
+
+- remove hardcoded camera names from tools
+
+- rebuild tests
+
+- convert Tool#test into something useful
+
+- fix Aperture
+  - keep value as set (e.g, f/3.5 should not become f/3.2)
+  - or document (because it uses EV)
+  
+- create FieldCalculator class?
+  - set subject distance/height/width/depth
+  - does DoF calculations
+
+- create generic camera models
+  - 35, 645, 6x6, 6x7, 4x5, 8x10, MFT, APS-C, FF
+  - each with 'normal' lens
+
+- create Subject class
+  - height/width
+  - near/far depth of field
+  
+- add print size to Scene
+  - calculate best CoC according to print size
+  
+- create Medium class?
+  - eg, film, plate, instant, CCD/CMOS
+  - with #sensitivity
+
+- add common brightness values to Brightness class
+  - eg, open shade, bright sun, etc.
     
-  - Add flash calculation
-    
-    http://www.scantips.com/lights/flashbasics1c.html
-    http://www.portraitlighting.net/inversesquare_law.htm
-    http://en.wikipedia.org/wiki/Guide_number
+- add lighting formulas
+  http://www.lightsearch.com/resources/lightguides/formulas.html
+  http://www.birket.com/technical-library/143/
+  
+- add flash calculation
+  http://www.scantips.com/lights/flashbasics1c.html
+  http://www.portraitlighting.net/inversesquare_law.htm
+  http://en.wikipedia.org/wiki/Guide_number
