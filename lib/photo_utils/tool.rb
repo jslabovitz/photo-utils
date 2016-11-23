@@ -6,7 +6,7 @@ module PhotoUtils
     end
 
     def name
-      self.class.to_s.downcase
+      self.class.to_s.split('::').last.downcase
     end
 
     def usage
