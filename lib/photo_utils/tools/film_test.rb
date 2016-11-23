@@ -36,7 +36,7 @@ module PhotoUtils
         end
 
         scenes.each_with_index do |scene2, i|
-          puts "%2d | %5s | %10s | %10s | %12s | %12s" % [
+          puts "%2d | %5s | %10s | %10s | %12s" % [
             i + 1,
             scene2.description,
             scene2.sensitivity,
