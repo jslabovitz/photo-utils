@@ -127,9 +127,9 @@ module PhotoUtils
       Aperture.new(f)
     end
 
-    def crop_factor(reference=Format['35'])
+    def crop_factor(other=Format['35'])
       # http://en.wikipedia.org/wiki/Crop_factor
-      reference.frame.diagonal / @frame.diagonal
+      other.frame.diagonal / @frame.diagonal
     end
 
     def angle_of_view(focal_length)
