@@ -1,5 +1,3 @@
-require 'delegate'
-
 module PhotoUtils
 
   class Length < DelegateClass(Float)

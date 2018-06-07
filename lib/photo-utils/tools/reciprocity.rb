@@ -1,5 +1,3 @@
-require 'photo-utils/tool'
-
 module PhotoUtils
 
   class Tools

@@ -1,5 +1,3 @@
-require 'photo-utils/tool'
-
 # require 'mini_exiftool'
 # require 'pathname2'
 

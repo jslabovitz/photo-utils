@@ -1,5 +1,3 @@
-require 'photo-utils'
-
 module PhotoUtils
 
   class SceneView

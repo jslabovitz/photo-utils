@@ -1,5 +1,3 @@
-require 'delegate'
-
 module PhotoUtils
 
   class Angle < DelegateClass(Float)
