@@ -11,7 +11,7 @@ module PhotoUtils
         # subject_distance = nil
         # depth_of_field = 2.feet
         depth_of_field = 0.1.feet
-        sensitivity = 1600
+        # sensitivity = 1600
         # brightness = PhotoUtils::Brightness.new_from_lux(2000)
         # brightness = nil
         # shutter = 1.0/125
@@ -65,7 +65,6 @@ module PhotoUtils
               #     nil
               #   end
               # end
-              exp_comp = nil
 
               puts header % [
                 scene.camera.name,

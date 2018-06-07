@@ -9,8 +9,8 @@ module PhotoUtils
         scene.sensitivity = 100
         scene.subject_distance = 6.feet
         scene.background_distance = 7.feet
-        flash_lux = 25
-        flash_seconds = 0.001
+        # flash_lux = 25
+        # flash_seconds = 0.001
         # flash_lux_seconds = flash_lux.to_f * (flash_seconds * 1000)
         flash_lux_seconds = 25000 / 2
         scene.brightness = PhotoUtils::Brightness.new_from_cdm2(flash_lux_seconds.to_f / ((scene.subject_distance / 1000) ** 2))
