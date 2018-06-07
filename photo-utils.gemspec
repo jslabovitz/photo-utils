@@ -1,16 +1,17 @@
 require_relative 'lib/photo-utils/version'
 
 Gem::Specification.new do |s|
-
-  s.name              = 'photo-utils'
-  s.author            = 'John Labovitz'
-  s.email             = 'johnl@johnlabovitz.com'
-  s.homepage          = 'http://johnlabovitz.com'
-  s.version           = PhotoUtils::VERSION
-  s.summary           = 'Models, formulas, and utilties for photography optics, etc.'
+  s.name          = 'photo-utils'
+  s.author        = 'John Labovitz'
+  s.email         = 'johnl@johnlabovitz.com'
+  s.homepage      = 'http://johnlabovitz.com'
+  s.version       = PhotoUtils::VERSION
+  s.summary       = 'Models, formulas, and utilties for photography optics, etc.'
   s.description = %q{
     PhotoUtils provides models, formulas, and utilties for photography optics, etc.
   }
+  s.license       = 'MIT'
+  s.homepage      = 'http://github.com/jslabovitz/photo-utils'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
