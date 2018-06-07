@@ -9,12 +9,12 @@ module PhotoUtils
     attr_reader   :sensitivity
     attr_reader   :brightness
 
-    def initialize
+    def initialize(params={})
       {
         background_distance: Math::Infinity,
         sensitivity: 100,
         brightness: 100,
-      }.each { |k, v| send("#{k}=", v) }
+      }.merge(params).each { |k, v| send("#{k}=", v) }
     end
 
     def sensitivity=(s)
