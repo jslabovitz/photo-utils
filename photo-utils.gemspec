@@ -24,5 +24,5 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'rubygems-tasks', '~> 0.2'
-  s.add_development_dependency 'minitest'
+  s.add_development_dependency 'minitest', '~> 0'
 end
