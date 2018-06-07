@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage      = 'http://github.com/jslabovitz/photo-utils'
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.test_files    = `git ls-files -- test/*_test.rb`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_path  = 'lib'
 
@@ -25,4 +25,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake', '~> 12.3'
   s.add_development_dependency 'rubygems-tasks', '~> 0.2'
   s.add_development_dependency 'minitest', '~> 0'
+  s.add_development_dependency 'minitest-power_assert', '~> 0'
 end
