@@ -6,10 +6,10 @@ module PhotoUtils
 
       def run
 
-        cameras = []
-        cameras << Camera[/Bronica/]
-        cameras << Camera[/Leica/]
-        cameras << Camera[/Hasselblad/]
+        cameras = ARGV.map do |arg|
+          Camera[arg] or raise "Can't find camera #{arg.inspect}"
+        end
+        raise "Must specify camera(s)" if cameras.empty?
 
         cameras.each do |camera|
 
