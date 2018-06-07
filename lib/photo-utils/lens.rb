@@ -2,11 +2,11 @@ module PhotoUtils
 
   class Lens
 
-    attr_accessor :name
+    attr_writer   :name
     attr_reader   :focal_length
-    attr_accessor :min_aperture
-    attr_accessor :max_aperture
-    attr_accessor :aperture
+    attr_reader   :min_aperture
+    attr_reader   :max_aperture
+    attr_reader   :aperture
 
     def initialize(params={})
       params.each { |k, v| send("#{k}=", v) }

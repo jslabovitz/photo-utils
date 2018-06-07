@@ -28,9 +28,9 @@ module PhotoUtils
     attr_accessor :name
     attr_accessor :formats
     attr_accessor :format
-    attr_accessor :min_shutter
-    attr_accessor :max_shutter
-    attr_accessor :shutter
+    attr_reader   :min_shutter
+    attr_reader   :max_shutter
+    attr_reader   :shutter
     attr_accessor :lenses
     attr_accessor :lens
 

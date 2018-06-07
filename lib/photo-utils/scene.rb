@@ -3,11 +3,11 @@ module PhotoUtils
   class Scene
 
     attr_accessor :description
-    attr_accessor :subject_distance
-    attr_accessor :background_distance
+    attr_reader   :subject_distance
+    attr_reader   :background_distance
     attr_accessor :camera
-    attr_accessor :sensitivity
-    attr_accessor :brightness
+    attr_reader   :sensitivity
+    attr_reader   :brightness
 
     def initialize
       {
