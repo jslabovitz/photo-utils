@@ -1,6 +1,6 @@
 require 'test/unit'
 require 'wrong'
-require 'photo_utils'
+require 'photo-utils'
 
 class TestTime < Test::Unit::TestCase
 

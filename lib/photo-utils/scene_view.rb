@@ -1,4 +1,4 @@
-require 'photo_utils'
+require 'photo-utils'
 
 module PhotoUtils
 

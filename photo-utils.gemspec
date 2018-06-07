@@ -1,6 +1,4 @@
-$LOAD_PATH << 'lib'
-
-require 'photo_utils/version'
+require_relative 'lib/photo-utils/version'
 
 Gem::Specification.new do |s|
 

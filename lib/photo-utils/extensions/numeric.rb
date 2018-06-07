@@ -1,4 +1,4 @@
-require 'photo_utils'
+require 'photo-utils'
 
 INCHES_PER_METER = 39.3700787402
 
