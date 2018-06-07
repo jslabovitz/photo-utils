@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'builder'
   s.add_dependency 'path'
 
-  s.add_development_dependency 'bundler'
-  s.add_development_dependency 'rake'
+  s.add_development_dependency 'rake', '~> 12.3'
+  s.add_development_dependency 'rubygems-tasks', '~> 0.2'
   s.add_development_dependency 'minitest'
 end
