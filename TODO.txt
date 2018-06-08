@@ -1,11 +1,19 @@
 - set lens & format in Scene, not Camera
   - add #default_lens and #default_format to Camera
 
+- create Core module
+  - move basic classes (Angle, Aperture, etc.)
+  
+- create Calculators module
+  - move logic of tools into this
+  - make tools simply create/manipulate calculators
+
 - consolidate Camera#print & Scene#print_camera
 
 - remove hardcoded camera names from tools
 
-- rebuild tests
+- convert cameras.rb to YAML
+  - include generic cameras/formats in gem
 
 - convert Tool#test into something useful
 
@@ -13,17 +21,15 @@
   - keep value as set (e.g, f/3.5 should not become f/3.2)
   - or document (because it uses EV)
   
-- create FieldCalculator class?
-  - set subject distance/height/width/depth
-  - does DoF calculations
-
 - create generic camera models
   - 35, 645, 6x6, 6x7, 4x5, 8x10, MFT, APS-C, FF
-  - each with 'normal' lens
+  - each with wide/normal/tele lens
 
 - create Subject class
-  - height/width
+  - distance
+  - height/width/depth
   - near/far depth of field
+  - handles DoF calculations
   
 - add print size to Scene
   - calculate best CoC according to print size
