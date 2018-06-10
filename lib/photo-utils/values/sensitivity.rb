@@ -4,14 +4,12 @@ module PhotoUtils
 
     APEX_LABEL = 'Sv'
 
-    C = 3.125
-
     def self.new_from_v(v)
-      new(C * (2 ** v.to_f))
+      new(Constants::ISO_BASE * (2 ** v.to_f))
     end
 
     def to_v
-      Math.log2(self / C)
+      Math.log2(self / Constants::ISO_BASE)
     end
 
     def string

@@ -6,16 +6,12 @@ module PhotoUtils
 
     APEX_LABEL = 'Iv'
 
-    N = 2 ** Rational(-7, 4)
-    C = 224
-    NC = N * C
-
     def self.new_from_v(v)
-      new((2 ** v.to_f) * NC)
+      new((2 ** v.to_f) * Constants::N * Constants::C)
     end
 
     def to_v
-      Math.log2(self / NC)
+      Math.log2(self / Constants::N * Constants::C)
     end
 
     def string

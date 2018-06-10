@@ -6,6 +6,8 @@ require 'delegate'
 
 require 'photo-utils/extensions/numeric'
 
+require 'photo-utils/constants'
+
 require 'photo-utils/values/value'
 require 'photo-utils/values/aperture'
 require 'photo-utils/values/brightness'
