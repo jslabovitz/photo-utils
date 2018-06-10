@@ -12,7 +12,7 @@ module PhotoUtils
         # depth_of_field = 2.feet
         depth_of_field = 0.1.feet
         # sensitivity = 1600
-        # brightness = PhotoUtils::Brightness.new_from_lux(2000)
+        # brightness = BrightnessValue.new(2000)
         # brightness = nil
         # shutter = 1.0/125
         shutter = nil
@@ -52,7 +52,7 @@ module PhotoUtils
               end
               scene.camera.lens.aperture = [aperture, scene.camera.lens.max_aperture].max
               scene.camera.lens.aperture = [scene.camera.lens.aperture, scene.camera.lens.min_aperture].min
-              scene.set_exposure
+              scene.calculate!
 
               # if scene.working_aperture > 0 && scene.working_aperture < camera.lens.min_aperture
               #   exp_comp = scene.working_aperture.to_v - camera.lens.aperture.to_v

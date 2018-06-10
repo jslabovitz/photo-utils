@@ -23,13 +23,11 @@ module PhotoUtils
           aperture = scene.aperture_for_depth_of_field(scene.subject_distance - (dof / 2), scene.subject_distance + (dof / 2))
           scene.camera.lens.aperture = [aperture, camera.lens.max_aperture].max
           scene.sensitivity = 1600
-          scene.set_exposure
+          scene.calculate!
 
           puts "\t" + "FOV: #{scene.field_of_view(scene.subject_distance).to_s(:imperial)}"
           puts "\t" + "DOF: #{scene.total_depth_of_field.to_s(:imperial)} (-#{scene.near_distance_from_subject.to_s(:imperial)}/+#{scene.far_distance_from_subject.to_s(:imperial)})"
-          puts
-
-          scene.print_exposure
+          puts "\t" + "EXPOSURE: #{scene.exposure}"
         end
       end
 

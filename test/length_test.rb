@@ -6,7 +6,7 @@ module PhotoUtils
 
     def setup
       @table = {
-    	  %q{∞}     => Math::Infinity,
+    	  %q{∞}     => Float::INFINITY,
     	  %q{6"}    => 6.inches,
     	  %q{1'}    => 1.feet,
     	  %q{3'6"}  => 3.5.feet,
@@ -17,20 +17,15 @@ module PhotoUtils
       }
     end
 
-    def test_formatter
+    def test_formatting
       @table.each do |s, n|
         if s =~ /['"]/
           format = :imperial
         else
-          format = :metric
+          format = nil
         end
         assert { Length.new(n).to_s(format) == s }
-      end
-    end
-
-    def test_parse
-  	  @table.each do |s, n|
-        assert { Length.new(s) == n }
+        assert { Length.parse(s) == n }
       end
     end
 

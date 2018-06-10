@@ -47,15 +47,15 @@ module PhotoUtils
     end
 
     def min_shutter=(t)
-      @min_shutter = t ? Time.new(t) : nil
+      @min_shutter = t ? TimeValue.new(t) : nil
     end
 
     def max_shutter=(t)
-      @max_shutter = t ? Time.new(t) : nil
+      @max_shutter = t ? TimeValue.new(t) : nil
     end
 
     def shutter=(t)
-      @shutter = t ? Time.new(t) : nil
+      @shutter = t ? TimeValue.new(t) : nil
     end
 
     def angle_of_view
@@ -69,8 +69,8 @@ module PhotoUtils
         io.puts "\t%s %s: focal length: %s [%s], aperture: %s~%s [%s~%s], angle of view: %s" % [
           (lens == @lens) ? '*' : ' ',
           lens.name,
-          lens.focal_length.format_metric(1),
-          @format.focal_length_equivalent(lens.focal_length).format_metric(1),
+          lens.focal_length,
+          @format.focal_length_equivalent(lens.focal_length),
           lens.max_aperture,
           lens.min_aperture,
           @format.aperture_equivalent(lens.max_aperture),

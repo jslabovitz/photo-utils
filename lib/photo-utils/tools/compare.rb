@@ -32,8 +32,8 @@ module PhotoUtils
 
         #FIXME: Ugh
 
-        $min_sensitivity = Sensitivity.new(100)
-        $max_sensitivity = Sensitivity.new(1600)
+        $min_sensitivity = SensitivityValue.new(100)
+        $max_sensitivity = SensitivityValue.new(1600)
         $max_angle_of_view_delta = Angle.new(5)
         $max_subject_distance_delta = 6.feet
 
@@ -137,7 +137,7 @@ module PhotoUtils
           scene.format = Format[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
 
           scene.description = "#{shot[:type]} [#{shot[:seq]}]"
-          scene.aperture = img['Aperture']
+          scene.aperture = img['ApertureValue']
           if img['ISO'].kind_of?(Numeric)
             scene.sensitivity = img['ISO']
           else # "0 800"
@@ -148,7 +148,7 @@ module PhotoUtils
 
           exp_comp = img['ExposureCompensation'].to_f
           if exp_comp != 0
-            scene.sensitivity = Sensitivity.new_from_v(scene.sensitivity.to_v + exp_comp)
+            scene.sensitivity = SensitivityValue.new_from_v(scene.sensitivity.to_v + exp_comp)
           end
 
           # d = w * f / s
@@ -214,7 +214,7 @@ module PhotoUtils
 
                 # ;;a = scene2.aperture
                 # round aperture to closest 1/2 stop
-                scene2.aperture = Aperture.new_from_v((scene2.aperture.to_v / 0.5).round * 0.5)
+                scene2.aperture = ApertureValue.new_from_v((scene2.aperture.to_v / 0.5).round * 0.5)
                 # ;;puts "[1] #{a} => #{scene2.aperture}"
                 # clamp to maximum aperture
                 scene2.aperture = [scene2.aperture, lens.max_aperture].max
@@ -227,7 +227,7 @@ module PhotoUtils
                 # start with minimum shutter time
                 scene2.time = camera.max_shutter
                 # round up to the next ISO value
-                scene2.sensitivity = Sensitivity.new_from_v(scene2.sensitivity.to_v.ceil)
+                scene2.sensitivity = SensitivityValue.new_from_v(scene2.sensitivity.to_v.ceil)
                 scene2.sensitivity = [scene2.sensitivity, $max_sensitivity].min
                 scene2.sensitivity = [scene2.sensitivity, $min_sensitivity].max
                 # # force recalculation of shutter

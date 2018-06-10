@@ -6,95 +6,28 @@ module PhotoUtils
 
       def run
 
-        # set up basic scene
+        basic_scene_params = {
+          subject_distance: 8.feet,
+          sensitivity: 400,
+          brightness: 8,
+        }
 
-        basic_scene = Scene.new
-        basic_scene.subject_distance = 8.feet
-        basic_scene.sensitivity = 400
-        basic_scene.brightness = 8
-
-        scenes = []
-
-        if false
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 50.mm
-          scene.aperture = 2
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['6x6']
-          scene.focal_length = 92.mm
-          scene.aperture = 8
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['5x7']
-          scene.focal_length = 253.mm
-          scene.aperture = 64
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
+        scene_params = []
+        camera_name = ARGV.shift or raise "Must specify camera"
+        camera = Camera[camera_name] or raise "Can't find camera #{camera_name.inspect}"
+        ((camera.lens.max_aperture.to_v.round)..(camera.lens.min_aperture.to_v.round)).each do |av|
+          camera.lens.aperture = ApertureValue.new_from_v(av)
+          scene_params << basic_scene_params.merge(camera: camera)
         end
 
-        if false
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 90.mm
-          scene.aperture = 2.8
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 90.mm
-          scene.aperture = 4
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 90.mm
-          scene.aperture = 5.6
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 85.mm
-          scene.aperture = 4
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-          scene = basic_scene.dup
-          scene.format = Format['35']
-          scene.focal_length = 85.mm
-          scene.aperture = 5.6
-          scene.description = "#{scene.format}: #{scene.focal_length} @ #{scene.aperture}"
-          scenes << scene
-
-        end
-
-        if true
-
-          camera = Camera[ARGV.shift] or raise "Can't find camera"
-          basic_scene.description = camera.name
-          basic_scene.camera = camera
-
-          aperture = camera.lens.max_aperture
-          while aperture <= camera.lens.min_aperture
-            scene = basic_scene.dup
-            camera.lens.aperture = aperture
-            # break if scene.time > 1.0/30
-            scene.description += ": #{camera.lens.focal_length} @ #{camera.lens.aperture}"
-            scenes << scene
-            aperture = Aperture.new_from_v(aperture.to_v + 1)
-          end
-
+        scenes = scene_params.map do |params|
+          params[:description] = '%s (%s): %s @ %s' % [
+            camera.name,
+            camera.format,
+            camera.lens.focal_length,
+            camera.lens.aperture,
+          ]
+          Scene.new(basic_scene_params.merge(params))
         end
 
         scenes.each do |scene|

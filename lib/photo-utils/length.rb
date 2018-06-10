@@ -2,17 +2,12 @@ module PhotoUtils
 
   class Length < DelegateClass(Float)
 
-    def initialize(x)
-      case x
-      when Length
-        super(x)
-      when Numeric
-        super(x.to_f)
-      when '∞'
-        super(Math::Infinity)
-      when String
+    def self.parse(s)
+      s = s.dup
+      if s == '∞'
+        new(Float::INFINITY)
+      else
         n = 0
-        s = x.dup
         until s.empty?
           if s.gsub!(/^\s*(\d+(\.\d+)?)\s*/, '')
             n2 = $1.to_f
@@ -32,13 +27,22 @@ module PhotoUtils
             raise "Can't parse number: #{s.inspect}"
           end
         end
-        super(n)
+        new(n)
+      end
+    end
+
+    def initialize(obj)
+      case obj
+      when Length, Numeric
+        super(obj.to_f)
+      when String
+        self.class.parse(obj)
       else
         raise "Can't make length from #{x.class}: #{x.inspect}"
       end
     end
 
-    def format_imperial
+    def imperial_string
       inches = self * INCHES_PER_METER / 1000
       if inches.floor >= 12
         feet = (inches / 12).floor
@@ -56,33 +60,25 @@ module PhotoUtils
       (feet > 0 ? "#{feet}'" : '') + (inches > 0 ? "#{inches}\"" : '')
     end
 
-    def format_metric(precision=nil)
+    def metric_string
       if self >= 1000
-        "#{(self / 1000).format(precision)}m"
+        '%sm' % PhotoUtils::format_float(self / 1000)
       else
-        "#{format(precision)}mm"
+        '%dmm' % self
       end
     end
 
-    def to_s(format=:metric)
-      if self == Math::Infinity
+    def to_s(format=nil)
+      if infinite?
         '∞'
       else
         case format
+        when nil
+          metric_string
         when :imperial
-          format_imperial
-        when :metric
-          format_metric
+          imperial_string
         end
       end
-    end
-
-    def -(other)
-      self.class.new(super(other))
-    end
-
-    def abs
-      self.class.new(super)
     end
 
   end

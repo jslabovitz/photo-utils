@@ -105,10 +105,6 @@ module PhotoUtils
       params.each { |k, v| send("#{k}=", v) }
     end
 
-    def inspect
-      "<#{self.class} name=#{@name.inspect} frame=#{@frame.inspect}>"
-    end
-
     def to_s(short=true)
       if short
         @name
@@ -124,7 +120,7 @@ module PhotoUtils
 
     def aperture_equivalent(aperture, other=Format['35'])
       f = aperture * crop_factor(other)
-      Aperture.new(f)
+      ApertureValue.new(f)
     end
 
     def crop_factor(other=Format['35'])
@@ -135,8 +131,9 @@ module PhotoUtils
     def angle_of_view(focal_length)
       # http://imaginatorium.org/stuff/angle.htm
       # http://en.wikipedia.org/wiki/Angle_of_view
-      a = Math.arcdeg(2 * Math.atan(@frame.diagonal / (2 * focal_length)))
-      Angle.new(a)
+      arc = 2 * Math.atan(@frame.diagonal / (2 * focal_length))
+      degrees = arc * (180 / Math::PI)
+      Angle.new(degrees)
     end
 
     def field_of_view(focal_length, subject_distance)

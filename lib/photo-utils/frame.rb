@@ -14,12 +14,8 @@ module PhotoUtils
       @width  = Length.new(width)
     end
 
-    def inspect
-      "<#{self.class} height=#{@height.inspect} width=#{@width.inspect}>"
-    end
-
-    def to_s(format=:metric)
-      if @height == Math::Infinity && @width == Math::Infinity
+    def to_s(format=nil)
+      if @height.infinite? && @width.infinite?
         "n/a"
       else
         "#{@height.to_s(format)} x #{@width.to_s(format)}"

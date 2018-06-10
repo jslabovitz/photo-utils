@@ -21,10 +21,17 @@ module PhotoUtils
         range = Range.new(r.first, r.last)
         ti = range.first
         until ti > range.last
-          tc = Time.new(ti).reciprocity
+          tc = reciprocity(TimeValue.new(ti))
           puts "#{ti} => #{tc.round.to_i}"
           ti *= 2
         end
+      end
+
+      # http://www.apug.org/forums/forum37/22334-fuji-neopan-400-reciprocity-failure-data.html
+
+      def reciprocity(t)
+        tc = t + (0.3 * (t ** 1.62))
+        TimeValue.new(tc)
       end
 
     end

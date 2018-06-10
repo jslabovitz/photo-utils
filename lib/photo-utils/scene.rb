@@ -11,18 +11,18 @@ module PhotoUtils
 
     def initialize(params={})
       {
-        background_distance: Math::Infinity,
+        background_distance: Float::INFINITY,
         sensitivity: 100,
         brightness: 100,
       }.merge(params).each { |k, v| send("#{k}=", v) }
     end
 
     def sensitivity=(s)
-      @sensitivity = Sensitivity.new(s)
+      @sensitivity = SensitivityValue.new(s)
     end
 
     def brightness=(b)
-      @brightness = Brightness.new(b)
+      @brightness = BrightnessValue.new(b)
     end
 
     def subject_distance=(s)
@@ -40,7 +40,7 @@ module PhotoUtils
 
     def aperture_for_depth_of_field(near_limit, far_limit)
       a = ((@camera.lens.focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))
-      Aperture.new(a)
+      ApertureValue.new(a)
     end
 
     def hyperfocal_distance
@@ -59,7 +59,7 @@ module PhotoUtils
       if s < h
         dof.far = (h * s) / (h - s)
       else
-        dof.far = Math::Infinity
+        dof.far = Float::INFINITY
       end
       dof.near = Length.new(dof.near)
       dof.far  = Length.new(dof.far)
@@ -72,12 +72,12 @@ module PhotoUtils
     end
 
     def far_distance_from_subject
-      d = (depth_of_field.far == Math::Infinity) ? Math::Infinity : (depth_of_field.far - subject_distance)
+      d = depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - subject_distance)
       Length.new(d)
     end
 
     def total_depth_of_field
-      d = (depth_of_field.far == Math::Infinity) ? Math::Infinity : (depth_of_field.far - depth_of_field.near)
+      d = depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - depth_of_field.near)
       Length.new(d)
     end
 
@@ -101,7 +101,7 @@ module PhotoUtils
 
     def working_aperture
       # http://en.wikipedia.org/wiki/F-number#Working_f-number
-      Aperture.new((1 - magnification) * @camera.lens.aperture)
+      ApertureValue.new((1 - magnification) * @camera.lens.aperture)
     end
 
     def blur_at_distance(d)
@@ -122,14 +122,14 @@ module PhotoUtils
     end
 
     def exposure
-      Exposure.new(
-        light: @brightness,
+      Exposure.calculate(
+        brightness: @brightness,
         sensitivity: @sensitivity,
         aperture: @camera.lens.aperture,
         time: @camera.shutter)
     end
 
-    def set_exposure
+    def calculate!
       exp = exposure
       @camera.lens.aperture = exp.aperture
       @camera.shutter = exp.time
@@ -138,7 +138,7 @@ module PhotoUtils
     def print_camera(io=STDOUT)
       io.puts "CAMERA:"
       io.puts "             name: #{@camera.name}"
-      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.format(10)})"
+      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.round(1)})"
       io.puts "    shutter range: #{@camera.max_shutter} ~ #{@camera.min_shutter}"
       io.puts "   aperture range: #{@camera.lens.max_aperture} ~ #{@camera.lens.min_aperture}"
       io.puts "             lens: #{@camera.lens.name} - #{@camera.lens.focal_length} (#{
@@ -151,7 +151,7 @@ module PhotoUtils
     end
 
     def print_exposure(io=STDOUT)
-      exposure.print(io)
+      io.puts "EXPOSURE: #{exposure}"
     end
 
     def print_depth_of_field(io=STDOUT)
@@ -161,9 +161,9 @@ module PhotoUtils
       io.puts "      subject mag: #{'%.2f' % magnification}x"
       io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
-      if background_distance != Math::Infinity
+      unless background_distance.infinite?
         io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
-        io.puts "  background blur: #{blur_at_distance(background_distance).to_s(:metric)}"
+        io.puts "  background blur: #{blur_at_distance(background_distance)}"
       end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
       io.puts " working aperture: #{working_aperture}"

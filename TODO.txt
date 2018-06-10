@@ -1,10 +1,21 @@
+- fix Brightness/Illuminance:
+  - use correct units & math
+  - rename to Luminance/Illuminance?
+  - change Exposure to take 'light' instead of 'brightness'
+    - handles either Luminance or Illuminance
+
+- consider adding format attribute to Value
+  - base value stays the same
+  - parsing detects format if necessary
+  - can also modify later
+  - or just specify to to_s as currently
+  - but format determines formatting & conversion
+  - eg, Length(format: :metric) or Aperture(format: :fstop)
+
 - set lens & format in Scene, not Camera
   - add #default_lens and #default_format to Camera
 
-- create Core module
-  - move basic classes (Angle, Aperture, etc.)
-  
-- create Calculators module
+- create Calculators module?
   - move logic of tools into this
   - make tools simply create/manipulate calculators
 
@@ -12,14 +23,12 @@
 
 - remove hardcoded camera names from tools
 
+- build tests for calculators (use existing tools?)
+
 - convert cameras.rb to YAML
   - include generic cameras/formats in gem
 
 - convert Tool#test into something useful
-
-- fix Aperture
-  - keep value as set (e.g, f/3.5 should not become f/3.2)
-  - or document (because it uses EV)
   
 - create generic camera models
   - 35, 645, 6x6, 6x7, 4x5, 8x10, MFT, APS-C, FF
