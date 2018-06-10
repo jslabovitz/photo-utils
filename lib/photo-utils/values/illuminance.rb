@@ -1,6 +1,7 @@
 module PhotoUtils
 
-  # amount specified in lux
+  # specified in lux or foot-candles
+  # incident light
 
   class IlluminanceValue < Value
 

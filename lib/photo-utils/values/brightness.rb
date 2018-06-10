@@ -1,6 +1,7 @@
 module PhotoUtils
 
-  # amount specified in cd/m2
+  # specified in cd/m2 or foot-lambert
+  # reflected light measurement
 
   class BrightnessValue < Value
 
