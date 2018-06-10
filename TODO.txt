@@ -1,10 +1,11 @@
-- fix Brightness/Illuminance:
+- fix Brightness/Illumination
   - use correct units & math
-  - rename to Luminance/Illuminance?
+    - illumination: lux, foot-candle
+    - brightness: cd/m2, foot-lambert
   - change Exposure to take 'light' instead of 'brightness'
-    - handles either Luminance or Illuminance
+    - handles either Brightness or Illumination
 
-- consider adding format attribute to Value
+- add format attribute to Value?
   - base value stays the same
   - parsing detects format if necessary
   - can also modify later
