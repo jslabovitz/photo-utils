@@ -9,6 +9,7 @@ module PhotoUtils
     attr_reader   :aperture
 
     def initialize(params={})
+      @name = nil
       params.each { |k, v| send("#{k}=", v) }
       @aperture = @max_aperture
     end
