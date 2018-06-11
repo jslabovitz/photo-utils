@@ -92,9 +92,13 @@ module PhotoUtils
       end
     end
 
-    def self.[](name)
+    def self.find(name)
       load_formats unless class_variable_defined?('@@formats')
       @@formats[name]
+    end
+
+    def self.[](name)
+      find(name)
     end
 
     attr_accessor :name
