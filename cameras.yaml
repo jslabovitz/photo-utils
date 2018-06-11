@@ -1,0 +1,23 @@
+- name: Generic 35mm
+  format: 35
+  min_shutter: 1/500
+  max_shutter: 1
+  lenses:
+    - focal_length: 35mm
+      min_aperture: f/22
+      max_aperture: f/2.8
+    - focal_length: 50mm
+      min_aperture: f/22
+      max_aperture: f/2.8
+    - focal_length: 90mm
+      min_aperture: f/22
+      max_aperture: f/2.8
+
+- name: Generic 645
+  format: 6x4.5
+  min_shutter: 1/500
+  max_shutter: 1
+  lenses:
+    - focal_length: 65mm
+      min_aperture: f/22
+      max_aperture: f/2.8

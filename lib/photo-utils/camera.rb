@@ -2,20 +2,34 @@ module PhotoUtils
 
   class Camera
 
-    CAMERAS_PATH = Path.new(ENV['HOME']) / '.cameras.rb'
+    DefaultCamerasFile = Path.new(__FILE__).dirname / '../../cameras.yaml'
+    UserCamerasFile = Path.new('~/.cameras.yaml').expand_path
+
+    @@cameras = []
+
+    def self.read_cameras
+      read_cameras_file(DefaultCamerasFile)
+      read_cameras_file(UserCamerasFile) if UserCamerasFile.exist?
+    end
 
     def self.cameras
-      unless class_variable_defined?('@@cameras')
-        if CAMERAS_PATH.exist?
-          @@cameras = eval(CAMERAS_PATH.read)
-        end
-      end
       @@cameras
+    end
+
+    def self.read_cameras_file(file)
+      begin
+        yaml = YAML.load(file.read, symbolize_names: true)
+      rescue Psych::SyntaxError => e
+        raise Error, "Syntax error in #{file.to_s.inspect}: #{e}"
+      end
+      yaml.each do |camera_yaml|
+        @@cameras << Camera.new(camera_yaml)
+      end
     end
 
     def self.find(params)
       if (sel = params[:name])
-        cameras.find { |c| sel === c.name }
+        @@cameras.find { |c| sel === c.name }
       else
         raise "Don't know how to search for camera with params: #{params.inspect}"
       end
@@ -26,12 +40,12 @@ module PhotoUtils
     end
 
     attr_accessor :name
-    attr_accessor :formats
+    attr_reader   :formats
     attr_accessor :format
     attr_reader   :min_shutter
     attr_reader   :max_shutter
     attr_reader   :shutter
-    attr_accessor :lenses
+    attr_reader   :lenses
     attr_accessor :lens
 
     def initialize(params={})
@@ -39,11 +53,21 @@ module PhotoUtils
         params[:formats] = [params.delete(:format)]
       end
       params.each { |k, v| send("#{k}=", v) }
-      @format ||= @formats.first
-      normal = @format.frame.diagonal
-      # set the lens to the one closest to normal (diagonal of frame)
-      @lens = @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
+      @format = @formats.first
+      @lens = normal_lens
       @shutter = @max_shutter
+    end
+
+    def formats=(formats)
+      @formats = formats.map do |format|
+        Format.find(format.to_s) or raise "Unknown format #{format.inspect} for camera #{name.inspect}"
+      end
+    end
+
+    def lenses=(lenses)
+      @lenses = lenses.map do |lens|
+        Lens.new(lens)
+      end
     end
 
     def min_shutter=(t)
@@ -56,6 +80,13 @@ module PhotoUtils
 
     def shutter=(t)
       @shutter = t ? TimeValue.new(t) : nil
+    end
+
+    # the lens closest to normal (diagonal of frame)
+
+    def normal_lens
+      normal = @format.frame.diagonal
+      @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
     end
 
     def angle_of_view
