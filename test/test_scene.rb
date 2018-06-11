@@ -5,9 +5,9 @@ module PhotoUtils
   class SceneTest < Test
 
     def setup
-      @scene = Scene.new
-      @scene.camera = Camera[/RB67/]    #FIXME: Use generic
-      @scene.subject_distance = 10.feet
+      @scene = Scene.new(
+        camera: Camera[/Generic 35mm/],
+        subject_distance: 10.feet)
     end
 
     def test_make_scene
