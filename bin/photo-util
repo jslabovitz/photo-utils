@@ -14,7 +14,6 @@ commands = {
   'compare'       => PhotoUtils::Tools::Compare,
   'blur'          => PhotoUtils::Tools::Blur,
   'film-test'     => PhotoUtils::Tools::FilmTest,
-  'brightness'    => PhotoUtils::Tools::Brightness,
   'cameras'       => PhotoUtils::Tools::Cameras,
   'calc-aperture' => PhotoUtils::Tools::CalcAperture,
   'chart-dof'     => PhotoUtils::Tools::ChartDOF,

@@ -36,7 +36,6 @@ require 'photo-utils/exposure'
 
 require 'photo-utils/tool'
 require 'photo-utils/tools/blur'
-require 'photo-utils/tools/brightness'
 require 'photo-utils/tools/calc_aperture'
 require 'photo-utils/tools/cameras'
 require 'photo-utils/tools/chart_dof'
