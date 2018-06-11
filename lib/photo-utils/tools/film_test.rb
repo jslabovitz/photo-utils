@@ -5,11 +5,11 @@ module PhotoUtils
     class FilmTest < Tool
 
       def run
-        camera = Camera[ARGV.first] or raise "No camera"
+        camera = Camera[ARGV.shift || 'Generic 35mm']
 
-        scene = Scene.new
-        scene.camera = camera
-        scene.sensitivity = 100
+        scene = Scene.new(
+          camera: camera,
+          sensitivity: 100)
         scene.camera.shutter = 1.0/60
         scene.camera.lens.aperture = 5.6
         # scene.description = "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68"

@@ -5,6 +5,7 @@ module PhotoUtils
     class ChartDOF < Tool
 
       def run
+        camera = Camera[ARGV.shift || 'Generic 35mm']
 
         basic_scene_params = {
           subject_distance: 8.feet,
@@ -13,8 +14,6 @@ module PhotoUtils
         }
 
         scene_params = []
-        camera_name = ARGV.shift or raise "Must specify camera"
-        camera = Camera[camera_name] or raise "Can't find camera #{camera_name.inspect}"
         ((camera.lens.max_aperture.to_v.round)..(camera.lens.min_aperture.to_v.round)).each do |av|
           camera.lens.aperture = ApertureValue.new_from_v(av)
           scene_params << basic_scene_params.merge(camera: camera)

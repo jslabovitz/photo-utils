@@ -5,11 +5,12 @@ module PhotoUtils
     class CalcAperture < Tool
 
       def run
+        camera = Camera[ARGV.shift || 'Generic 35mm']
 
         # set up basic scene
 
         basic_scene = Scene.new
-        basic_scene.camera = Camera[ARGV.first] or raise "No camera"
+        basic_scene.camera = camera
         basic_scene.subject_distance = 12.feet
         basic_scene.background_distance = 14.feet
         basic_scene.camera.lens.aperture = 8

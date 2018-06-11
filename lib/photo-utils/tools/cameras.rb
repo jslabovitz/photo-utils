@@ -5,13 +5,9 @@ module PhotoUtils
     class Cameras < Tool
 
       def run
-        if Camera.cameras
-          Camera.cameras.each do |camera|
-            camera.print
-            puts
-          end
-        else
-          warn "No cameras found."
+        Camera.cameras.each do |camera|
+          camera.print
+          puts
         end
       end
 

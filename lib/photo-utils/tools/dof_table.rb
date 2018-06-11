@@ -5,10 +5,10 @@ module PhotoUtils
     class DOFTable < Tool
 
       def run
-        camera = Camera[ARGV.shift] or raise Error, "Unknown camera"
+        camera = Camera[ARGV.shift || 'Generic 35mm']
 
-        scene = Scene.new
-        scene.camera = camera
+        scene = Scene.new(
+          camera: camera)
 
         puts
         scene.print_camera

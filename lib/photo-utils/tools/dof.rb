@@ -6,29 +6,23 @@ module PhotoUtils
 
       def run
 
-        cameras = ARGV.map do |arg|
-          Camera[arg] or raise "Can't find camera #{arg.inspect}"
-        end
-        raise "Must specify camera(s)" if cameras.empty?
+        camera = Camera[ARGV.shift || 'Generic 35mm']
 
-        cameras.each do |camera|
+        puts "#{camera.name}"
 
-          puts "#{camera.name}"
+        scene = Scene.new
+        scene.camera = camera
+        scene.camera.shutter = 1.0 / 125
+        scene.subject_distance = 30.feet
+        dof = 1.feet
+        aperture = scene.aperture_for_depth_of_field(scene.subject_distance - (dof / 2), scene.subject_distance + (dof / 2))
+        scene.camera.lens.aperture = [aperture, camera.lens.max_aperture].max
+        scene.sensitivity = 1600
+        scene.calculate!
 
-          scene = Scene.new
-          scene.camera = camera
-          scene.camera.shutter = 1.0 / 125
-          scene.subject_distance = 30.feet
-          dof = 1.feet
-          aperture = scene.aperture_for_depth_of_field(scene.subject_distance - (dof / 2), scene.subject_distance + (dof / 2))
-          scene.camera.lens.aperture = [aperture, camera.lens.max_aperture].max
-          scene.sensitivity = 1600
-          scene.calculate!
-
-          puts "\t" + "FOV: #{scene.field_of_view(scene.subject_distance).to_s(:imperial)}"
-          puts "\t" + "DOF: #{scene.total_depth_of_field.to_s(:imperial)} (-#{scene.near_distance_from_subject.to_s(:imperial)}/+#{scene.far_distance_from_subject.to_s(:imperial)})"
-          puts "\t" + "EXPOSURE: #{scene.exposure}"
-        end
+        puts "\t" + "FOV: #{scene.field_of_view(scene.subject_distance).to_s(:imperial)}"
+        puts "\t" + "DOF: #{scene.total_depth_of_field.to_s(:imperial)} (-#{scene.near_distance_from_subject.to_s(:imperial)}/+#{scene.far_distance_from_subject.to_s(:imperial)})"
+        puts "\t" + "EXPOSURE: #{scene.exposure}"
       end
 
     end
