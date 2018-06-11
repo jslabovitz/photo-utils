@@ -5,6 +5,7 @@ module PhotoUtils
     class Blur < Tool
 
       def run
+        camera = Camera[ARGV.shift]
         scene = Scene.new
         scene.sensitivity = 100
         scene.subject_distance = 6.feet
@@ -14,7 +15,7 @@ module PhotoUtils
         # flash_lux_seconds = flash_lux.to_f * (flash_seconds * 1000)
         flash_lux_seconds = 25000 / 2
         scene.brightness = BrightnessValue.new(flash_lux_seconds.to_f / ((scene.subject_distance / 1000) ** 2))
-        scene.camera = Camera[/Eastman/]
+        scene.camera = camera
         # scene.camera.lens = scene.camera.lenses.find { |l| l.focal_length == 12.inches }
         scene.camera.lens.aperture = 32
         scene.camera.shutter = nil

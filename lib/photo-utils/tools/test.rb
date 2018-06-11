@@ -32,14 +32,10 @@ module PhotoUtils
         }
 
         Camera.cameras.each do |camera|
-          # next unless camera.name =~ /Eastman/
-          # next unless camera.name =~ /Hasselblad|Bronica|Leica/
           camera.formats.each do |format|
-            # next unless format.name =~ /5x7/
             puts
             camera.format = format
             camera.lenses.sort_by(&:focal_length).each do |lens|
-              # next unless lens.name =~ /12"/
               camera.lens = lens
               scene = Scene.new
               # scene.sensitivity = sensitivity
