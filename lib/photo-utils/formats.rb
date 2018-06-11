@@ -60,7 +60,6 @@ module PhotoUtils
       6x12		                    56		112
       6x12 Linhof		              57		120
       6x17		                    56		168
-      6x17		                    56		168
 
       Polaroid 660                73    95
       Polaroid 660 on Mamiya RB/RZ67    73    73
