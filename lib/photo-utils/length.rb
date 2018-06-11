@@ -36,7 +36,7 @@ module PhotoUtils
       when Length, Numeric
         super(obj.to_f)
       when String
-        self.class.parse(obj)
+        super(self.class.parse(obj))
       else
         raise "Can't make length from #{x.class}: #{x.inspect}"
       end
