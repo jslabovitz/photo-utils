@@ -31,6 +31,12 @@ module PhotoUtils
   	  assert { @a.absolute(50) == 50 }
     end
 
+    def test_parse
+      assert { ApertureValue.parse('f/1') == 1 }
+      assert { ApertureValue.parse('f/2.8') == 2.8 }
+      assert { ApertureValue.parse('f/16.0') == 16 }
+    end
+
   end
 
 end

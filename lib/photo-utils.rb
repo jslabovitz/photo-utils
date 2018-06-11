@@ -3,6 +3,13 @@ require 'hashstruct'
 require 'builder'
 require 'path'
 require 'delegate'
+require 'yaml'
+
+module PhotoUtils
+
+  class Error < Exception; end
+
+end
 
 require 'photo-utils/extensions/numeric'
 

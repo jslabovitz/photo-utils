@@ -28,6 +28,13 @@ module PhotoUtils
   	  assert { @t.decr.to_v.round == TimeValue.new(@t / 2).to_v.round }
     end
 
+    def test_parse
+      assert { TimeValue.parse('1') == 1 }
+      assert { TimeValue.parse('1s') == 1 }
+      assert { TimeValue.parse('1/1s') == 1 }
+      assert { TimeValue.parse('1/500') == Rational(1,500) }
+    end
+
   end
 
 end

@@ -4,6 +4,15 @@ module PhotoUtils
 
     APEX_LABEL = 'Av'
 
+    def self.parse(s)
+      case s.to_s.strip
+      when %r{^f/([\d\.]+)$}i
+        new($1.to_f)
+      else
+        raise ValueParseError, "Can't parse #{s.inspect} as aperture value"
+      end
+    end
+
     def self.new_from_v(v)
       new(Math.sqrt(2 ** v.to_f))
     end

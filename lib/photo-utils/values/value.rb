@@ -2,11 +2,23 @@ module PhotoUtils
 
   class Value < DelegateClass(Float)
 
+    class ValueParseError < Error; end
+
+    def self.parse(s)
+      case s.to_s.strip
+      when /^([\d\.]+)$/
+        $1.to_f
+      else
+        raise ValueParseError, "Can't parse as value: #{s.inspect}"
+      end
+    end
+
     def self.new_from_v(v)
       new(2 ** v.to_f)
     end
 
     def initialize(n)
+      n = self.class.parse(n) if n === String
       super(n.to_f)
     end
 
