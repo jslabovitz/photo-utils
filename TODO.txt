@@ -22,19 +22,10 @@
 
 - consolidate Camera#print & Scene#print_camera
 
-- remove hardcoded camera names from tools
-
 - build tests for calculators (use existing tools?)
-
-- convert cameras.rb to YAML
-  - include generic cameras/formats in gem
 
 - convert Tool#test into something useful
   
-- create generic camera models
-  - 35, 645, 6x6, 6x7, 4x5, 8x10, MFT, APS-C, FF
-  - each with wide/normal/tele lens
-
 - create Subject class
   - distance
   - height/width/depth
