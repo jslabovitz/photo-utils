@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestCamera < Test
+  class CameraTest < Test
 
     def setup
       @camera = Camera[/Generic 35mm/]
