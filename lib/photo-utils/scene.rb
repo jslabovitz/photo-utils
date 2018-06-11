@@ -147,7 +147,6 @@ module PhotoUtils
       io.puts "    angle of view: #{@camera.angle_of_view}"
       io.puts "          shutter: #{@camera.shutter}"
       io.puts "         aperture: #{@camera.lens.aperture}"
-      io.puts
     end
 
     def print_exposure(io=STDOUT)
@@ -167,7 +166,6 @@ module PhotoUtils
       end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
       io.puts " working aperture: #{working_aperture}"
-      io.puts
     end
 
     def print(io=STDOUT)
