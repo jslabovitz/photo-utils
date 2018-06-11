@@ -19,8 +19,8 @@ module PhotoUtils
 
         first = true
 
-        1.upto(30) do |s|
-          scene.subject_distance = s.feet
+        1.upto(30) do |subject_distance|
+          scene.subject_distance = subject_distance.feet
           if first
             first = false
             puts (['', ''] + apertures.map { |a| a.to_s(:value) }).join("\t")
@@ -28,11 +28,14 @@ module PhotoUtils
             puts (['Distance', 'Field of view'] + apertures).join("\t")
           end
           print scene.subject_distance.to_s(:imperial)
-          print "\t" + "#{scene.field_of_view(scene.subject_distance).height.to_s(:imperial)}H x #{scene.field_of_view(scene.subject_distance).width.to_s(:imperial)}W"
-          apertures.each do |a|
-            scene.camera.lens.aperture = a
-            # print "\t" + "%s (%s ~ %s)" % [scene.total_depth_of_field, scene.near_distance_from_subject, scene.far_distance_from_subject].map { |d| d.to_s(:imperial) }
-            print "\t" + "%s" % [scene.total_depth_of_field].map { |d| d.to_s(:imperial) }
+          fov = scene.field_of_view(scene.subject_distance)
+          print "\t" + "%sH x %sW" % [
+            fov.height.to_s(:imperial),
+            fov.width.to_s(:imperial),
+          ]
+          apertures.each do |aperture|
+            scene.camera.lens.aperture = aperture
+            print "\t" + "%s" % scene.total_depth_of_field.to_s(:imperial)
           end
           puts
         end
