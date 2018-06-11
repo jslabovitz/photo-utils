@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestSensitivity < Test
+  class SensitivityValueTest < Test
 
     def setup
   	  @s = SensitivityValue.new(400)

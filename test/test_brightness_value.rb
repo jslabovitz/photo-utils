@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestBrightness < Test
+  class BrightnessValueTest < Test
 
     def setup
       @cdm2 = 3.4

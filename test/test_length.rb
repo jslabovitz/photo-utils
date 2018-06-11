@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestLength < Test
+  class LengthTest < Test
 
     def setup
       @table = {

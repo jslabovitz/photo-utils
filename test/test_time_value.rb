@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestTime < Test
+  class TimeValueTest < Test
 
     def setup
   	  @t = TimeValue.new(1)

@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestExposure < Test
+  class ExposureValueTest < Test
 
     def setup
       @time = TimeValue.new_from_v(0)

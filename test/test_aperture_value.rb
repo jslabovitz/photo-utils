@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestAperture < Test
+  class ApertureValueTest < Test
 
     def setup
   	  @a = ApertureValue.new(1)

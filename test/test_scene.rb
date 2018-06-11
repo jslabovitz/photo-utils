@@ -2,7 +2,7 @@ require_relative 'test'
 
 module PhotoUtils
 
-  class TestScene < Test
+  class SceneTest < Test
 
     def setup
       @scene = Scene.new
