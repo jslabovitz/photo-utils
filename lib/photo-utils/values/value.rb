@@ -18,7 +18,7 @@ module PhotoUtils
     end
 
     def initialize(n)
-      n = self.class.parse(n) if n === String
+      n = self.class.parse(n) if n.kind_of?(String)
       super(n.to_f)
     end
 
