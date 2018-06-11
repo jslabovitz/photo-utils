@@ -18,7 +18,7 @@ module PhotoUtils
       if @name
         "#{@name} (#{@focal_length})"
       else
-        @focal_length.to_s
+        "#{@focal_length}"
       end
     end
 
