@@ -12,7 +12,6 @@ module PhotoUtils
       assert { @camera.name == 'Generic 35mm' }
       assert { @camera.format.name == '35' }
       assert { @camera.lens.name == '50mm' }
-      assert { @camera.angle_of_view == 47 }
       lens = @camera.lens
       assert { lens == @camera.normal_lens }
       assert { lens.min_aperture == 22 }

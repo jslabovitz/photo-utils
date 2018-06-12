@@ -89,11 +89,6 @@ module PhotoUtils
       @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
     end
 
-    def angle_of_view
-      raise "Need focal length and format size to determine angle of view" unless @lens && @lens.focal_length && @format
-      @format.angle_of_view(@lens.focal_length)
-    end
-
     def print(io=STDOUT)
       io.puts "#{@name}: format: #{@format}, shutter: #{@max_shutter}~#{@min_shutter}"
       @lenses.sort_by(&:focal_length).each do |lens|

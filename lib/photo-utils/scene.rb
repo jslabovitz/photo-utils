@@ -144,7 +144,7 @@ module PhotoUtils
       io.puts "             lens: #{@camera.lens.name} - #{@camera.lens.focal_length} (#{
         %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@camera.format.focal_length_equivalent(@camera.lens.focal_length, Format[f])}" }.join(', ')
       })"
-      io.puts "    angle of view: #{@camera.angle_of_view}"
+      io.puts "    angle of view: #{@camera.format.angle_of_view(@camera.lens.focal_length)}"
       io.puts "          shutter: #{@camera.shutter}"
       io.puts "         aperture: #{@camera.lens.aperture}"
     end
