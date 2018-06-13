@@ -1,3 +1,16 @@
+- move field-related logic from Scene into FieldCalculator
+  - takes parameters (e.g., focal length) not objects (lens)
+  - add camera back into Scene 
+  - 
+
+- add current_{aperture,shutter,lens,format} to Camera
+
+- rename Exposure -> ExposureCalculator
+
+- rename *Value classes
+  - ApertureValue -> Value
+  - move to main directory
+
 - fix Brightness/Illumination
   - use correct units & math
     - illumination: lux, foot-candle
@@ -12,13 +25,6 @@
   - or just specify to to_s as currently
   - but format determines formatting & conversion
   - eg, Length(format: :metric) or Aperture(format: :fstop)
-
-- set lens & format in Scene, not Camera
-  - add #default_lens and #default_format to Camera
-
-- create Calculators module?
-  - move logic of tools into this
-  - make tools simply create/manipulate calculators
 
 - consolidate Camera#print & Scene#print_camera
 
