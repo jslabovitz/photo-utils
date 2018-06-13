@@ -108,12 +108,8 @@ module PhotoUtils
       params.each { |k, v| send("#{k}=", v) }
     end
 
-    def to_s(short=true)
-      if short
-        @name
-      else
-        "#{@name} (#{@frame})"
-      end
+    def to_s
+      @name
     end
 
     def focal_length_equivalent(focal_length, other=Format['35'])
