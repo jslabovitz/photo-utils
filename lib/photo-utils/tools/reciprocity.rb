@@ -13,25 +13,29 @@ module PhotoUtils
       end
 
       def run
-        if ARGV.first
-          r = ARGV.first.split('-', 2).map { |n| n ? n.to_i : nil }
-        else
-          r = 1..100
-        end
-        range = Range.new(r.first, r.last)
+        formula = (ARGV.shift || 'neopan').to_sym
+        range = 1..128
         ti = range.first
         until ti > range.last
-          tc = reciprocity(TimeValue.new(ti))
-          puts "#{ti} => #{tc.round.to_i}"
+          ti = TimeValue.new(ti)
+          tc = reciprocity(ti, formula: formula)
+          puts "%4s => %4s" % [ti, tc]
           ti *= 2
         end
       end
 
       # http://www.apug.org/forums/forum37/22334-fuji-neopan-400-reciprocity-failure-data.html
+      # https://www.flickr.com/groups/477426@N23/discuss/72157635197694957/
 
-      def reciprocity(t)
-        tc = t + (0.3 * (t ** 1.62))
-        TimeValue.new(tc)
+      def reciprocity(time, formula: :neopan)
+        time + case formula
+        when :neopan
+          0.3 * (time ** 1.62)
+        when :portra
+          0.870189 * (time ** 1.35815)
+        else
+          raise Error, "Can't compute reciprocity for #{formula.inspect}"
+        end
       end
 
     end
