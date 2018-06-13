@@ -26,6 +26,14 @@ module PhotoUtils
       Math.log2(to_f)
     end
 
+    def +(n)
+      self.class.new(to_f + n)
+    end
+
+    def -(n)
+      self.class.new(to_f - n)
+    end
+
     def incr
       self.class.new_from_v(to_v + 1)
     end
