@@ -21,6 +21,10 @@ module PhotoUtils
       Math.log2(to_f ** 2)
     end
 
+    def succ
+      self.class.new_from_v(to_v + 1)
+    end
+
     def string
       'f/%s' % float_string
     end

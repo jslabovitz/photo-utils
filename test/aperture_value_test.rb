@@ -37,6 +37,11 @@ module PhotoUtils
       assert { ApertureValue.parse('f/16.0') == 16 }
     end
 
+    def test_range
+      r = ApertureValue.new(1) .. ApertureValue.new(4)
+      assert { r.to_a.map { |n| n.round(1) } == [1, 1.4, 2, 2.8, 4] }
+    end
+
   end
 
 end
