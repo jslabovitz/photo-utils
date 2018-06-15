@@ -126,8 +126,6 @@ module PhotoUtils
       @camera.lens.aperture = aperture_for_depth_of_field(
         @subject_distance - (depth_of_field / 2),
         @subject_distance + (depth_of_field / 2))
-      @camera.lens.aperture = [@camera.lens.aperture, @camera.lens.max_aperture].max
-      @camera.lens.aperture = [@camera.lens.aperture, @camera.lens.min_aperture].min
     end
 
     def calculate!

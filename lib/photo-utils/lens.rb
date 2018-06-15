@@ -41,7 +41,9 @@ module PhotoUtils
     end
 
     def aperture=(a)
-      @aperture = ApertureValue.new(a)
+      a = ApertureValue.new(a)
+      raise Error, "Aperture out of range of lens: #{a}" unless (@min_aperture..@max_aperture).include?(a)
+      @aperture = a
     end
 
     def set_defaults!
