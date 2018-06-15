@@ -41,7 +41,6 @@ module PhotoUtils
 
     def hyperfocal_distance
       # http://en.wikipedia.org/wiki/Hyperfocal_distance
-      raise "Need aperture to determine hyperfocal distance" unless @camera.lens.aperture
       Length.new(
         (
           (@camera.lens.focal_length ** 2) / (@camera.lens.aperture * @camera.format.circle_of_confusion)
