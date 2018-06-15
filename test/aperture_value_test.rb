@@ -40,12 +40,17 @@ module PhotoUtils
 
     def test_parse_us_stop
       [
-        [4,   1,  'US 1'],
-        [5.7, 2,  'US 2'],
-        [8,   4,  'US 4'],
-        [11,  8,  'US 8'],
-        [16,  16, 'US 16'],
+        [4,    1],
+        [5.7,  2],
+        [8,    4],
+        [11,   8],
+        [16,  16],
+        # [22,  32],    # 30.250000000000004
+        [32,  64],
+        # [45, 128],   # 126.56250000000001
+        [64, 256],
       ].each do |f, us, str|
+        str = "US #{us}"
         assert { ApertureValue.new(f).us_stop.round == us }
         assert { ApertureValue.new(f).to_s(:us) == str }
         assert { ApertureValue.parse(str).round == f.round }
