@@ -11,6 +11,7 @@ module PhotoUtils
     def test_value
       assert { @a.to_f == 1 }
       assert { @a.to_v == 0 }
+      assert { @a.us_stop == 0.0625 }
     end
 
     def test_format_as_string
@@ -31,10 +32,24 @@ module PhotoUtils
   	  assert { @a.absolute(50) == 50 }
     end
 
-    def test_parse
+    def test_parse_fstop
       assert { ApertureValue.parse('f/1') == 1 }
       assert { ApertureValue.parse('f/2.8') == 2.8 }
-      assert { ApertureValue.parse('f/16.0') == 16 }
+      assert { ApertureValue.parse('f/16') == 16 }
+    end
+
+    def test_parse_us_stop
+      [
+        [4,   1,  'US 1'],
+        [5.7, 2,  'US 2'],
+        [8,   4,  'US 4'],
+        [11,  8,  'US 8'],
+        [16,  16, 'US 16'],
+      ].each do |f, us, str|
+        assert { ApertureValue.new(f).us_stop.round == us }
+        assert { ApertureValue.new(f).to_s(:us) == str }
+        assert { ApertureValue.parse(str).round == f.round }
+      end
     end
 
     def test_range

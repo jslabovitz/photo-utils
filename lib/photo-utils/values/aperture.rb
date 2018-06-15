@@ -8,6 +8,8 @@ module PhotoUtils
       case s.to_s.strip
       when %r{^f/([\d\.]+)$}i
         new($1.to_f)
+      when %r{^US ([\d\.]+)$}i
+        new_from_us_stop($1.to_f)
       else
         raise ValueParseError, "Can't parse #{s.inspect} as aperture value"
       end
@@ -15,6 +17,10 @@ module PhotoUtils
 
     def self.new_from_v(v)
       new(Math.sqrt(2 ** v.to_f))
+    end
+
+    def self.new_from_us_stop(us)
+      new_from_v(Math.log2(us) + 4)
     end
 
     def to_v
@@ -30,19 +36,11 @@ module PhotoUtils
     end
 
     def us_string
-      'US %d' % us_stop
+      'US %s' % us_stop.round
     end
 
     def us_stop
-      # Av 8 is equivalent to f/16 and US 16
-      steps = to_v.to_i - 8
-      us = 16
-      if steps < 0
-        steps.abs.times { us /= 2 }
-      else
-        steps.times { us *= 2 }
-      end
-      us
+      2 ** (to_v - 4)
     end
 
     def absolute(focal_length)
