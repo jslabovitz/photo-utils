@@ -16,7 +16,7 @@ module PhotoUtils
       @height = options[:height] || 50
       @max_distance = options[:max_distance] || @scene.depth_of_field.far
       @camera_width  = options[:camera_width]  || @scene.focal_length
-      @camera_height = options[:camera_height] || [@scene.absolute_aperture, @scene.format.height].max
+      @camera_height = options[:camera_height] || [@scene.camera.lens.absolute_aperture, @scene.format.height].max
       @scale = (@width.to_f - @height) / (@camera_width + @max_distance)
       @camera_scale = [
         @height.to_f / @camera_width,
@@ -45,12 +45,12 @@ module PhotoUtils
     end
 
     def draw_camera(xml)
-      fh2 = (@scene.camera.format.frame.height / 2) * @camera_scale
-      aa2 = (@scene.absolute_aperture / 2) * @camera_scale
+      fh2 = (@scene.format.frame.height / 2) * @camera_scale
+      aa2 = (@scene.camera.lens.absolute_aperture / 2) * @camera_scale
       points = [
         [0, -fh2],
-        [@scene.camera.lens.focal_length * @camera_scale, -aa2],
-        [@scene.camera.lens.focal_length * @camera_scale, aa2],
+        [@scene.focal_length * @camera_scale, -aa2],
+        [@scene.focal_length * @camera_scale, aa2],
         [0, fh2],
       ]
       xml.g(transform: "translate(0,#{@height / 2})") do

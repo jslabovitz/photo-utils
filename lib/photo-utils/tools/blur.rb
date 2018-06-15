@@ -6,6 +6,7 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
+        camera.lens.aperture = 32
         scene = Scene.new(
           camera: camera,
           sensitivity: 100,
@@ -17,10 +18,8 @@ module PhotoUtils
         # flash_lux_seconds = flash_lux.to_f * (flash_seconds * 1000)
         flash_lux_seconds = 25000 / 2
         scene.brightness = BrightnessValue.new(flash_lux_seconds.to_f / ((scene.subject_distance / 1000) ** 2))
-        scene.camera.lens.aperture = 32
-        scene.camera.shutter = nil
 
-        scene.print_camera
+        scene.camera.print
         scene.print_exposure
         scene.print_depth_of_field
 

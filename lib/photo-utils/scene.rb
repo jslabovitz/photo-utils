@@ -35,20 +35,23 @@ module PhotoUtils
 
     def circle_of_confusion
       # http://en.wikipedia.org/wiki/Circle_of_confusion
-      @camera.format.frame.diagonal / 1750
+      @camera.format.frame.diagonal / 1500
     end
 
     def aperture_for_depth_of_field(near_limit, far_limit)
-      a = ((@camera.lens.focal_length ** 2) / circle_of_confusion) * ((far_limit - near_limit) / (2 * near_limit * far_limit))
-      ApertureValue.new(a)
+      ApertureValue.new(
+        ((@camera.lens.focal_length ** 2) / circle_of_confusion) *
+        ((far_limit - near_limit) / (2 * near_limit * far_limit)))
     end
 
     def hyperfocal_distance
       # http://en.wikipedia.org/wiki/Hyperfocal_distance
-      raise "Need focal length, aperture, and circle of confusion to determine hyperfocal distance" \
-        unless @camera.lens.focal_length && @camera.lens.aperture && circle_of_confusion
-      h = ((@camera.lens.focal_length ** 2) / (@camera.lens.aperture * circle_of_confusion)) + @camera.lens.focal_length
-      Length.new(h)
+      raise "Need aperture to determine hyperfocal distance" unless @camera.lens.aperture
+      Length.new(
+        (
+          (@camera.lens.focal_length ** 2) / (@camera.lens.aperture * circle_of_confusion)
+        ) + @camera.lens.focal_length
+      )
     end
 
     def depth_of_field
@@ -67,22 +70,21 @@ module PhotoUtils
     end
 
     def near_distance_from_subject
-      d = subject_distance - depth_of_field.near
-      Length.new(d)
+      Length.new(
+        subject_distance - depth_of_field.near)
     end
 
     def far_distance_from_subject
-      d = depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - subject_distance)
-      Length.new(d)
+      Length.new(
+        depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - subject_distance))
     end
 
     def total_depth_of_field
-      d = depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - depth_of_field.near)
-      Length.new(d)
+      Length.new(
+        depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - depth_of_field.near))
     end
 
     def field_of_view(distance)
-      raise "Need focal length and format size to determine field of view" unless @camera.lens.focal_length && @camera.format
       @camera.format.field_of_view(@camera.lens.focal_length, distance)
     end
 
@@ -117,10 +119,6 @@ module PhotoUtils
       Length.new(b.mm)
     end
 
-    def absolute_aperture
-      @camera.lens.aperture.absolute(@camera.lens.focal_length)
-    end
-
     def exposure
       Exposure.calculate(
         brightness: @brightness,
@@ -129,24 +127,18 @@ module PhotoUtils
         time: @camera.shutter)
     end
 
+    def calculate_best_aperture!(depth_of_field)
+      @camera.lens.aperture = aperture_for_depth_of_field(
+        @subject_distance - (depth_of_field / 2),
+        @subject_distance + (depth_of_field / 2))
+      @camera.lens.aperture = [@camera.lens.aperture, @camera.lens.max_aperture].max
+      @camera.lens.aperture = [@camera.lens.aperture, @camera.lens.min_aperture].min
+    end
+
     def calculate!
       exp = exposure
       @camera.lens.aperture = exp.aperture
       @camera.shutter = exp.time
-    end
-
-    def print_camera(io=STDOUT)
-      io.puts "CAMERA:"
-      io.puts "             name: #{@camera.name}"
-      io.puts "           format: #{@camera.format} (35mm crop factor: #{@camera.format.crop_factor.round(1)})"
-      io.puts "    shutter range: #{@camera.max_shutter} ~ #{@camera.min_shutter}"
-      io.puts "   aperture range: #{@camera.lens.max_aperture} ~ #{@camera.lens.min_aperture}"
-      io.puts "             lens: #{@camera.lens.name} - #{@camera.lens.focal_length} (#{
-        %w{35 6x4.5 6x6 6x7 5x7}.map { |f| "#{f}: #{@camera.format.focal_length_equivalent(@camera.lens.focal_length, Format[f])}" }.join(', ')
-      })"
-      io.puts "    angle of view: #{@camera.format.angle_of_view(@camera.lens.focal_length)}"
-      io.puts "          shutter: #{@camera.shutter}"
-      io.puts "         aperture: #{@camera.lens.aperture}"
     end
 
     def print_exposure(io=STDOUT)

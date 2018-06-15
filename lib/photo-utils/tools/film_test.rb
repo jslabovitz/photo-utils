@@ -6,13 +6,13 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
+        camera.shutter = Rational(1, 60)
+        camera.lens.aperture = 5.6
 
         scene = Scene.new(
           camera: camera,
-          sensitivity: 100)
-        scene.camera.shutter = 1.0/60
-        scene.camera.lens.aperture = 5.6
-        # scene.description = "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68"
+          sensitivity: 100,
+          description: "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68")
 
         scene.print_exposure
 

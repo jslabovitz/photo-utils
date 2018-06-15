@@ -43,10 +43,6 @@ module PhotoUtils
       2 ** (to_v - 4)
     end
 
-    def absolute(focal_length)
-      focal_length / self
-    end
-
   end
 
 end

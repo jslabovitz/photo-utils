@@ -28,10 +28,6 @@ module PhotoUtils
   	  assert { @a.decr.to_v.round == ApertureValue.new(0.7).to_v.round  }
     end
 
-    def test_absolute
-  	  assert { @a.absolute(50) == 50 }
-    end
-
     def test_parse_fstop
       assert { ApertureValue.parse('f/1') == 1 }
       assert { ApertureValue.parse('f/2.8') == 2.8 }

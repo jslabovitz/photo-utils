@@ -1,15 +1,17 @@
 - move field-related logic from Scene into FieldCalculator
   - takes parameters (e.g., focal length) not objects (lens)
   - add camera back into Scene 
-  - 
 
-- add current_{aperture,shutter,lens,format} to Camera
+- move class methods from Camera into Cameras
 
 - rename Exposure -> ExposureCalculator
 
 - rename *Value classes
   - ApertureValue -> Value
   - move to main directory
+
+- change {min,max}_{shutter,aperture} to Range
+  - add #speeds setter to parse string representation
 
 - fix Brightness/Illumination
   - use correct units & math
@@ -25,8 +27,6 @@
   - or just specify to to_s as currently
   - but format determines formatting & conversion
   - eg, Length(format: :metric) or Aperture(format: :fstop)
-
-- consolidate Camera#print & Scene#print_camera
 
 - build tests for calculators (use existing tools?)
 
@@ -44,6 +44,9 @@
 - create Medium class?
   - eg, film, plate, instant, CCD/CMOS
   - with #sensitivity
+
+- add shutter range/current to Lens
+  - camera.shutter || lens.shutter
 
 - add common brightness values to Brightness class
   - eg, open shade, bright sun, etc.

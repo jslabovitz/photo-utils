@@ -11,15 +11,17 @@ module PhotoUtils
     def initialize(params={})
       @name = nil
       params.each { |k, v| send("#{k}=", v) }
-      @aperture = @max_aperture
+      set_defaults!
     end
 
     def to_s
-      if @name
-        "#{@name} (#{@focal_length})"
-      else
-        "#{@focal_length}"
-      end
+      '%s: focal length: %s, aperture: %s (%s~%s)' % [
+        name,
+        @focal_length,
+        @aperture,
+        @max_aperture,
+        @min_aperture,
+      ]
     end
 
     def name
@@ -40,6 +42,20 @@ module PhotoUtils
 
     def aperture=(a)
       @aperture = ApertureValue.new(a)
+    end
+
+    def set_defaults!
+      @aperture = median_aperture
+    end
+
+    def median_aperture
+      ApertureValue.new_from_v(
+        ((@max_aperture.to_v + @min_aperture.to_v) / 2).round
+      )
+    end
+
+    def absolute_aperture
+      @focal_length / @aperture
     end
 
   end

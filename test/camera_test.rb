@@ -8,12 +8,14 @@ module PhotoUtils
       @camera = Camera[/Generic 35mm/]
     end
 
-    def test
+    def test_camera
       assert { @camera.name == 'Generic 35mm' }
-      assert { @camera.format.name == '35' }
-      assert { @camera.lens.name == '50mm' }
-      lens = @camera.lens
-      assert { lens == @camera.normal_lens }
+      assert { @camera.formats.map(&:name) == ['35'] }
+    end
+
+    def test_lens
+      lens = @camera.normal_lens(@camera.formats.first)
+      assert { lens.name == '50mm' }
       assert { lens.min_aperture == 22 }
       assert { lens.max_aperture == 2.8 }
     end

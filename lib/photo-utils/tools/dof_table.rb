@@ -11,7 +11,7 @@ module PhotoUtils
           camera: camera)
 
         puts
-        scene.print_camera
+        scene.camera.print
         puts
 
         # Av equivalents of f/4 ~ f/64

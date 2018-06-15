@@ -6,39 +6,30 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
+        lens = camera.normal_lens(camera.formats.first)
 
-        basic_scene_params = {
+        basic_scene = Scene.new(
           subject_distance: 8.feet,
           sensitivity: 400,
           brightness: 8,
-        }
+          camera: camera)
 
-        scene_params = []
-        ((camera.lens.max_aperture.to_v.round)..(camera.lens.min_aperture.to_v.round)).each do |av|
-          camera.lens.aperture = ApertureValue.new_from_v(av)
-          scene_params << basic_scene_params.merge(camera: camera)
-        end
+        scenes = []
 
-        scenes = scene_params.map do |params|
-          params[:description] = '%s (%s): %s @ %s' % [
-            camera.name,
-            camera.format,
-            camera.lens.focal_length,
-            camera.lens.aperture,
-          ]
-          Scene.new(basic_scene_params.merge(params))
-        end
-
-        scenes.each do |scene|
-          scene.print; puts
+        (lens.max_aperture.to_v.round .. lens.min_aperture.to_v.round).each do |av|
+          scene = basic_scene.dup
+          scene.camera.lens.aperture = ApertureValue.new_from_v(av)
+          scene.calculate!
+          scene.print
+          puts
         end
 
         # max_distance = scenes.map { |s| s.depth_of_field.far }.max
         # max_distance = scenes.map { |s| s.hyperfocal_distance }.max
         max_distance = 50.feet
 
-        camera_width  = scenes.map { |s| camera.lens.focal_length }.max
-        camera_height = scenes.map { |s| [s.absolute_aperture, camera.format.frame.height].max }.max
+        camera_width  = scenes.map { |s| s.camera.lens.focal_length }.max
+        camera_height = scenes.map { |s| [s.camera.lens.absolute_aperture, s.camera.format.frame.height].max }.max
 
         html = Builder::XmlMarkup.new(indent: 2)
         html.declare!(:DOCTYPE, :html)
@@ -63,9 +54,7 @@ module PhotoUtils
             end
           end
         end
-
-        output_file = ARGV.first or usage
-        Path.new(output_file).write(html.target!)
+        print html.target!
       end
 
     end

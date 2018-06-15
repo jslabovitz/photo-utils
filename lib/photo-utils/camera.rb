@@ -41,7 +41,7 @@ module PhotoUtils
 
     attr_accessor :name
     attr_reader   :formats
-    attr_accessor :format
+    attr_reader   :format
     attr_reader   :min_shutter
     attr_reader   :max_shutter
     attr_reader   :shutter
@@ -53,9 +53,7 @@ module PhotoUtils
         params[:formats] = [params.delete(:format)]
       end
       params.each { |k, v| send("#{k}=", v) }
-      @format = @formats.first
-      @lens = normal_lens
-      @shutter = @max_shutter
+      set_defaults!
     end
 
     def formats=(formats)
@@ -65,43 +63,68 @@ module PhotoUtils
     end
 
     def lenses=(lenses)
-      @lenses = lenses.map do |lens|
-        Lens.new(lens)
-      end
+      @lenses = lenses.map { |lens| Lens.new(lens) }.sort_by(&:focal_length)
     end
 
     def min_shutter=(t)
-      @min_shutter = t ? TimeValue.new(t) : nil
+      @min_shutter = TimeValue.new(t)
     end
 
     def max_shutter=(t)
-      @max_shutter = t ? TimeValue.new(t) : nil
+      @max_shutter = TimeValue.new(t)
     end
 
     def shutter=(t)
-      @shutter = t ? TimeValue.new(t) : nil
+      @shutter = TimeValue.new(t)
+    end
+
+    def set_defaults!
+      @format = @formats.first
+      @lens = normal_lens(@format)
+      @shutter = @max_shutter
     end
 
     # the lens closest to normal (diagonal of frame)
 
-    def normal_lens
-      normal = @format.frame.diagonal
+    def normal_lens(format)
+      normal = format.frame.diagonal
       @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
     end
 
+    def angle_of_view
+      @format.angle_of_view(@lens.focal_length)
+    end
+
+    def aperture
+      @lens.aperture
+    end
+
+    def focal_length
+      @lens.focal_length
+    end
+
+    def focal_length_equivalent(format)
+      @format.focal_length_equivalent(@lens.focal_length, format)
+    end
+
+    def to_s
+      '%s: format: %s (%s), shutter: %s (%s~%s), angle of view: %s' % [
+        @name,
+        @format,
+        @formats.join(', '),
+        @shutter,
+        @max_shutter,
+        @min_shutter,
+        angle_of_view,
+      ]
+    end
+
     def print(io=STDOUT)
-      io.puts "#{@name}: format: #{@format}, shutter: #{@max_shutter}~#{@min_shutter}"
-      @lenses.sort_by(&:focal_length).each do |lens|
-        io.puts "\t%s %s: focal length: %s [%s], aperture: %s~%s [%s~%s], angle of view: %s" % [
+      io.puts to_s
+      @lenses.each do |lens|
+        io.puts "\t%s %s" % [
           (lens == @lens) ? '*' : ' ',
-          lens.name,
-          lens.focal_length,
-          @format.focal_length_equivalent(lens.focal_length),
-          lens.max_aperture,
-          lens.min_aperture,
-          @format.aperture_equivalent(lens.max_aperture),
-          @format.aperture_equivalent(lens.min_aperture),
-          @format.angle_of_view(lens.focal_length),
+          lens,
         ]
       end
     end

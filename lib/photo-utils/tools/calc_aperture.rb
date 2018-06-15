@@ -13,14 +13,13 @@ module PhotoUtils
         basic_scene.camera = camera
         basic_scene.subject_distance = 12.feet
         basic_scene.background_distance = 14.feet
-        basic_scene.camera.lens.aperture = 8
-        basic_scene.description = basic_scene.camera.name
+        basic_scene.description = camera.name
 
         puts "--- @ #{basic_scene.subject_distance.to_s(:imperial)}"
-        basic_scene.camera.lenses.each do |lens|
+        camera.lenses.each do |lens|
           scene = basic_scene.dup
-          scene.camera.shutter = nil
-          scene.camera.lens = lens
+          # scene.shutter = nil
+          scene.calculate!
           # scene.aperture = scene.aperture_for_depth_of_field(scene.subject_distance - 9.inches, scene.subject_distance + 9.inches)
           # next unless scene.aperture >= lens.max_aperture && scene.aperture <= lens.min_aperture
           # background_fov = scene.field_of_view(scene.background_distance)
