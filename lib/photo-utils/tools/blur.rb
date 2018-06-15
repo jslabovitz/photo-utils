@@ -6,10 +6,8 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
-        camera.lens.aperture = 32
         scene = Scene.new(
           camera: camera,
-          sensitivity: 100,
           subject_distance: 6.feet,
           background_distance: 7.feet,
         )
@@ -28,8 +26,8 @@ module PhotoUtils
           puts "%12s: blur disk: %7s, blur/CoC: %6d%% -- %s" % [
             d.to_s(:imperial),
             blur,
-            (blur / scene.circle_of_confusion) * 100,
-            blur <= scene.circle_of_confusion ? 'in focus' : 'out of focus'
+            (blur / camera.format.circle_of_confusion) * 100,
+            blur <= camera.format.circle_of_confusion ? 'in focus' : 'out of focus'
           ]
         end
       end

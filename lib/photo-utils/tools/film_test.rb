@@ -6,40 +6,28 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
-        camera.shutter = Rational(1, 60)
-        camera.lens.aperture = 5.6
-
-        scene = Scene.new(
-          camera: camera,
-          sensitivity: 100,
-          description: "film: Acros 100; flash: Metz 60 at 1/128~1/256 power; dev: 11m in HC-110 (H) @ 68")
-
-        scene.print_exposure
 
         zone_offset_from_mg = -4
+        brightness = BrightnessValue.new_from_v(5 + zone_offset_from_mg)
 
         # recommendation from Adams' "The Negative"
         # steps = [0, -1.0/3, -2.0/3, -1, 1.0/3, 2.0/3, 1]
         steps = [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2]
 
-        scenes = []
-
-        steps.each do |i|
-          scene2 = scene.dup
-          scene2.brightness = BrightnessValue.new_from_v(scene.brightness.to_v - zone_offset_from_mg)
-          scene2.sensitivity = SensitivityValue.new_from_v(scene.sensitivity.to_v + i)
-          # FIXME: scene2.calculate_best_exposure
-          scene2.description = i.to_s
-          scenes << scene2
-        end
-
-        scenes.each_with_index do |scene2, i|
-          puts "%2d | %5s | %10s | %10s | %12s" % [
+        steps.each_with_index do |offset, i|
+          sensitivity = SensitivityValue.new_from_v(camera.sensitivity.to_v + offset)
+          exposure = Exposure.calculate(
+            time: camera.shutter,
+            aperture: camera.lens.aperture,
+            brightness: brightness,
+            sensitivity: sensitivity)
+          puts "%d | %4s | %10s | %5s | %6s | %s" % [
             i + 1,
-            scene2.description,
-            scene2.sensitivity,
-            scene2.exposure.aperture,
-            scene2.exposure.time,
+            offset,
+            sensitivity,
+            exposure.aperture,
+            exposure.time,
+            exposure,
           ]
         end
       end

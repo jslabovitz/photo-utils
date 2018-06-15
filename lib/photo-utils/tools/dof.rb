@@ -7,14 +7,10 @@ module PhotoUtils
       def run
 
         camera = Camera[ARGV.shift || 'Generic 35mm']
-        camera.shutter = Rational(1, 125)
-
-        puts "#{camera.name}"
 
         scene = Scene.new(
           camera: camera,
-          subject_distance: 30.feet,
-          sensitivity: 1600)
+          subject_distance: 30.feet)
         scene.calculate_best_aperture!(1.feet)
         scene.calculate!
 

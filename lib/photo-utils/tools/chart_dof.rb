@@ -6,17 +6,15 @@ module PhotoUtils
 
       def run
         camera = Camera[ARGV.shift || 'Generic 35mm']
-        lens = camera.normal_lens(camera.formats.first)
 
         basic_scene = Scene.new(
           subject_distance: 8.feet,
-          sensitivity: 400,
           brightness: 8,
           camera: camera)
 
         scenes = []
 
-        (lens.max_aperture.to_v.round .. lens.min_aperture.to_v.round).each do |av|
+        (camera.lens.max_aperture.to_v.round .. camera.lens.min_aperture.to_v.round).each do |av|
           scene = basic_scene.dup
           scene.camera.lens.aperture = ApertureValue.new_from_v(av)
           scene.calculate!

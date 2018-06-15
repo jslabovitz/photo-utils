@@ -42,6 +42,7 @@ module PhotoUtils
     attr_accessor :name
     attr_reader   :formats
     attr_reader   :format
+    attr_reader   :sensitivity
     attr_reader   :min_shutter
     attr_reader   :max_shutter
     attr_reader   :shutter
@@ -60,6 +61,10 @@ module PhotoUtils
       @formats = formats.map do |format|
         Format.find(format.to_s) or raise "Unknown format #{format.inspect} for camera #{name.inspect}"
       end
+    end
+
+    def sensitivity=(s)
+      @sensitivity = SensitivityValue.new(s)
     end
 
     def lenses=(lenses)
@@ -82,6 +87,7 @@ module PhotoUtils
       @format = @formats.first
       @lens = normal_lens(@format)
       @shutter = @max_shutter
+      @sensitivity = SensitivityValue.new(100)  #FIXME: get from Medium
     end
 
     # the lens closest to normal (diagonal of frame)

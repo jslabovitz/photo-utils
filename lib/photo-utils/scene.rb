@@ -6,19 +6,13 @@ module PhotoUtils
     attr_reader   :subject_distance
     attr_reader   :background_distance
     attr_accessor :camera
-    attr_reader   :sensitivity
     attr_reader   :brightness
 
     def initialize(params={})
       {
         background_distance: Float::INFINITY,
-        sensitivity: 100,
         brightness: 100,
       }.merge(params).each { |k, v| send("#{k}=", v) }
-    end
-
-    def sensitivity=(s)
-      @sensitivity = SensitivityValue.new(s)
     end
 
     def brightness=(b)
@@ -116,7 +110,7 @@ module PhotoUtils
     def exposure
       Exposure.calculate(
         brightness: @brightness,
-        sensitivity: @sensitivity,
+        sensitivity: @camera.sensitivity,
         aperture: @camera.lens.aperture,
         time: @camera.shutter)
     end
