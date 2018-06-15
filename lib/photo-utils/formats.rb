@@ -142,6 +142,11 @@ module PhotoUtils
         subject_distance * (@frame.width  / focal_length))
     end
 
+    def circle_of_confusion
+      # http://en.wikipedia.org/wiki/Circle_of_confusion
+      @frame.diagonal / 1500
+    end
+
   end
 
 end

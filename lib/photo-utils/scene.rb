@@ -33,14 +33,9 @@ module PhotoUtils
       @background_distance = Length.new(s)
     end
 
-    def circle_of_confusion
-      # http://en.wikipedia.org/wiki/Circle_of_confusion
-      @camera.format.frame.diagonal / 1500
-    end
-
     def aperture_for_depth_of_field(near_limit, far_limit)
       ApertureValue.new(
-        ((@camera.lens.focal_length ** 2) / circle_of_confusion) *
+        ((@camera.lens.focal_length ** 2) / @camera.format.circle_of_confusion) *
         ((far_limit - near_limit) / (2 * near_limit * far_limit)))
     end
 
@@ -49,7 +44,7 @@ module PhotoUtils
       raise "Need aperture to determine hyperfocal distance" unless @camera.lens.aperture
       Length.new(
         (
-          (@camera.lens.focal_length ** 2) / (@camera.lens.aperture * circle_of_confusion)
+          (@camera.lens.focal_length ** 2) / (@camera.lens.aperture * @camera.format.circle_of_confusion)
         ) + @camera.lens.focal_length
       )
     end
