@@ -1,7 +1,14 @@
 - move field-related logic from Scene into FieldCalculator
   - takes parameters (e.g., focal length) not objects (lens)
-  - add camera back into Scene 
 
+- add Shot class
+  - has #camera, #scene
+  - has simple methods to calculate exposure or field
+
+- rework Scene class
+  - has brightness range instead of single brightness
+  - doesn't have camera
+  
 - move class methods from Camera into Cameras
 
 - rename Exposure -> ExposureCalculator
@@ -11,22 +18,30 @@
   - move to main directory
 
 - change {min,max}_{shutter,aperture} to Range
-  - add #speeds setter to parse string representation
+  - add #{shutter,aperture}_range to parse string representation
 
 - fix Brightness/Illumination
   - use correct units & math
     - illumination: lux, foot-candle
     - brightness: cd/m2, foot-lambert
-  - change Exposure to take 'light' instead of 'brightness'
+  - change ExposureCalculator to take 'light' instead of 'brightness'
     - handles either Brightness or Illumination
 
-- add format attribute to Value?
-  - base value stays the same
-  - parsing detects format if necessary
-  - can also modify later
-  - or just specify to to_s as currently
-  - but format determines formatting & conversion
-  - eg, Length(format: :metric) or Aperture(format: :fstop)
+- rework units
+  - each has #to_XXX
+  - classes:
+    - Aperture (f/stop)
+      - Value (Av)
+      - Uniform (US)
+    - Shutter (secs) [was Time]
+      - Value (Tv)
+    - Brightness (lux?)
+      - Value (Bv)
+    - Sensitivity (ISO)
+      - Value (Sv)
+    - Length (meters)
+      - Imperial (feet/inches)
+    - Angle (degrees)
 
 - build tests for calculators (use existing tools?)
 
@@ -41,9 +56,10 @@
 - add print size to Scene
   - calculate best CoC according to print size
   
-- create Medium class?
+- create Medium class
   - eg, film, plate, instant, CCD/CMOS
-  - with #sensitivity
+  - has #sensitivity
+  - part of Camera
 
 - add shutter range/current to Lens
   - camera.shutter || lens.shutter
@@ -54,8 +70,3 @@
 - add lighting formulas
   http://www.lightsearch.com/resources/lightguides/formulas.html
   http://www.birket.com/technical-library/143/
-  
-- add flash calculation
-  http://www.scantips.com/lights/flashbasics1c.html
-  http://www.portraitlighting.net/inversesquare_law.htm
-  http://en.wikipedia.org/wiki/Guide_number
