@@ -101,6 +101,10 @@ module PhotoUtils
       @format.angle_of_view(@lens.focal_length)
     end
 
+    def field_of_view(distance)
+      @format.field_of_view(@lens.focal_length, distance)
+    end
+
     def aperture
       @lens.aperture
     end

@@ -72,13 +72,17 @@ module PhotoUtils
         depth_of_field.far.infinite? ? depth_of_field.far : (depth_of_field.far - depth_of_field.near))
     end
 
-    def field_of_view(distance)
-      @camera.format.field_of_view(@camera.lens.focal_length, distance)
+    def subject_field_of_view
+      @camera.field_of_view(@subject_distance)
+    end
+
+    def background_field_of_view
+      @camera.field_of_view(@background_distance)
     end
 
     def magnification
       # http://en.wikipedia.org/wiki/Depth_of_field#Hyperfocal_magnification
-      @camera.lens.focal_length / (subject_distance - @camera.lens.focal_length)
+      @camera.lens.focal_length / (@subject_distance - @camera.lens.focal_length)
     end
 
     def subject_distance_for_field_of_view(fov)
@@ -134,12 +138,12 @@ module PhotoUtils
     def print_depth_of_field(io=STDOUT)
       io.puts "FIELD:"
       io.puts "     subject dist: #{subject_distance.to_s(:imperial)}"
-      io.puts "      subject FOV: #{field_of_view(subject_distance).to_s(:imperial)}"
+      io.puts "      subject FOV: #{subject_field_of_view.to_s(:imperial)}"
       io.puts "      subject mag: #{'%.2f' % magnification}x"
       io.puts "      subject DOF: #{total_depth_of_field.to_s(:imperial)} (-#{near_distance_from_subject.to_s(:imperial)}/+#{far_distance_from_subject.to_s(:imperial)})"
       io.puts "  background dist: #{background_distance.to_s(:imperial)}"
       unless background_distance.infinite?
-        io.puts "   background FOV: #{field_of_view(background_distance).to_s(:imperial)}"
+        io.puts "   background FOV: #{background_field_of_view.to_s(:imperial)}"
         io.puts "  background blur: #{blur_at_distance(background_distance)}"
       end
       io.puts "  hyperfocal dist: #{hyperfocal_distance.to_s(:imperial)}"
