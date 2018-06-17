@@ -8,26 +8,17 @@ module PhotoUtils
         camera = Camera[ARGV.shift || 'Generic 35mm']
         scene = Scene.new(
           camera: camera,
-          subject_distance: 6.feet,
-          background_distance: 7.feet,
-        )
-        # flash_lux = 25
-        # flash_seconds = 0.001
-        # flash_lux_seconds = flash_lux.to_f * (flash_seconds * 1000)
-        flash_lux_seconds = 25000 / 2
-        scene.brightness = BrightnessValue.new(flash_lux_seconds.to_f / ((scene.subject_distance / 1000) ** 2))
+          subject_distance: 6.feet)
+        scene.brightness = BrightnessValue.new(2000)
 
         scene.camera.print
         scene.print_exposure
         scene.print_depth_of_field
 
-        1.feet.step(scene.subject_distance * 2, 1.feet).map { |d| Length.new(d) }.each do |d|
-          blur = scene.blur_at_distance(d)
-          puts "%12s: blur disk: %7s, blur/CoC: %6d%% -- %s" % [
-            d.to_s(:imperial),
-            blur,
-            (blur / camera.format.circle_of_confusion) * 100,
-            blur <= camera.format.circle_of_confusion ? 'in focus' : 'out of focus'
+        1.feet.step(scene.subject_distance * 2, 1.feet).map { |d| Length.new(d) }.each do |distance|
+          puts "%12s: %s" % [
+            distance.to_s(:imperial),
+            scene.in_focus?(distance) ? 'in focus' : '--'
           ]
         end
       end

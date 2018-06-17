@@ -5,18 +5,15 @@ module PhotoUtils
   class SceneTest < Test
 
     def setup
+      @camera = Camera[/Generic 35mm/]
       @scene = Scene.new(
-        camera: Camera[/Generic 35mm/],
+        camera: @camera,
         subject_distance: 10.feet)
     end
 
-    def test_make_scene
-      assert { @scene }
-    end
-
-    def test_blur_is_zero_at_subject
-      blur = @scene.blur_at_distance(@scene.subject_distance)
-      assert { blur == 0 }
+    def test_blur
+      assert { @scene.in_focus?(@scene.subject_distance) }
+      assert { !@scene.in_focus?(0) }
     end
 
   end

@@ -98,17 +98,29 @@ module PhotoUtils
       ApertureValue.new((1 - magnification) * @camera.lens.aperture)
     end
 
-    def blur_at_distance(d)
+    # diameter of blur disk
+
+    def blur_at_distance(distance)
       # http://en.wikipedia.org/wiki/Depth_of_field#Foreground_and_background_blur
-      xd = (d - subject_distance).abs
-      b = (@camera.lens.focal_length * magnification) / @camera.lens.aperture
-      if d < subject_distance
-        b *= xd / (subject_distance - xd)
-      else
-        b *= xd / (subject_distance + xd)
+      depth = (distance - @subject_distance).abs
+      Length.new(
+        (
+          (
+            @camera.lens.focal_length * magnification
+          ) / @camera.lens.aperture
+        ) * (
+          depth / (
+            @subject_distance + (
+              distance < @subject_distance ? -depth : depth
+            )
+          )
+        )
+      )
       end
-      # diameter of blur disk, in mm
-      Length.new(b.mm)
+    end
+
+    def in_focus?(distance)
+      blur_at_distance(distance) <= @camera.format.circle_of_confusion
     end
 
     def exposure
