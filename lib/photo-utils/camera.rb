@@ -5,7 +5,7 @@ module PhotoUtils
     DefaultCamerasFile = Path.new(__FILE__).dirname / '../../cameras.yaml'
     UserCamerasFile = Path.new('~/.cameras.yaml').expand_path
 
-    @@cameras = []
+    @@cameras = {}
 
     def self.read_cameras
       read_cameras_file(DefaultCamerasFile)
@@ -13,7 +13,7 @@ module PhotoUtils
     end
 
     def self.cameras
-      @@cameras
+      @@cameras.values
     end
 
     def self.read_cameras_file(file)
@@ -23,38 +23,31 @@ module PhotoUtils
         raise Error, "Syntax error in #{file.to_s.inspect}: #{e}"
       end
       yaml.each do |camera_yaml|
-        @@cameras << Camera.new(camera_yaml)
+        camera = Camera.new(camera_yaml)
+        @@cameras[camera.name] = camera
       end
     end
 
-    def self.find(params)
-      if (sel = params[:name])
-        @@cameras.find { |c| sel === c.name }
-      else
-        raise "Don't know how to search for camera with params: #{params.inspect}"
-      end
+    def self.find(name)
+      @@cameras[name]
     end
 
-    def self.[](name)
-      find(name: name)
+    def self.generic_35mm
+      find('Generic 35mm') or raise "No generic 35mm camera defined"
     end
 
     attr_accessor :name
     attr_reader   :formats
-    attr_reader   :format
     attr_reader   :sensitivity
     attr_reader   :min_shutter
     attr_reader   :max_shutter
-    attr_reader   :shutter
     attr_reader   :lenses
-    attr_accessor :lens
 
-    def initialize(params={})
+    def initialize(**params)
       if params[:format]
         params[:formats] = [params.delete(:format)]
       end
       params.each { |k, v| send("#{k}=", v) }
-      set_defaults!
     end
 
     def formats=(formats)
@@ -79,15 +72,10 @@ module PhotoUtils
       @max_shutter = TimeValue.new(t)
     end
 
-    def shutter=(t)
-      @shutter = TimeValue.new(t)
-    end
-
-    def set_defaults!
-      @format = @formats.first
-      @lens = normal_lens(@format)
-      @shutter = @max_shutter
-      @sensitivity = SensitivityValue.new(100)  #FIXME: get from Medium
+    def median_shutter
+      TimeValue.new_from_v(
+        ((@max_shutter.to_v + @min_shutter.to_v) / 2).round
+      )
     end
 
     # the lens closest to normal (diagonal of frame)
@@ -97,45 +85,19 @@ module PhotoUtils
       @lenses.sort_by { |l| (normal - l.focal_length).abs }.first
     end
 
-    def angle_of_view
-      @format.angle_of_view(@lens.focal_length)
-    end
-
-    def field_of_view(distance)
-      @format.field_of_view(@lens.focal_length, distance)
-    end
-
-    def aperture
-      @lens.aperture
-    end
-
-    def focal_length
-      @lens.focal_length
-    end
-
-    def focal_length_equivalent(format)
-      @format.focal_length_equivalent(@lens.focal_length, format)
-    end
-
     def to_s
-      '%s: format: %s (%s), shutter: %s (%s~%s), angle of view: %s' % [
+      '%s: formats: %s, shutter: %s~%s' % [
         @name,
-        @format,
         @formats.join(', '),
-        @shutter,
         @max_shutter,
         @min_shutter,
-        angle_of_view,
       ]
     end
 
     def print(io=STDOUT)
       io.puts to_s
       @lenses.each do |lens|
-        io.puts "\t%s %s" % [
-          (lens == @lens) ? '*' : ' ',
-          lens,
-        ]
+        io.puts "\t" + lens.to_s
       end
     end
 

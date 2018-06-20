@@ -1,20 +1,11 @@
-- move field-related logic from Scene into FieldCalculator
-  - takes parameters (e.g., focal length) not objects (lens)
+- use BigDecimal instead of float?
 
-- add Shot class
-  - has #camera, #scene
-  - has simple methods to calculate exposure or field
-
-- rework Scene class
-  - has brightness range instead of single brightness
-  - doesn't have camera
+- make Scene have brightness range instead of single brightness?
   
-- move class methods from Camera into Cameras
-
-- rename Exposure -> ExposureCalculator
+- move Camera class methods into new Cameras class
 
 - rename *Value classes
-  - ApertureValue -> Value
+  - eg, ApertureValue -> Value
   - move to main directory
 
 - change {min,max}_{shutter,aperture} to Range
@@ -24,7 +15,7 @@
   - use correct units & math
     - illumination: lux, foot-candle
     - brightness: cd/m2, foot-lambert
-  - change ExposureCalculator to take 'light' instead of 'brightness'
+  - change Scene to take 'light' instead of 'brightness'
     - handles either Brightness or Illumination
 
 - rework units
@@ -47,12 +38,6 @@
 
 - convert Tool#test into something useful
   
-- create Subject class
-  - distance
-  - height/width/depth
-  - near/far depth of field
-  - handles DoF calculations
-  
 - add print size to Scene
   - calculate best CoC according to print size
   
@@ -66,7 +51,3 @@
 
 - add common brightness values to Brightness class
   - eg, open shade, bright sun, etc.
-    
-- add lighting formulas
-  http://www.lightsearch.com/resources/lightguides/formulas.html
-  http://www.birket.com/technical-library/143/

@@ -5,22 +5,17 @@ module PhotoUtils
     class DOF < Tool
 
       def run
-
-        camera = Camera[ARGV.shift || 'Generic 35mm']
-
+        camera = Camera.generic_35mm
         scene = Scene.new(
           camera: camera,
-          subject_distance: 30.feet)
-        scene.calculate_best_aperture!(1.feet)
-        scene.calculate!
-
-        puts "\t" + ' field of view: %s' % scene.field_of_view(scene.subject_distance).to_s(:imperial)
-        puts "\t" + 'depth of field: %s (-%s/+%s)' % [
-          scene.total_depth_of_field.to_s(:imperial),
-          scene.near_distance_from_subject.to_s(:imperial),
-          scene.far_distance_from_subject.to_s(:imperial),
-        ]
-        puts "\t" + '      exposure: %s' % scene.exposure
+          subject_distance: 30.feet,
+          foreground_distance: 29.feet,
+          background_distance: 31.feet,
+          sensitivity: 100,
+          brightness: 2000)
+        scene.calculate_aperture_for_depth_of_field!
+        scene.calculate_exposure!
+        scene.print
       end
 
     end

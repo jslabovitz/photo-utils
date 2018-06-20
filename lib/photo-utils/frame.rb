@@ -4,27 +4,43 @@ module PhotoUtils
 
   class Frame
 
-    attr_accessor :height
-    attr_accessor :width
+    attr_reader :width
+    attr_reader :height
 
-    def initialize(height, width)
-      # correct swapped values
-      width, height = height, width if height < width
-      @height = Length.new(height)
-      @width  = Length.new(width)
+    def initialize(**params)
+      params.each { |k, v| send("#{k}=", v) }
+    end
+
+    def width=(w)
+      @width = Length.new(w)
+    end
+
+    def height=(h)
+      @height = Length.new(h)
+    end
+
+    def ==(other)
+      raise Error, "Not a #{self.class}: #{other.inspect}" unless other.kind_of?(self.class)
+      @width == other.width && @height == other.height
     end
 
     def to_s(format=nil)
       if @height.infinite? && @width.infinite?
-        "n/a"
+        'n/a'
       else
-        "#{@height.to_s(format)} x #{@width.to_s(format)}"
+        '%s x %s' % [
+          @width.to_s(format),
+          @height.to_s(format),
+        ]
       end
     end
 
     def diagonal
-      d = Math.sqrt((@height ** 2) + (@width ** 2))
-      Length.new(d)
+      Length.new(
+        Math.sqrt(
+          (@width ** 2) + (@height ** 2)
+        )
+      )
     end
 
   end

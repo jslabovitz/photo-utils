@@ -32,7 +32,6 @@ require 'photo-utils/frame'
 require 'photo-utils/formats'
 require 'photo-utils/scene'
 require 'photo-utils/scene_view'
-require 'photo-utils/exposure'
 
 require 'photo-utils/tool'
 require 'photo-utils/tools/blur'

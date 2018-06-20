@@ -14,7 +14,7 @@ module PhotoUtils
       @scene = scene
       @width = options[:width] || 900
       @height = options[:height] || 50
-      @max_distance = options[:max_distance] || @scene.depth_of_field.far
+      @max_distance = options[:max_distance] || @scene.background_distance
       @camera_width  = options[:camera_width]  || @scene.focal_length
       @camera_height = options[:camera_height] || [@scene.camera.lens.absolute_aperture, @scene.format.height].max
       @scale = (@width.to_f - @height) / (@camera_width + @max_distance)
@@ -101,9 +101,9 @@ module PhotoUtils
 
       # depth of focus area
       xml.rect(
-        x: @scene.depth_of_field.near * @scale,
+        x: @scene.foreground_distance * @scale,
         y: 0,
-        width: @scene.total_depth_of_field * @scale,
+        width: @scene.depth_of_field * @scale,
         height: @height,
         stroke: 'blue',
         fill: 'none')

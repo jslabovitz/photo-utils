@@ -5,12 +5,16 @@ module PhotoUtils
   class CameraTest < Test
 
     def setup
-      @camera = Camera[/Generic 35mm/]
+      @camera = Camera.generic_35mm
     end
 
-    def test_camera
+    def test_generic_35mm
       assert { @camera.name == 'Generic 35mm' }
       assert { @camera.formats.map(&:name) == ['35'] }
+    end
+
+    def test_find
+      assert { Camera.find(@camera.name) == @camera }
     end
 
     def test_lens

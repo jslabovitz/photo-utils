@@ -264,7 +264,7 @@ module PhotoUtils
                   scene2.subject_distance.to_s(:imperial),
                   subject_distance_delta < 0 ? '-' : '+',
                   subject_distance_delta.abs.to_s(:imperial),
-                  scene2.total_depth_of_field.to_s(:imperial),
+                  scene2.depth_of_field.to_s(:imperial),
                   scene2.near_distance_from_subject.to_s(:imperial),
                   scene2.far_distance_from_subject.to_s(:imperial),
                   failure || 'GOOD'

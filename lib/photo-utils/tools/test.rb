@@ -5,19 +5,18 @@ module PhotoUtils
     class Test < Tool
 
       def run
-
-        camera = Camera[ARGV.shift || 'Generic 35mm']
-        subject_distance = 3.feet
-        depth_of_field = 2.feet
-        brightness = BrightnessValue.new(2000)
+        camera = Camera.generic_35mm
+        scene_params = {
+          subject_distance: 3.feet,
+          foreground_distance: 2.feet,
+          background_distance: 4.feet,
+          brightness: 2000,
+          sensitivity: 100,
+        }
         camera.lenses.each do |lens|
-          camera.lens = lens
-          scene = Scene.new(
-            camera: camera,
-            brightness: brightness,
-            subject_distance: subject_distance)
-          scene.calculate_best_aperture!(depth_of_field)
-          scene.calculate!
+          scene = Scene.new(camera: camera, lens: lens, **scene_params)
+          scene.calculate_aperture_for_depth_of_field!
+          scene.calculate_exposure!
           scene.print
         end
       end

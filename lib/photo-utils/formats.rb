@@ -80,7 +80,7 @@ module PhotoUtils
         case line.sub(/#.*/, '').strip
         when /^(.*?)\s{2,}([\d\.]+)\s+([\d\.]+)\s*(.*?)$/
           name, height, width, aliases = $1, $2, $3, $4
-          frame = Frame.new(width.to_f, height.to_f)
+          frame = Frame.new(width: width.to_f, height: height.to_f)
           format = Format.new(name: name, frame: frame)
           @@formats[name] = format
           aliases.split(/,\s*/).each { |a| @@formats[a] = format }
@@ -125,26 +125,6 @@ module PhotoUtils
     def crop_factor(other=Format['35'])
       # http://en.wikipedia.org/wiki/Crop_factor
       other.frame.diagonal / @frame.diagonal
-    end
-
-    def angle_of_view(focal_length)
-      # http://imaginatorium.org/stuff/angle.htm
-      # http://en.wikipedia.org/wiki/Angle_of_view
-      arc = 2 * Math.atan(@frame.diagonal / (2 * focal_length))
-      degrees = arc * (180 / Math::PI)
-      Angle.new(degrees)
-    end
-
-    def field_of_view(focal_length, subject_distance)
-      # http://en.wikipedia.org/wiki/Field_of_view
-      Frame.new(
-        subject_distance * (@frame.height / focal_length),
-        subject_distance * (@frame.width  / focal_length))
-    end
-
-    def circle_of_confusion
-      # http://en.wikipedia.org/wiki/Circle_of_confusion
-      @frame.diagonal / 1500
     end
 
   end

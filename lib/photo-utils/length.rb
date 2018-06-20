@@ -42,6 +42,22 @@ module PhotoUtils
       end
     end
 
+    # def +(other)
+    #   self.class.new(super)
+    # end
+
+    # def -(other)
+    #   self.class.new(super)
+    # end
+
+    # def /(other)
+    #   self.class.new(super)
+    # end
+
+    # def *(other)
+    #   self.class.new(super)
+    # end
+
     def imperial_string
       inches = self * INCHES_PER_METER / 1000
       if inches.floor >= 12

@@ -6,19 +6,16 @@ module PhotoUtils
     attr_reader   :focal_length
     attr_reader   :min_aperture
     attr_reader   :max_aperture
-    attr_reader   :aperture
 
     def initialize(params={})
       @name = nil
       params.each { |k, v| send("#{k}=", v) }
-      set_defaults!
     end
 
     def to_s
-      '%s: focal length: %s, aperture: %s (%s~%s)' % [
+      '%s: focal length: %s, aperture: %s~%s' % [
         name,
         @focal_length,
-        @aperture,
         @max_aperture,
         @min_aperture,
       ]
@@ -50,10 +47,6 @@ module PhotoUtils
       @max_aperture .. @min_aperture
     end
 
-    def set_defaults!
-      @aperture = median_aperture
-    end
-
     def median_aperture
       ApertureValue.new_from_v(
         ((@max_aperture.to_v + @min_aperture.to_v) / 2).round
@@ -61,7 +54,9 @@ module PhotoUtils
     end
 
     def absolute_aperture
-      @focal_length / @aperture
+      Length.new(
+        @focal_length / @aperture
+      )
     end
 
   end

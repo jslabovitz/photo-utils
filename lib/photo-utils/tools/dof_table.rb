@@ -5,14 +5,8 @@ module PhotoUtils
     class DOFTable < Tool
 
       def run
-        camera = Camera[ARGV.shift || 'Generic 35mm']
-
-        scene = Scene.new(
-          camera: camera)
-
-        puts
-        scene.camera.print
-        puts
+        camera = Camera.generic_35mm
+        scene = Scene.new(camera: camera)
 
         # Av equivalents of f/4 ~ f/64
         apertures = (4..12).map { |av| ApertureValue.new_from_v(av) }
@@ -34,8 +28,8 @@ module PhotoUtils
             fov.width.to_s(:imperial),
           ]
           apertures.each do |aperture|
-            scene.camera.lens.aperture = aperture
-            print "\t" + "%s" % scene.total_depth_of_field.to_s(:imperial)
+            scene.aperture = aperture
+            print "\t" + "%s" % scene.depth_of_field.to_s(:imperial)
           end
           puts
         end

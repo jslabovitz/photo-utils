@@ -5,16 +5,17 @@ module PhotoUtils
     class Blur < Tool
 
       def run
-        camera = Camera[ARGV.shift || 'Generic 35mm']
+        camera = Camera.generic_35mm
         scene = Scene.new(
           camera: camera,
-          subject_distance: 6.feet)
-        scene.brightness = BrightnessValue.new(2000)
-
-        scene.camera.print
-        scene.print_exposure
-        scene.print_depth_of_field
-
+          brightness: 2000,
+          sensitivity: 100,
+          subject_distance: 6.feet,
+          foreground_distance: 5.feet,
+          background_distance: 7.feet)
+        scene.calculate_exposure!
+        scene.print
+        puts
         1.feet.step(scene.subject_distance * 2, 1.feet).map { |d| Length.new(d) }.each do |distance|
           puts "%12s: %s" % [
             distance.to_s(:imperial),
