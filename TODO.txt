@@ -36,8 +36,6 @@
 
 - build tests for calculators (use existing tools?)
 
-- convert Tool#test into something useful
-  
 - add print size to Scene
   - calculate best CoC according to print size
   

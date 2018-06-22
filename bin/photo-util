@@ -6,17 +6,13 @@ options = {}
 appname = File.basename($0)
 
 commands = {
-  'reciprocity'   => PhotoUtils::Tools::Reciprocity,
-  'focal-length'  => PhotoUtils::Tools::FocalLength,
-  'test'          => PhotoUtils::Tools::Test,
-  'dof-table'     => PhotoUtils::Tools::DOFTable,
-  'dof'           => PhotoUtils::Tools::DOF,
-  'compare'       => PhotoUtils::Tools::Compare,
-  'blur'          => PhotoUtils::Tools::Blur,
-  'film-test'     => PhotoUtils::Tools::FilmTest,
   'cameras'       => PhotoUtils::Tools::Cameras,
-  'calc-aperture' => PhotoUtils::Tools::CalcAperture,
   'chart-dof'     => PhotoUtils::Tools::ChartDOF,
+  'compare'       => PhotoUtils::Tools::Compare,
+  'dof'           => PhotoUtils::Tools::DOF,
+  'dof-table'     => PhotoUtils::Tools::DOFTable,
+  'film-test'     => PhotoUtils::Tools::FilmTest,
+  'reciprocity'   => PhotoUtils::Tools::Reciprocity,
 }
 
 cmd = ARGV.shift or raise "Usage"

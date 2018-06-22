@@ -34,17 +34,13 @@ require 'photo-utils/scene'
 require 'photo-utils/scene_view'
 
 require 'photo-utils/tool'
-require 'photo-utils/tools/blur'
-require 'photo-utils/tools/calc_aperture'
 require 'photo-utils/tools/cameras'
 require 'photo-utils/tools/chart_dof'
 require 'photo-utils/tools/compare'
 require 'photo-utils/tools/dof'
 require 'photo-utils/tools/dof_table'
 require 'photo-utils/tools/film_test'
-require 'photo-utils/tools/focal_length'
 require 'photo-utils/tools/reciprocity'
-require 'photo-utils/tools/test'
 
 module PhotoUtils
 
