@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.require_path  = 'lib'
 
   s.add_runtime_dependency 'hashstruct', '~> 0'
-  s.add_runtime_dependency 'builder', '~> 0'
   s.add_runtime_dependency 'path', '~> 0'
 
   s.add_development_dependency 'rake', '~> 12.3'
