@@ -92,7 +92,7 @@ module PhotoUtils
     end
 
     def depth_of_field
-      raise "Must define foreground_distance and background_distance to compute depth of field" \
+      raise "Must define foreground distance and background distance to compute depth of field" \
         unless @foreground_distance && @background_distance
       Length.new(
         @background_distance - @foreground_distance
