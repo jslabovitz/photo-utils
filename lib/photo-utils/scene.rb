@@ -269,6 +269,7 @@ module PhotoUtils
       }.each do |label, value|
         io.puts field_string(label, value)
       end
+      io.puts
     end
 
   end

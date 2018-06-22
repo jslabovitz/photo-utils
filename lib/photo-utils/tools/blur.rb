@@ -15,7 +15,6 @@ module PhotoUtils
           background_distance: 7.feet)
         scene.calculate_exposure!
         scene.print
-        puts
         1.feet.step(scene.subject_distance * 2, 1.feet).map { |d| Length.new(d) }.each do |distance|
           puts "%12s: %s" % [
             distance.to_s(:imperial),

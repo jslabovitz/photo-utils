@@ -30,7 +30,6 @@ module PhotoUtils
           # next unless scene.time < 1.0/15
 
           scene.print
-          puts
         end
 
       end

@@ -154,13 +154,7 @@ module PhotoUtils
           # d = w * f / s
           scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.format.width))
 
-          puts
-          puts "--- #{scene.description}"
-          puts
-
-          scene.print_exposure
-          scene.print_depth_of_field
-          puts
+          scene.print
 
           # now compute equivalent scene for each camera
 

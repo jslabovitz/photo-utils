@@ -23,7 +23,6 @@ module PhotoUtils
           scene.calculate_depth_of_field!
           scene.calculate_exposure!
           scene.print
-          puts
         end
 
         # max_distance = scenes.map { |s| s.depth_of_field.far }.max

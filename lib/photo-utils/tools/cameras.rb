@@ -7,7 +7,6 @@ module PhotoUtils
       def run
         Camera.cameras.each do |camera|
           camera.print
-          puts
         end
       end
 

@@ -99,6 +99,7 @@ module PhotoUtils
       @lenses.each do |lens|
         io.puts "\t" + lens.to_s
       end
+      io.puts
     end
 
   end
