@@ -113,13 +113,15 @@ module PhotoUtils
     end
 
     def focal_length_equivalent(focal_length, other=Format['35'])
-      f = focal_length * crop_factor(other)
-      Length.new(f)
+      Length.new(
+        focal_length * crop_factor(other)
+      )
     end
 
     def aperture_equivalent(aperture, other=Format['35'])
-      f = aperture * crop_factor(other)
-      ApertureValue.new(f)
+      ApertureValue.new(
+        aperture * crop_factor(other)
+      )
     end
 
     def crop_factor(other=Format['35'])
