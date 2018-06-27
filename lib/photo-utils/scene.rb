@@ -155,18 +155,21 @@ module PhotoUtils
       # http://en.wikipedia.org/wiki/Field_of_view
       Frame.new(
         width:  distance * (@sensor_frame.width  / @focal_length),
-        height: distance * (@sensor_frame.height / @focal_length))
+        height: distance * (@sensor_frame.height / @focal_length)
+      )
     end
 
     def distance_for_field_of_view(fov)
-      d_w = fov.width  / @sensor_frame.width  * @focal_length
-      d_h = fov.height / @sensor_frame.height * @focal_length
+      d_w = Length.new(fov.width  / @sensor_frame.width  * @focal_length)
+      d_h = Length.new(fov.height / @sensor_frame.height * @focal_length)
       [d_w, d_h].max
     end
 
     def circle_of_confusion
       # http://en.wikipedia.org/wiki/Circle_of_confusion
-      @sensor_frame.diagonal / 1500
+      Length.new(
+        @sensor_frame.diagonal / 1500
+      )
     end
 
     #FIXME: unused
