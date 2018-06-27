@@ -53,12 +53,6 @@ module PhotoUtils
       )
     end
 
-    def absolute_aperture
-      Length.new(
-        @focal_length / @aperture
-      )
-    end
-
   end
 
 end

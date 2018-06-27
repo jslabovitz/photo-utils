@@ -108,7 +108,15 @@ module PhotoUtils
 
     def working_aperture
       # http://en.wikipedia.org/wiki/F-number#Working_f-number
-      ApertureValue.new((1 - magnification) * @aperture)
+      ApertureValue.new(
+        (1 - magnification) * @aperture
+      )
+    end
+
+    def absolute_aperture
+      Length.new(
+        @focal_length / @aperture
+      )
     end
 
     # diameter of blur disk
