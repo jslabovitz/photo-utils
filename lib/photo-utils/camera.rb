@@ -8,11 +8,14 @@ module PhotoUtils
     @@cameras = {}
 
     def self.read_cameras
-      read_cameras_file(DefaultCamerasFile)
-      read_cameras_file(UserCamerasFile) if UserCamerasFile.exist?
+      if @@cameras.empty?
+        read_cameras_file(DefaultCamerasFile)
+        read_cameras_file(UserCamerasFile) if UserCamerasFile.exist?
+      end
     end
 
     def self.cameras
+      read_cameras
       @@cameras.values
     end
 
@@ -33,6 +36,7 @@ module PhotoUtils
     end
 
     def self.generic_35mm
+      read_cameras
       find('Generic 35mm') or raise "No generic 35mm camera defined"
     end
 
