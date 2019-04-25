@@ -21,3 +21,12 @@
     - focal_length: 65mm
       min_aperture: f/22
       max_aperture: f/2.8
+
+- name: Generic 6x6
+  format: 6x6
+  min_shutter: 1/500
+  max_shutter: 1
+  lenses:
+    - focal_length: 75mm
+      min_aperture: f/22
+      max_aperture: f/2.8
