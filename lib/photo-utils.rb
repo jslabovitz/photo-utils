@@ -39,13 +39,3 @@ require 'photo-utils/tools/dof'
 require 'photo-utils/tools/dof_table'
 require 'photo-utils/tools/film_test'
 require 'photo-utils/tools/reciprocity'
-
-module PhotoUtils
-
-  def self.format_float(n, precision=1)
-    ((n.round == n.to_f || n.round == 0) ? n.round : n.round(precision)).to_s
-  end
-
-  Camera.read_cameras
-
-end

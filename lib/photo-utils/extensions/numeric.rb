@@ -18,4 +18,8 @@ class Numeric
     PhotoUtils::Length.new(self)
   end
 
+  def format(precision=1)
+    ((round == to_f || round == 0) ? round : round(precision)).to_s
+  end
+
 end

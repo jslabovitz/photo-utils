@@ -43,13 +43,13 @@ module PhotoUtils
     end
 
     def float_string
-      PhotoUtils::format_float(to_f)
+      to_f.format
     end
 
     def value_string
       '%s:%s' % [
         self.class::APEX_LABEL,
-        PhotoUtils::format_float(to_v),
+        to_v.format
       ]
     end
 

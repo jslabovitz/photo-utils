@@ -78,7 +78,7 @@ module PhotoUtils
 
     def metric_string
       if self >= 1000
-        '%sm' % PhotoUtils::format_float(self / 1000)
+        '%sm' % (self / 1000).format
       else
         '%dmm' % self
       end
