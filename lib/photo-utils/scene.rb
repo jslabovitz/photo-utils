@@ -234,11 +234,11 @@ module PhotoUtils
 
     def exposure_string
       '%s = %s + %s = %s + %s' % [
-        @exposure.to_s(:value),
-        @aperture.to_s(:value),
-        @shutter.to_s(:value),
-        @sensitivity.to_s(:value),
-        @brightness.to_s(:value),
+        @exposure,
+        @aperture,
+        @shutter,
+        @sensitivity,
+        @brightness,
       ]
     end
 
@@ -252,8 +252,8 @@ module PhotoUtils
         '--'
       when Length
         '%s (%s)' % [
-          distance ? distance.to_s(:imperial) : '--',
-          distance ? field_of_view(distance).to_s(:imperial) : '--',
+          distance.to_s(:imperial),
+          field_of_view(distance).to_s(:imperial),
         ]
       else
         raise "Value is not a length: #{distance.inspect}"
