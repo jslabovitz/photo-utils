@@ -32,6 +32,7 @@ require 'photo-utils/formats'
 require 'photo-utils/scene'
 
 require 'photo-utils/tool'
+require 'photo-utils/tools/apertures'
 require 'photo-utils/tools/cameras'
 require 'photo-utils/tools/chart_dof'
 require 'photo-utils/tools/compare'
