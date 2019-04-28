@@ -32,11 +32,11 @@ module PhotoUtils
     end
 
     def self.find(name)
+      read_cameras
       @@cameras[name]
     end
 
     def self.generic_35mm
-      read_cameras
       find('Generic 35mm') or raise "No generic 35mm camera defined"
     end
 
