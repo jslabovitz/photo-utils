@@ -242,10 +242,6 @@ module PhotoUtils
       ]
     end
 
-    def field_string(label, value)
-      '  %15s: %s' % [label, value]
-    end
-
     def distance_string(distance)
       case distance
       when nil
@@ -278,7 +274,7 @@ module PhotoUtils
         'depth of field' => depth_of_field.to_s(:imperial),
         'magnification' => magnification.round(2),
       }.each do |label, value|
-        io.puts field_string(label, value)
+        io.puts '  %15s: %s' % [label, value]
       end
       io.puts
     end
