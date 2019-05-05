@@ -21,7 +21,6 @@ module PhotoUtils
           scene = base_scene.dup(aperture: ApertureValue.new_from_v(av))
           scene.calculate_depth_of_field!
           scene.calculate_exposure!
-          scene.print
           scene
         end
 
