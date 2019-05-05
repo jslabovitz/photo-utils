@@ -10,16 +10,15 @@ module PhotoUtils
         camera = Camera.generic_35mm
         lens = camera.normal_lens(camera.formats.first)
 
-        scene_params = {
+        base_scene = Scene.new(
           camera: camera,
           lens: lens,
           subject_distance: 8.feet,
           brightness: 8,
-          sensitivity: 100,
-        }
+          sensitivity: 100)
 
         scenes = (lens.max_aperture.to_v.round .. lens.min_aperture.to_v.round).map do |av|
-          scene = Scene.new(scene_params.merge(aperture: ApertureValue.new_from_v(av)))
+          scene = base_scene.dup(aperture: ApertureValue.new_from_v(av))
           scene.calculate_depth_of_field!
           scene.calculate_exposure!
           scene.print
