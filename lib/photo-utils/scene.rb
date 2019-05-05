@@ -24,7 +24,15 @@ module PhotoUtils
         params[:aperture] ||= lens.median_aperture
         params[:sensitivity] ||= camera.sensitivity
       end
+      set(params)
+    end
+
+    def set(**params)
       params.each { |k, v| send("#{k}=", v) }
+    end
+
+    def dup(**params)
+      super().tap { |s| s.set(params) }
     end
 
     def brightness=(b)
