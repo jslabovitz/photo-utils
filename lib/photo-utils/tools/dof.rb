@@ -5,17 +5,19 @@ module PhotoUtils
     class DOF < Tool
 
       def run
-        camera = Camera.generic_35mm
-        scene_params = {
+        # camera = Camera.generic_35mm
+        camera = Camera.find('Leica M10-D') or raise "Can't find camera"
+        base_scene = Scene.new(
           camera: camera,
-          subject_distance: 12.feet,
-          foreground_distance: 10.feet,
-          background_distance: 14.feet,
-          brightness: 2000,
-          sensitivity: 100,
-        }
+          subject_distance: 3.feet,
+          foreground_distance: 2.feet,
+          background_distance: 4.feet,
+          # brightness: 700,
+          sensitivity: 6400)
         camera.lenses.each do |lens|
-          scene = Scene.new(scene_params)
+          scene = base_scene.dup(
+            focal_length: lens.focal_length,
+            shutter: TimeValue.new(1.0/(2 * lens.focal_length)))
           scene.calculate_aperture_for_depth_of_field!
           scene.calculate_exposure!
 

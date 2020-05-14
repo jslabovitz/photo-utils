@@ -1,6 +1,3 @@
-# require 'mini_exiftool'
-# require 'pathname2'
-
 module PhotoUtils
 
   class Tools
@@ -37,33 +34,14 @@ module PhotoUtils
         $max_angle_of_view_delta = Angle.new(5)
         $max_subject_distance_delta = 6.feet
 
-        base = Path.new('/Users/johnl/Pictures/Lightroom Burned Exports')
-
         shots = %q{
 
-          # file                        width DoF   description
+          # format   time   aperture  focal length   sensitivity  width DoF   description
 
-          3787022130_ce334b0c20_o.jpg   56"   3'    OCF poem typist: W/A closeup
-          3894979751_8ef3683c78_o.jpg   54"   3'    OCF poem typist: medium
-          3711708327_917d493f1a_o.jpg   23"   1'    OCF man with hat: torso
-          58970238_dfe52a2c77_o.jpg     96"   3'    backlit dancer: medium from medium
-          3043470502_9b3406f4dd_o.jpg   81"   3'    winged stripper
-          3084813136_180bda6d84_o.jpg   75"   3'    stripper moving away: close from close
-          IMG_2664.jpg                  233"  10'   yarddogs dancers: wide from far
-          IMG_2672.jpg                  95"   10'   yarddogs horns: medium from far
-          IMG_2864.jpg                  49"   2'    sideshow bug eating: close from near
-          IMG_2790.jpg                  63"   3'    sideshow ass: medium from near
-
-          060512.031.jpg                233"  6'    Japan: man on street at night
-          060512.051.jpg                150'  50'   Japan: Tokyo cityscape
-          060512.139.jpg                15'   10'   Japan: man in street
-          060514.058.jpg                4'    1'    Japan: bookstore
-          060515.081.jpg                7'    4'    Japan: plants at corner
-          060519.001.jpg                14"   3"    Japan: eggs
-          060520.012.jpg                20'   10'   Japan: haystack
-          060524.023.jpg                9'    3'    Japan: plants & rust
-          060527.051.jpg                8'    3'    Japan: racoon & bicycle
-          060528.003.jpg                18"   6"    Japan: tiny buddhas
+          FF         1/125  f/8       50mm           400          150'  50'   Tokyo cityscape
+          FF         1/125  f/8       50mm           400          15'   10'   man in street
+          FF         1/125  f/8       50mm           400          7'    4'    plants at corner
+          FF         1/125  f/8       50mm           400          14"   3"    eggs
 
         }.split(/\n/).map { |line|
           line.gsub!(/^\s+|\s+$/, '')
@@ -71,14 +49,16 @@ module PhotoUtils
           if line.empty?
             nil
           else
-            file, width, dof, type = line.split(/\s+/, 4)
-              dof = Length.new(dof)
-            width = Length.new(width)
+            format, time, aperture, focal_length, sensitivity, width, dof, description = line.split(/\s+/, 8)
             HashStruct.new(
-              type: type,
-              file: file,
-              subject_width: width,
-              desired_dof: dof)
+              format: (Format[format] or raise "Format error"),
+              time: TimeValue.new(time),
+              aperture: ApertureValue.new(aperture),
+              focal_length: Length.new(focal_length),
+              sensitivity: SensitivityValue.new(sensitivity),
+              width: Length.new(width),
+              dof: Length.new(dof),
+              description: description)
           end
         }.compact
 
@@ -110,7 +90,7 @@ module PhotoUtils
             raise "angle of view too different (#{angle_of_view_delta} > #{$max_angle_of_view_delta})"
           end
 
-          # if scene.angle_of_view - scene.angle_of_view > 5
+          # if scene.angle_of_view - scene.angle_of_view > $max_angle_of_view_delta
           #   raise "angle of view too wide (#{scene2.angle_of_view} > #{scene.angle_of_view})"
           #   next
           # end
@@ -129,30 +109,16 @@ module PhotoUtils
 
         shots.each do |shot|
 
-          img = MiniExiftool.new(base + shot.file, numerical: true, timestamps: DateTime)
-
           scene = Scene.new
-
-          model = img['Model']
-          scene.format = Format[model] or raise "Can't determine frame for model #{model.inspect} (#{shot.file})"
-
-          scene.description = "#{shot[:type]} [#{shot[:seq]}]"
-          scene.aperture = img['ApertureValue']
-          if img['ISO'].kind_of?(Numeric)
-            scene.sensitivity = img['ISO']
-          else # "0 800"
-            scene.sensitivity = img['ISO'].split(' ').last.to_f
-          end
-          scene.time = img['ExposureTime']
-          scene.focal_length = img['FocalLength']
-
-          exp_comp = img['ExposureCompensation'].to_f
-          if exp_comp != 0
-            scene.sensitivity = SensitivityValue.new_from_v(scene.sensitivity.to_v + exp_comp)
-          end
+          scene.sensor_frame = shot.format.frame
+          scene.description = shot.description
+          scene.aperture = shot.aperture
+          scene.sensitivity = shot.sensitivity
+          scene.shutter = shot.time
+          scene.focal_length = shot.focal_length
 
           # d = w * f / s
-          scene.subject_distance = Length.new(shot.subject_width * (scene.focal_length / scene.format.width))
+          scene.subject_distance = Length.new(shot.width * (scene.focal_length / scene.sensor_frame.width))
 
           scene.print
 
@@ -192,14 +158,14 @@ module PhotoUtils
                 # o = subject dimension
                 # i = frame dimension
 
-                scene2.subject_distance = 1 / ((scene2.frame.width / scene2.focal_length) / shot.subject_width)
+                scene2.subject_distance = 1 / ((scene2.frame.width / scene2.focal_length) / shot.width)
 
                 #
                 # calculate depth of field
                 #
 
-                near_limit = scene2.subject_distance - (shot.desired_dof / 2)
-                far_limit  = scene2.subject_distance + (shot.desired_dof / 2)
+                near_limit = scene2.subject_distance - (shot.dof / 2)
+                far_limit  = scene2.subject_distance + (shot.dof / 2)
                 scene2.aperture = scene2.aperture_for_depth_of_field(near_limit, far_limit)
 
                 #
