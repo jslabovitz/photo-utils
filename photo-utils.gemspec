@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'hashstruct', '~> 1.3'
   s.add_runtime_dependency 'path', '~> 2.0'
 
-  s.add_development_dependency 'rake', '~> 12.3'
+  s.add_development_dependency 'rake', '~> 13.0'
   s.add_development_dependency 'rubygems-tasks', '~> 0.2'
   s.add_development_dependency 'minitest', '~> 0'
   s.add_development_dependency 'minitest-power_assert', '~> 0'
