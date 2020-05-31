@@ -129,6 +129,10 @@ module PhotoUtils
       other.frame.diagonal / @frame.diagonal
     end
 
+    def aspect_ratio
+      Rational(@frame.width, @frame.height)
+    end
+
   end
 
 end
