@@ -26,7 +26,7 @@ module PhotoUtils
         raise Error, "Syntax error in #{file.to_s.inspect}: #{e}"
       end
       yaml.each do |camera_yaml|
-        camera = Camera.new(camera_yaml)
+        camera = Camera.new(**camera_yaml)
         @@cameras[camera.name] = camera
       end
     end
