@@ -101,7 +101,15 @@ module PhotoUtils
     def print(io=STDOUT)
       io.puts to_s
       @lenses.each do |lens|
-        io.puts "\t" + lens.to_s
+        str = @formats.map do |format|
+          "%s in 35mm: %s @ %s~%s" % [
+            format,
+            format.focal_length_equivalent(lens.focal_length),
+            format.aperture_equivalent(lens.max_aperture),
+            format.aperture_equivalent(lens.min_aperture),
+          ]
+        end.join(', ')
+        io.puts "\t" + lens.to_s + " (#{str})"
       end
       io.puts
     end
