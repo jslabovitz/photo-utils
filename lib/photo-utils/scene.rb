@@ -24,7 +24,7 @@ module PhotoUtils
         params[:aperture] ||= lens.median_aperture
         params[:sensitivity] ||= camera.sensitivity
       end
-      set(params)
+      set(**params)
     end
 
     def set(**params)
