@@ -25,9 +25,11 @@ module PhotoUtils
       rescue Psych::SyntaxError => e
         raise Error, "Syntax error in #{file.to_s.inspect}: #{e}"
       end
-      yaml.each do |camera_yaml|
-        camera = Camera.new(**camera_yaml)
-        @@cameras[camera.key] = camera
+      if yaml
+        yaml.each do |camera_yaml|
+          camera = Camera.new(**camera_yaml)
+          @@cameras[camera.key] = camera
+        end
       end
     end
 
