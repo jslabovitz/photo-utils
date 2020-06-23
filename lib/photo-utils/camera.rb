@@ -3,7 +3,7 @@ module PhotoUtils
   class Camera
 
     DefaultCamerasFile = Path.new(__FILE__).dirname / '../../cameras.yaml'
-    UserCamerasFile = Path.new('~/.cameras.yaml').expand_path
+    UserCamerasFile = Path.new('~/.phu/cameras.yaml').expand_path
 
     @@cameras = {}
 
