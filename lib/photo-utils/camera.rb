@@ -27,20 +27,22 @@ module PhotoUtils
       end
       yaml.each do |camera_yaml|
         camera = Camera.new(**camera_yaml)
-        @@cameras[camera.name] = camera
+        @@cameras[camera.key] = camera
       end
     end
 
-    def self.find(name)
+    def self.find(key)
       read_cameras
-      @@cameras[name]
+      @@cameras[key.to_s.downcase.to_sym]
     end
 
     def self.generic_35mm
-      find('Generic 35mm') or raise "No generic 35mm camera defined"
+      find('g35') or raise "No generic 35mm camera defined"
     end
 
-    attr_accessor :name
+    attr_reader   :key
+    attr_reader   :make
+    attr_reader   :model
     attr_reader   :formats
     attr_reader   :sensitivity
     attr_reader   :min_shutter
@@ -54,9 +56,21 @@ module PhotoUtils
       params.each { |k, v| send("#{k}=", v) }
     end
 
+    def key=(key)
+      @key = key.to_s.downcase.to_sym
+    end
+
+    def make=(make)
+      @make = make.to_s
+    end
+
+    def model=(model)
+      @model = model.to_s
+    end
+
     def formats=(formats)
       @formats = formats.map do |format|
-        Format.find(format.to_s) or raise "Unknown format #{format.inspect} for camera #{name.inspect}"
+        Format.find(format.to_s) or raise "Unknown format #{format.inspect} for camera #{key.inspect}"
       end
     end
 
@@ -90,8 +104,10 @@ module PhotoUtils
     end
 
     def to_s
-      '%s: formats: %s, shutter: %s~%s' % [
-        @name,
+      '%s %s [%s]: formats: %s, shutter: %s~%s' % [
+        @make,
+        @model,
+        @key,
         @formats.join(', '),
         @max_shutter,
         @min_shutter,
