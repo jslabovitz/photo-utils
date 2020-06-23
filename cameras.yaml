@@ -1,4 +1,6 @@
-- name: Generic 35mm
+- key: g35
+  make: Generic
+  model: 35
   format: 35
   min_shutter: 1/500
   max_shutter: 1
@@ -13,7 +15,9 @@
       min_aperture: f/22
       max_aperture: f/2.8
 
-- name: Generic 645
+- key: g645
+  make: Generic
+  model: 645
   format: 6x4.5
   min_shutter: 1/500
   max_shutter: 1
@@ -22,7 +26,9 @@
       min_aperture: f/22
       max_aperture: f/2.8
 
-- name: Generic 6x6
+- key: g66
+  make: Generic
+  model: 66
   format: 6x6
   min_shutter: 1/500
   max_shutter: 1
