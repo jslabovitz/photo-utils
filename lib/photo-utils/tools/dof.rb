@@ -5,8 +5,7 @@ module PhotoUtils
     class DOF < Tool
 
       def run
-        # camera = Camera.generic_35mm
-        camera = Camera.find('Leica M10-D') or raise "Can't find camera"
+        camera = Camera.generic_35mm
         base_scene = Scene.new(
           camera: camera,
           subject_distance: 3.feet,

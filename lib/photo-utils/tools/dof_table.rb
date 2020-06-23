@@ -29,6 +29,7 @@ module PhotoUtils
           ]
           apertures.each do |aperture|
             scene.aperture = aperture
+            scene.calculate_depth_of_field!
             print "\t" + "%s" % scene.depth_of_field.to_s(:imperial)
           end
           puts

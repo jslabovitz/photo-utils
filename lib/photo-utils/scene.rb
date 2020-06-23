@@ -32,7 +32,7 @@ module PhotoUtils
     end
 
     def dup(**params)
-      super().tap { |s| s.set(params) }
+      super().tap { |s| s.set(**params) }
     end
 
     def brightness=(b)
