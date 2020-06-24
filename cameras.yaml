@@ -1,38 +1,53 @@
 - key: g35
-  make: Generic
-  model: 35
+  make: Generica
+  model: G35
   format: 35
   min_shutter: 1/500
   max_shutter: 1
   lenses:
-    - focal_length: 35mm
+    - key: 35mm
+      make: Generica
+      model: 35/2.8
+      focal_length: 35mm
       min_aperture: f/22
       max_aperture: f/2.8
-    - focal_length: 50mm
+    - key: 50mm
+      make: Generica
+      model: 50/2.8
+      focal_length: 50mm
       min_aperture: f/22
       max_aperture: f/2.8
-    - focal_length: 90mm
+    - key: 90mm
+      make: Generica
+      model: 90/2.8
+      focal_length: 90mm
       min_aperture: f/22
       max_aperture: f/2.8
 
 - key: g645
-  make: Generic
-  model: 645
+  make: Generica
+  model: G645
   format: 6x4.5
   min_shutter: 1/500
   max_shutter: 1
   lenses:
-    - focal_length: 65mm
+    - key: 65mm
+      make: Generica
+      model: 65/2.8
+      focal_length: 65mm
       min_aperture: f/22
       max_aperture: f/2.8
 
 - key: g66
-  make: Generic
-  model: 66
+  make: Generica
+  model: G66
   format: 6x6
   min_shutter: 1/500
   max_shutter: 1
   lenses:
-    - focal_length: 75mm
+    - key: 75mm
+      make: Generica
+      model: 75/2.8
+      focal_length: 75mm
       min_aperture: f/22
       max_aperture: f/2.8

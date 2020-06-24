@@ -2,27 +2,38 @@ module PhotoUtils
 
   class Lens
 
-    attr_writer   :name
+    attr_reader   :key
+    attr_reader   :make
+    attr_reader   :model
     attr_reader   :focal_length
     attr_reader   :min_aperture
     attr_reader   :max_aperture
 
     def initialize(params={})
-      @name = nil
       params.each { |k, v| send("#{k}=", v) }
     end
 
+    def key=(key)
+      @key = key.to_s.downcase
+    end
+
+    def make=(make)
+      @make = make.to_s
+    end
+
+    def model=(model)
+      @model = model.to_s
+    end
+
     def to_s
-      '%s: focal length: %s, aperture: %s~%s' % [
-        name,
+      '%s %s [%s]: focal length: %s, aperture: %s~%s' % [
+        @make,
+        @model,
+        @key,
         @focal_length,
         @max_aperture,
         @min_aperture,
       ]
-    end
-
-    def name
-      @name || @focal_length.to_s
     end
 
     def focal_length=(f)
