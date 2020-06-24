@@ -35,7 +35,7 @@ module PhotoUtils
 
     def self.find(key)
       read_cameras
-      @@cameras[key.to_s.downcase.to_sym]
+      @@cameras[key.to_s.downcase]
     end
 
     def self.generic_35mm
@@ -59,7 +59,7 @@ module PhotoUtils
     end
 
     def key=(key)
-      @key = key.to_s.downcase.to_sym
+      @key = key.to_s.downcase
     end
 
     def make=(make)

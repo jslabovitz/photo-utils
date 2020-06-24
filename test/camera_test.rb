@@ -9,7 +9,7 @@ module PhotoUtils
     end
 
     def test_generic_35mm
-      assert { @camera.key == :g35 }
+      assert { @camera.key == 'g35' }
       assert { @camera.make == 'Generic' }
       assert { @camera.model == '35' }
       assert { @camera.formats.map(&:name) == ['35'] }
