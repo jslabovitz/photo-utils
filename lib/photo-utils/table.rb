@@ -47,7 +47,7 @@ module PhotoUtils
       self.class.make_key(key)
     end
 
-    def load_file(file:, item_class:)
+    def load_file(file:, item_class: OpenStruct)
       [DefaultDataDir, UserDataDir].each do |dir|
         path = dir / file
         if path.exist?

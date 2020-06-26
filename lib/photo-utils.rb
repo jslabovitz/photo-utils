@@ -12,6 +12,7 @@ module PhotoUtils
   UserDataDir = Path.home / '.phu'
   FormatsFile = 'formats.yaml'
   CamerasFile = 'cameras.yaml'
+  FilmsFile = 'films.yaml'
   DefaultCamerasFile = DefaultDataDir / CamerasFile
   UserCamerasFile = UserDataDir / CamerasFile
 
@@ -34,6 +35,7 @@ require 'photo-utils/angle'
 
 require 'photo-utils/table'
 
+require 'photo-utils/film'
 require 'photo-utils/frame'
 require 'photo-utils/format'
 require 'photo-utils/lens'
