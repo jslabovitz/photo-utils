@@ -38,7 +38,7 @@ module PhotoUtils
       when String
         super(self.class.parse(obj))
       else
-        raise "Can't make length from #{x.class}: #{x.inspect}"
+        raise "Can't make length from #{obj.class}: #{obj.inspect}"
       end
     end
 

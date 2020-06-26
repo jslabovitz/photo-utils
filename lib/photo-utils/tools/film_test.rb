@@ -5,7 +5,7 @@ module PhotoUtils
     class FilmTest < Tool
 
       def run
-        camera = Camera.generic_35mm
+        camera = Cameras.generic_35mm
 
         zone_offset_from_mg = -4
         brightness = BrightnessValue.new_from_v(5 + zone_offset_from_mg)

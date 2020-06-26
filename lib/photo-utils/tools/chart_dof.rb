@@ -7,8 +7,8 @@ module PhotoUtils
     class ChartDOF < Tool
 
       def run
-        camera = Camera.generic_35mm
-        lens = camera.normal_lens(camera.formats.first)
+        camera = Cameras.generic_35mm
+        lens = camera.normal_lens(camera.primary_format)
 
         base_scene = Scene.new(
           camera: camera,
@@ -29,10 +29,8 @@ module PhotoUtils
           # max_distance: scenes.map { |s| s.depth_of_field.far }.max,
           # max_distance: scenes.map { |s| s.hyperfocal_distance }.max,
           max_distance: 50.feet,
-          camera_frame: Frame.new(
-            width: scenes.map(&:focal_length).max,
-            height: scenes.map { |s| [s.absolute_aperture, s.sensor_frame.height].max }.max,
-          ),
+          camera_width: scenes.map(&:focal_length).max,
+          camera_height: scenes.map { |s| [s.absolute_aperture, s.sensor_frame.height].max }.max,
         )
         chart.print
       end
@@ -41,7 +39,8 @@ module PhotoUtils
 
         attr_accessor :scenes
         attr_accessor :max_distance
-        attr_accessor :camera_frame
+        attr_accessor :camera_width
+        attr_accessor :camera_height
 
         def initialize(**params)
           params.each { |k, v| send("#{k}=", v) }
@@ -57,7 +56,7 @@ module PhotoUtils
                 scenes.each do |scene|
                   scene_view = SceneView.new(scene,
                     max_distance: max_distance,
-                    camera_frame: camera_frame)
+                    camera_width: camera_width)
                   html.tr do
                     html.td do
                       html << (scene.description || '')

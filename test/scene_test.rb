@@ -5,7 +5,7 @@ module PhotoUtils
   class SceneTest < Test
 
     def setup
-      @camera = Camera.generic_35mm
+      @camera = Cameras.generic_35mm
       @scene = Scene.new(
         camera: @camera,
         subject_distance: 1000)

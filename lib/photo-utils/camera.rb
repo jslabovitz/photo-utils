@@ -2,46 +2,6 @@ module PhotoUtils
 
   class Camera
 
-    DefaultCamerasFile = Path.new(__FILE__).dirname / '../../cameras.yaml'
-    UserCamerasFile = Path.new('~/.phu/cameras.yaml').expand_path
-
-    @@cameras = {}
-
-    def self.read_cameras
-      if @@cameras.empty?
-        read_cameras_file(DefaultCamerasFile)
-        read_cameras_file(UserCamerasFile) if UserCamerasFile.exist?
-      end
-    end
-
-    def self.cameras
-      read_cameras
-      @@cameras.values
-    end
-
-    def self.read_cameras_file(file)
-      begin
-        yaml = YAML.load(file.read, symbolize_names: true)
-      rescue Psych::SyntaxError => e
-        raise Error, "Syntax error in #{file.to_s.inspect}: #{e}"
-      end
-      if yaml
-        yaml.each do |camera_yaml|
-          camera = Camera.new(**camera_yaml)
-          @@cameras[camera.key] = camera
-        end
-      end
-    end
-
-    def self.find(key)
-      read_cameras
-      @@cameras[key.to_s.downcase]
-    end
-
-    def self.generic_35mm
-      find('g35') or raise "No generic 35mm camera defined"
-    end
-
     attr_reader   :key
     attr_reader   :make
     attr_reader   :model
@@ -52,14 +12,13 @@ module PhotoUtils
     attr_reader   :lenses
 
     def initialize(**params)
-      if params[:format]
-        params[:formats] = [params.delete(:format)]
-      end
+      @formats = Table.new
+      @lenses = Table.new
       params.each { |k, v| send("#{k}=", v) }
     end
 
     def key=(key)
-      @key = key.to_s.downcase
+      @key = Table.make_key(key)
     end
 
     def make=(make)
@@ -70,10 +29,35 @@ module PhotoUtils
       @model = model.to_s
     end
 
+    def name
+      "#{@make} #{@model}"
+    end
+
+    def format=(obj)
+      add_format(obj)
+    end
+
     def formats=(formats)
-      @formats = formats.map do |format|
-        Format.find(format.to_s) or raise "Unknown format #{format.inspect} for camera #{key.inspect}"
+      formats.each do |key, obj|
+        add_format(obj.merge(key: key))
       end
+    end
+
+    def primary_format
+      @formats.first
+    end
+
+    def add_format(obj)
+      format = case obj
+      when Hash
+        Format.new(**obj)
+      when String, Numeric
+        Format.find(obj) or raise "Unknown format #{obj.inspect}"
+      else
+        raise "Unknown format spec: #{obj.inspect}"
+      end
+      format.key ||= format.frame.key or raise "Can't determine key"
+      @formats << format
     end
 
     def sensitivity=(s)
@@ -81,7 +65,9 @@ module PhotoUtils
     end
 
     def lenses=(lenses)
-      @lenses = lenses.map { |lens| Lens.new(lens) }.sort_by(&:focal_length)
+      lenses.each do |key, info|
+        @lenses << Lens.new(info.merge(key: key))
+      end
     end
 
     def min_shutter=(t)
@@ -110,7 +96,7 @@ module PhotoUtils
         @make,
         @model,
         @key,
-        @formats.join(', '),
+        @formats.to_a.join(', '),
         @max_shutter,
         @min_shutter,
       ]
@@ -119,12 +105,13 @@ module PhotoUtils
     def print(io=STDOUT)
       io.puts to_s
       @lenses.each do |lens|
-        str = @formats.map do |format|
+        str = formats.map do |format|
+          frame = format.frame
           "%s in 35mm: %s @ %s~%s" % [
-            format,
-            format.focal_length_equivalent(lens.focal_length),
-            format.aperture_equivalent(lens.max_aperture),
-            format.aperture_equivalent(lens.min_aperture),
+            frame,
+            frame.focal_length_equivalent(lens.focal_length),
+            frame.aperture_equivalent(lens.max_aperture),
+            frame.aperture_equivalent(lens.min_aperture),
           ]
         end.join(', ')
         io.puts "\t" + lens.to_s + " (#{str})"
@@ -132,6 +119,13 @@ module PhotoUtils
       io.puts
     end
 
+  end
+
+  Cameras = Table.new
+  Cameras.load_file(file: CamerasFile, item_class: Camera)
+
+  def Cameras.generic_35mm
+    self['g35'] or raise "Can't find generic 35mm"
   end
 
 end

@@ -36,12 +36,12 @@ module PhotoUtils
 
         shots = %q{
 
-          # format   time   aperture  focal length   sensitivity  width DoF   description
+          # frame    shutter  aperture  focal length   sensitivity  width DoF   description
 
-          FF         1/125  f/8       50mm           400          150'  50'   Tokyo cityscape
-          FF         1/125  f/8       50mm           400          15'   10'   man in street
-          FF         1/125  f/8       50mm           400          7'    4'    plants at corner
-          FF         1/125  f/8       50mm           400          14"   3"    eggs
+          FF         1/125    f/8       50mm           400          150'  50'   Tokyo cityscape
+          FF         1/125    f/8       50mm           400          15'   10'   man in street
+          FF         1/125    f/8       50mm           400          7'    4'    plants at corner
+          FF         1/125    f/8       50mm           400          14"   3"    eggs
 
         }.split(/\n/).map { |line|
           line.gsub!(/^\s+|\s+$/, '')
@@ -49,10 +49,10 @@ module PhotoUtils
           if line.empty?
             nil
           else
-            format, time, aperture, focal_length, sensitivity, width, dof, description = line.split(/\s+/, 8)
+            frame, shutter, aperture, focal_length, sensitivity, width, dof, description = line.split(/\s+/, 8)
             HashStruct.new(
-              format: (Format[format] or raise "Format error"),
-              time: TimeValue.new(time),
+              frame: (Frames[frame] or raise "Unknown frame key: #{frame.inspect}"),
+              shutter: TimeValue.new(shutter),
               aperture: ApertureValue.new(aperture),
               focal_length: Length.new(focal_length),
               sensitivity: SensitivityValue.new(sensitivity),
@@ -99,8 +99,8 @@ module PhotoUtils
           # validate shutter
           #
 
-          if scene.time > camera.max_shutter
-            raise "shutter too slow (#{scene.time} < #{camera.max_shutter})"
+          if scene.shutter > camera.max_shutter
+            raise "shutter too slow (#{scene.shutter} < #{camera.max_shutter})"
           end
 
         end
@@ -110,29 +110,30 @@ module PhotoUtils
         shots.each do |shot|
 
           scene = Scene.new
-          scene.sensor_frame = shot.format.frame
+          scene.sensor_frame = shot.frame
           scene.description = shot.description
           scene.aperture = shot.aperture
           scene.sensitivity = shot.sensitivity
-          scene.shutter = shot.time
+          scene.shutter = shot.shutter
           scene.focal_length = shot.focal_length
 
           # d = w * f / s
           scene.subject_distance = Length.new(shot.width * (scene.focal_length / scene.sensor_frame.width))
 
           scene.calculate_depth_of_field!
+          scene.calculate_exposure!
 
           scene.print
 
           # now compute equivalent scene for each camera
 
-          cameras.each do |camera|
+          Cameras.each do |camera|
 
             scene2 = Scene.new
-            scene2.format = camera.format or raise "Unknown format: #{camera.format.inspect}"
+            scene2.sensor_frame = camera.primary_format.frame
             scene2.aperture = scene.aperture
             scene2.brightness = scene.brightness
-            # scene2.sensitivity = 400
+            scene2.sensitivity = scene.sensitivity
 
             # find the lens that would best fit
 
@@ -160,15 +161,15 @@ module PhotoUtils
                 # o = subject dimension
                 # i = frame dimension
 
-                scene2.subject_distance = 1 / ((scene2.frame.width / scene2.focal_length) / shot.width)
+                scene2.subject_distance = 1 / ((scene2.sensor_frame.width / scene2.focal_length) / shot.width)
 
                 #
                 # calculate depth of field
                 #
 
-                near_limit = scene2.subject_distance - (shot.dof / 2)
-                far_limit  = scene2.subject_distance + (shot.dof / 2)
-                scene2.aperture = scene2.aperture_for_depth_of_field(near_limit, far_limit)
+                scene2.foreground_distance = scene2.subject_distance - (shot.dof / 2)
+                scene2.background_distance = scene2.subject_distance + (shot.dof / 2)
+                scene2.calculate_aperture_for_depth_of_field!
 
                 #
                 # adjust aperture
@@ -187,19 +188,21 @@ module PhotoUtils
                 #
 
                 # start with minimum shutter time
-                scene2.time = camera.max_shutter
+                scene2.shutter = camera.max_shutter
                 # round up to the next ISO value
                 scene2.sensitivity = SensitivityValue.new_from_v(scene2.sensitivity.to_v.ceil)
                 scene2.sensitivity = [scene2.sensitivity, $max_sensitivity].min
                 scene2.sensitivity = [scene2.sensitivity, $min_sensitivity].max
                 # # force recalculation of shutter
-                # scene2.time = nil
+                # scene2.shutter = nil
+
+                scene2.calculate_exposure!
 
                 #
                 # compute subject distance difference
                 #
 
-                subject_distance_delta = scene.subject_distance - scene2.subject_distance
+                subject_distance_delta = Length.new(scene.subject_distance - scene2.subject_distance)
 
                 #
                 # compute angle of view difference
@@ -221,16 +224,16 @@ module PhotoUtils
                   camera.name,
                   lens.name,
                   scene2.aperture,
-                  scene2.time,
+                  scene2.shutter,
                   scene2.sensitivity,
                   scene2.subject_distance.to_s(:imperial),
                   subject_distance_delta < 0 ? '-' : '+',
-                  subject_distance_delta.abs.to_s(:imperial),
+                  Length.new(subject_distance_delta.abs).to_s(:imperial),
                   scene2.depth_of_field.to_s(:imperial),
-                  scene2.near_distance_from_subject.to_s(:imperial),
-                  scene2.far_distance_from_subject.to_s(:imperial),
+                  scene2.foreground_distance.to_s(:imperial),
+                  scene2.background_distance.to_s(:imperial),
                   failure || 'GOOD'
-                ] if options[:verbose] || !failure
+                ]
 
                 successes[camera.name] ||= {}
 

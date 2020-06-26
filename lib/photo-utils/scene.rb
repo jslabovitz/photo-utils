@@ -16,7 +16,7 @@ module PhotoUtils
 
     def initialize(camera: nil, lens: nil, **params)
       if camera
-        format = camera.formats.first
+        format = camera.primary_format
         lens ||= camera.normal_lens(format)
         params[:sensor_frame] ||= format.frame
         params[:focal_length] ||= lens.focal_length

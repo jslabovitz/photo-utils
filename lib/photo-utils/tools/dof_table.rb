@@ -5,7 +5,7 @@ module PhotoUtils
     class DOFTable < Tool
 
       def run
-        camera = Camera.generic_35mm
+        camera = Cameras.generic_35mm
         scene = Scene.new(camera: camera)
 
         # Av equivalents of f/4 ~ f/64
@@ -22,15 +22,11 @@ module PhotoUtils
             puts (['Distance', 'Field of view'] + apertures).join("\t")
           end
           print scene.subject_distance.to_s(:imperial)
-          fov = scene.field_of_view(scene.subject_distance)
-          print "\t" + "%sH x %sW" % [
-            fov.height.to_s(:imperial),
-            fov.width.to_s(:imperial),
-          ]
+          print "\t" + scene.field_of_view(scene.subject_distance).to_s(:imperial)
           apertures.each do |aperture|
             scene.aperture = aperture
             scene.calculate_depth_of_field!
-            print "\t" + "%s" % scene.depth_of_field.to_s(:imperial)
+            print "\t" + scene.depth_of_field.to_s(:imperial)
           end
           puts
         end

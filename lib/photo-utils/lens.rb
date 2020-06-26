@@ -14,7 +14,7 @@ module PhotoUtils
     end
 
     def key=(key)
-      @key = key.to_s.downcase
+      @key = key.to_s
     end
 
     def make=(make)
@@ -25,15 +25,8 @@ module PhotoUtils
       @model = model.to_s
     end
 
-    def to_s
-      '%s %s [%s]: focal length: %s, aperture: %s~%s' % [
-        @make,
-        @model,
-        @key,
-        @focal_length,
-        @max_aperture,
-        @min_aperture,
-      ]
+    def name
+      "#{@make} #{@model}"
     end
 
     def focal_length=(f)
@@ -48,12 +41,6 @@ module PhotoUtils
       @max_aperture = ApertureValue.new(a)
     end
 
-    def aperture=(a)
-      a = ApertureValue.new(a)
-      raise Error, "Aperture out of range of lens: #{a} (#{aperture_range})" unless aperture_range.include?(a)
-      @aperture = a
-    end
-
     def aperture_range
       @max_aperture .. @min_aperture
     end
@@ -62,6 +49,21 @@ module PhotoUtils
       ApertureValue.new_from_v(
         ((@max_aperture.to_v + @min_aperture.to_v) / 2).round
       )
+    end
+
+    def <=>(other)
+      @focal_length <=> other.focal_length
+    end
+
+    def to_s
+      '%s %s [%s]: focal length: %s, aperture: %s~%s' % [
+        @make,
+        @model,
+        @key,
+        @focal_length,
+        @max_aperture,
+        @min_aperture,
+      ]
     end
 
   end

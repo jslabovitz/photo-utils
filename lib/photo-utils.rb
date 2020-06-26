@@ -8,6 +8,13 @@ module PhotoUtils
 
   class Error < Exception; end
 
+  DefaultDataDir = Path.new(__FILE__).dirname / '..' / 'data'
+  UserDataDir = Path.home / '.phu'
+  FormatsFile = 'formats.yaml'
+  CamerasFile = 'cameras.yaml'
+  DefaultCamerasFile = DefaultDataDir / CamerasFile
+  UserCamerasFile = UserDataDir / CamerasFile
+
 end
 
 require 'photo-utils/extensions/numeric'
@@ -25,10 +32,12 @@ require 'photo-utils/values/time'
 require 'photo-utils/length'
 require 'photo-utils/angle'
 
-require 'photo-utils/lens'
-require 'photo-utils/camera'
+require 'photo-utils/table'
+
 require 'photo-utils/frame'
 require 'photo-utils/formats'
+require 'photo-utils/lens'
+require 'photo-utils/camera'
 require 'photo-utils/scene'
 
 require 'photo-utils/tool'

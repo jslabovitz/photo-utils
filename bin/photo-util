@@ -7,7 +7,7 @@ appname = File.basename($0)
 
 commands = {
   'apertures'     => PhotoUtils::Tools::Apertures,
-  'cameras'       => PhotoUtils::Tools::Cameras,
+  'cameras'       => PhotoUtils::Tools::CamerasTool,
   'chart-dof'     => PhotoUtils::Tools::ChartDOF,
   'compare'       => PhotoUtils::Tools::Compare,
   'dof'           => PhotoUtils::Tools::DOF,

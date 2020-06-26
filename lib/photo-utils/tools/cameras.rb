@@ -2,10 +2,10 @@ module PhotoUtils
 
   class Tools
 
-    class Cameras < Tool
+    class CamerasTool < Tool
 
       def run
-        Camera.cameras.each do |camera|
+        Cameras.each do |camera|
           camera.print
         end
       end
