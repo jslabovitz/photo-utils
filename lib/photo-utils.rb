@@ -35,7 +35,7 @@ require 'photo-utils/angle'
 require 'photo-utils/table'
 
 require 'photo-utils/frame'
-require 'photo-utils/formats'
+require 'photo-utils/format'
 require 'photo-utils/lens'
 require 'photo-utils/camera'
 require 'photo-utils/scene'
