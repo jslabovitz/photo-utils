@@ -1,12 +1,17 @@
+- move exposure-related methods into new Exposure class
+
+- move physical scene (distance, etc.) into Scene class
+
+- combine Shot & Scene
+
 - use BigDecimal instead of float?
 
-- make Scene have brightness range instead of single brightness?
-  
-- move Camera class methods into new Cameras class
+- change most uses of 'shutter' to 'time'
 
-- rename *Value classes
-  - eg, ApertureValue -> Value
-  - move to main directory
+- make Scene/Shot have brightness range instead of single brightness?
+  - shadow
+  - highlight
+  - middle-gray
 
 - change {min,max}_{shutter,aperture} to Range
   - add #{shutter,aperture}_range to parse string representation
