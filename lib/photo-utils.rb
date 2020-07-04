@@ -1,3 +1,4 @@
+require 'builder'
 require 'pp'
 require 'hashstruct'
 require 'path'
