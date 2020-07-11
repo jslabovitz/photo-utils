@@ -5,18 +5,11 @@ module PhotoUtils
     APEX_LABEL = 'Av'
 
     def self.parse(s)
-      case s
-      when String
-        case s.strip
-        when %r{^(f/)?([\d\.]+)$}i
-          new($2.to_f)
-        when %r{^US\s+([\d\.]+)$}i
-          new_from_us_stop($1.to_f)
-        else
-          raise ValueParseError, "Can't parse #{s.inspect} as aperture value"
-        end
-      when Numeric
-        new(s)
+      case s.strip
+      when %r{^(f/)?([\d\.]+)$}i
+        new($2.to_f)
+      when %r{^US\s+([\d\.]+)$}i
+        new_from_us_stop($1.to_f)
       else
         raise ValueParseError, "Can't parse #{s.inspect} as aperture value"
       end

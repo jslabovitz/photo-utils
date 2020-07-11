@@ -5,7 +5,7 @@ module PhotoUtils
     class ValueParseError < Error; end
 
     def self.parse(s)
-      case s.to_s.strip
+      case s.strip
       when /^([\d\.]+)$/
         $1.to_f
       else

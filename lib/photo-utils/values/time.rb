@@ -5,18 +5,11 @@ module PhotoUtils
     APEX_LABEL = 'Tv'
 
     def self.parse(s)
-      case s
-      when String
-        case s.to_s.strip
-        when %r{^([\d\.]+)/([\d\.]+)s?$}i
-          new(Rational($1.to_f, $2.to_f))
-        when %r{^([\d\.]+)s?$}i
-          new($1.to_f)
-        else
-          raise ValueParseError, "Can't parse #{s.inspect} as time value"
-        end
-      when Numeric
-        new(s)
+      case s.strip
+      when %r{^([\d\.]+)/([\d\.]+)s?$}i
+        new(Rational($1.to_f, $2.to_f))
+      when %r{^([\d\.]+)s?$}i
+        new($1.to_f)
       else
         raise ValueParseError, "Can't parse #{s.inspect} as time value"
       end
