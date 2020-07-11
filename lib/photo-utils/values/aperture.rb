@@ -6,7 +6,7 @@ module PhotoUtils
 
     def self.parse(s)
       case s.strip
-      when %r{^(f/)?([\d\.]+)$}i
+      when %r{^(f/?)?([\d\.]+)$}i
         new($2.to_f)
       when %r{^US\s+([\d\.]+)$}i
         new_from_us_stop($1.to_f)
