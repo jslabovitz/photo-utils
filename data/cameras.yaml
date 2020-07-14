@@ -1,9 +1,8 @@
 g35:
   make: Generica
   model: 35
-  format:
-    frame: 135
-    num_frames: 36
+  format: 135
+  frames: 36
   min_shutter: 1/500
   max_shutter: 1
   lenses:
@@ -29,9 +28,13 @@ g35:
 g645:
   make: Generica
   model: 645
-  format:
-    frame: 6x4.5
-    num_frames: 16
+  backs:
+    '120':
+      format: 6x4.5
+      frames: 16
+    '220':
+      format: 6x4.5
+      frames: 32
   min_shutter: 1/500
   max_shutter: 1
   lenses:
@@ -45,9 +48,8 @@ g645:
 g66:
   make: Generica
   model: 66
-  format:
-    frame: 6x6
-    num_frames: 12
+  format: 6x6
+  frames: 12
   min_shutter: 1/500
   max_shutter: 1
   lenses:
@@ -61,13 +63,13 @@ g66:
 g45:
   make: Generica
   model: 45
-  formats:
+  backs:
     4x5:
-      frame: 4x5
-      num_frames: 1
-    120-6x9:
-      frame: 6x9
-      num_frames: 8
+      format: 4x5
+      frames: 1
+    6x9:
+      format: 6x9
+      frames: 8
   min_shutter: 1/500
   max_shutter: 1
   lenses:
