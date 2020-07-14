@@ -12,7 +12,8 @@ module PhotoUtils
       assert { @camera.key == 'g35' }
       assert { @camera.make == 'Generica' }
       assert { @camera.model == '35' }
-      assert { @camera.formats.map(&:key) == ['135'] }
+      assert { @camera.backs.map(&:key) == ['135'] }
+      assert { @camera.primary_format.key == '135' }
     end
 
     def test_find

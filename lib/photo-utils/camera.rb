@@ -5,15 +5,20 @@ module PhotoUtils
     attr_reader   :key
     attr_reader   :make
     attr_reader   :model
-    attr_reader   :formats
+    attr_reader   :backs
     attr_reader   :sensitivity
     attr_reader   :min_shutter
     attr_reader   :max_shutter
     attr_reader   :lenses
 
     def initialize(**params)
-      @formats = Table.new
+      @backs = Table.new
       @lenses = Table.new
+      format = params.delete(:format)
+      frames = params.delete(:frames)
+      if format
+        add_back(format: format, frames: frames)
+      end
       params.each { |k, v| send("#{k}=", v) }
     end
 
@@ -37,27 +42,31 @@ module PhotoUtils
       add_format(obj)
     end
 
-    def formats=(formats)
-      formats.each do |key, obj|
-        add_format(obj.merge(key: key))
+    def backs=(backs)
+      backs.each do |key, back|
+        add_back(back.merge(key: key))
       end
+    end
+
+    def primary_back
+      @backs.first
     end
 
     def primary_format
-      @formats.first
+      primary_back&.format
     end
 
-    def add_format(obj)
-      format = case obj
+    def add_back(back)
+      back = case back
+      when Back
+        back
       when Hash
-        Format.new(**obj)
-      when String, Numeric
-        Format.find(obj) or raise "Unknown format #{obj.inspect}"
+        Back.new(**back)
       else
-        raise "Unknown format spec: #{obj.inspect}"
+        raise "Unknown back spec: #{back.inspect}"
       end
-      format.key ||= format.frame.key or raise "Can't determine key"
-      @formats << format
+      back.key ||= back.format.key or raise "Can't determine back key"
+      @backs << back
     end
 
     def sensitivity=(s)
