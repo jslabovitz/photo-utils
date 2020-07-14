@@ -49,9 +49,9 @@ module PhotoUtils
           if line.empty?
             nil
           else
-            frame, shutter, aperture, focal_length, sensitivity, width, dof, description = line.split(/\s+/, 8)
+            format, shutter, aperture, focal_length, sensitivity, width, dof, description = line.split(/\s+/, 8)
             HashStruct.new(
-              frame: (Frames[frame] or raise "Unknown frame key: #{frame.inspect}"),
+              frame: (Formats[format] or raise "Unknown format key: #{format.inspect}"),
               shutter: TimeValue.new(shutter),
               aperture: ApertureValue.new(aperture),
               focal_length: Length.new(focal_length),
