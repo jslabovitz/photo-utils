@@ -4,6 +4,10 @@ module PhotoUtils
 
     include Enumerable
 
+    def self.load(file:, item_class: nil)
+      new.tap { |t| t.load(file: file, item_class: item_class) }
+    end
+
     def self.make_key(key)
       key.to_s.downcase
     end
@@ -47,7 +51,8 @@ module PhotoUtils
       self.class.make_key(key)
     end
 
-    def load_file(file:, item_class: OpenStruct)
+    def load(file:, item_class: nil)
+      item_class ||= OpenStruct
       [DefaultDataDir, UserDataDir].each do |dir|
         path = dir / file
         if path.exist?

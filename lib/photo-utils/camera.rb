@@ -130,8 +130,7 @@ module PhotoUtils
 
   end
 
-  Cameras = Table.new
-  Cameras.load_file(file: CamerasFile, item_class: Camera)
+  Cameras = Table.load(file: CamerasFile, item_class: Camera)
 
   def Cameras.generic_35mm
     self['g35'] or raise "Can't find generic 35mm"

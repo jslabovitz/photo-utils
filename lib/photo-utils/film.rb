@@ -32,7 +32,6 @@ module PhotoUtils
 
   end
 
-  Films = Table.new
-  Films.load_file(file: FilmsFile, item_class: Film)
+  Films = Table.load(file: FilmsFile, item_class: Film)
 
 end

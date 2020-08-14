@@ -26,7 +26,6 @@ module PhotoUtils
 
   end
 
-  Processes = Table.new
-  Processes.load_file(file: ProcessesFile, item_class: Process)
+  Processes = Table.load(file: ProcessesFile, item_class: Process)
 
 end
