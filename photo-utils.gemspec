@@ -1,11 +1,9 @@
-require_relative 'lib/photo-utils/version'
-
 Gem::Specification.new do |s|
   s.name          = 'photo-utils'
   s.author        = 'John Labovitz'
   s.email         = 'johnl@johnlabovitz.com'
   s.homepage      = 'http://johnlabovitz.com'
-  s.version       = PhotoUtils::VERSION
+  s.version       = '0.5'
   s.summary       = 'Models, formulas, and utilties for photography optics, etc.'
   s.description = %q{
     PhotoUtils provides models, formulas, and utilties for photography optics, etc.
@@ -23,7 +21,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'path', '~> 2.0'
 
   s.add_development_dependency 'rake', '~> 13.0'
-  s.add_development_dependency 'rubygems-tasks', '~> 0.2'
-  s.add_development_dependency 'minitest', '~> 0'
-  s.add_development_dependency 'minitest-power_assert', '~> 0'
+  s.add_development_dependency 'minitest', '~> 5.15'
+  s.add_development_dependency 'minitest-power_assert', '~> 0.3'
 end
