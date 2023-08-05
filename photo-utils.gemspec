@@ -17,10 +17,10 @@ Gem::Specification.new do |s|
   s.require_path  = 'lib'
 
   s.add_runtime_dependency 'builder', '~> 3.2'
-  s.add_runtime_dependency 'hashstruct', '~> 1.3'
-  s.add_runtime_dependency 'path', '~> 2.0'
+  s.add_runtime_dependency 'hashstruct', '~> 1.4'
+  s.add_runtime_dependency 'path', '~> 2.1'
 
   s.add_development_dependency 'rake', '~> 13.0'
-  s.add_development_dependency 'minitest', '~> 5.16'
+  s.add_development_dependency 'minitest', '~> 5.19'
   s.add_development_dependency 'minitest-power_assert', '~> 0.3'
 end
