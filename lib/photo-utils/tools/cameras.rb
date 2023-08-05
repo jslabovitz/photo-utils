@@ -5,7 +5,12 @@ module PhotoUtils
     class CamerasTool < Tool
 
       def run
-        Cameras.each do |camera|
+        if ARGV.empty?
+          cameras = Cameras.to_a
+        else
+          cameras = ARGV.map { |a| Cameras[a] }
+        end
+        cameras.each do |camera|
           camera.print
         end
       end
