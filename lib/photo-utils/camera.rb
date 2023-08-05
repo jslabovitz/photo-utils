@@ -38,10 +38,6 @@ module PhotoUtils
       "#{@make} #{@model}"
     end
 
-    def format=(obj)
-      add_format(obj)
-    end
-
     def backs=(backs)
       backs.each do |key, back|
         add_back(back.merge(key: key))
@@ -105,7 +101,7 @@ module PhotoUtils
         @make,
         @model,
         @key,
-        @formats.to_a.join(', '),
+        @backs.to_a.join(', '),
         @max_shutter,
         @min_shutter,
       ]
@@ -114,13 +110,13 @@ module PhotoUtils
     def print(io=STDOUT)
       io.puts to_s
       @lenses.each do |lens|
-        str = formats.map do |format|
-          frame = format.frame
+        str = @backs.map do |back|
+          format = back.format
           "%s in 35mm: %s @ %s~%s" % [
-            frame,
-            frame.focal_length_equivalent(lens.focal_length),
-            frame.aperture_equivalent(lens.max_aperture),
-            frame.aperture_equivalent(lens.min_aperture),
+            format,
+            format.focal_length_equivalent(lens.focal_length),
+            format.aperture_equivalent(lens.max_aperture),
+            format.aperture_equivalent(lens.min_aperture),
           ]
         end.join(', ')
         io.puts "\t" + lens.to_s + " (#{str})"
